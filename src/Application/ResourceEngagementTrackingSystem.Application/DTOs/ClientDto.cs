@@ -5,17 +5,23 @@ namespace ResourceEngagementTrackingSystem.Application.DTOs
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public string ContactName { get; set; }
+        public string ContactPhone { get; set; }
     }
 
     public class CreateClientDto
     {
         public string Name { get; set; }
         public string Email { get; set; }
+        public string ContactName { get; set; }
+        public string ContactPhone { get; set; }
     }
 
     public class UpdateClientDto
     {
         public string Name { get; set; }
         public string Email { get; set; }
+        public string ContactName { get; set; }
+        public string ContactPhone { get; set; }
     }
 }

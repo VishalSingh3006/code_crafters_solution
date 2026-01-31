@@ -13,6 +13,13 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+        [Required]
+        [MaxLength(150)]
+        public string ContactName { get; set; }
+
+        [MaxLength(50)]
+        public string ContactPhone { get; set; }
+
         public ICollection<Project> Projects { get; set; }
     }
 }

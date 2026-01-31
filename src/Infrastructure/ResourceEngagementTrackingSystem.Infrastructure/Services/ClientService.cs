@@ -22,21 +22,23 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
             {
                 Id = c.Id,
                 Name = c.Name,
-                Email = c.Email
+                Email = c.Email,
+                ContactName = c.ContactName,
+                ContactPhone = c.ContactPhone
             }).ToListAsync();
         }
         public async Task<ClientDto> GetByIdAsync(int id)
         {
             var c = await _context.Clients.FindAsync(id);
             if (c == null) return null;
-            return new ClientDto { Id = c.Id, Name = c.Name, Email = c.Email };
+            return new ClientDto { Id = c.Id, Name = c.Name, Email = c.Email, ContactName = c.ContactName, ContactPhone = c.ContactPhone };
         }
         public async Task<ClientDto> CreateAsync(CreateClientDto dto)
         {
-            var c = new Client { Name = dto.Name, Email = dto.Email };
+            var c = new Client { Name = dto.Name, Email = dto.Email, ContactName = dto.ContactName, ContactPhone = dto.ContactPhone };
             _context.Clients.Add(c);
             await _context.SaveChangesAsync();
-            return new ClientDto { Id = c.Id, Name = c.Name, Email = c.Email };
+            return new ClientDto { Id = c.Id, Name = c.Name, Email = c.Email, ContactName = c.ContactName, ContactPhone = c.ContactPhone };
         }
         public async Task<ClientDto> UpdateAsync(int id, UpdateClientDto dto)
         {
@@ -44,8 +46,10 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
             if (c == null) return null;
             c.Name = dto.Name;
             c.Email = dto.Email;
+            c.ContactName = dto.ContactName;
+            c.ContactPhone = dto.ContactPhone;
             await _context.SaveChangesAsync();
-            return new ClientDto { Id = c.Id, Name = c.Name, Email = c.Email };
+            return new ClientDto { Id = c.Id, Name = c.Name, Email = c.Email, ContactName = c.ContactName, ContactPhone = c.ContactPhone };
         }
         public async Task<bool> DeleteAsync(int id)
         {

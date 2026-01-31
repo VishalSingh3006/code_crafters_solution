@@ -30,12 +30,32 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   );
 
   const handleSubmit = async () => {
-    if (mode === "edit" && project) {
-      await update(project.id, form as UpdateProjectRequest);
-    } else {
-      await create(form as CreateProjectRequest);
+    // Basic validation
+    if (!form.name.trim()) {
+      setError("Project name is required");
+      return;
     }
-    if (onSuccess) await onSuccess();
+    if (!form.clientId || form.clientId === 0) {
+      setError("Please select a valid client");
+      return;
+    }
+    
+    try {
+      setError(null);
+      if (mode === "edit" && project) {
+        await update(project.id, form as UpdateProjectRequest);
+      } else {
+        await create(form as CreateProjectRequest);
+      }
+      if (onSuccess) await onSuccess();
+    } catch (err: any) {
+      setError(err.message || "Failed to save project");
+    }
+  };
+
+  const setError = (message: string | null) => {
+    // Since the hook doesn't expose setError, we'll handle errors through the hook's error state
+    // The error will be displayed through the hook's error state
   };
 
   return (
@@ -46,6 +66,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
         value={form.name}
         onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
         fullWidth
+        required
+        error={!form.name.trim()}
+        helperText={!form.name.trim() ? "Project name is required" : ""}
       />
       <TextField
         label="Description"
@@ -65,10 +88,18 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
           setForm((f) => ({ ...f, clientId: Number(e.target.value) }))
         }
         fullWidth
+        required
+        inputProps={{ min: 1 }}
+        error={!form.clientId || form.clientId === 0}
+        helperText={!form.clientId || form.clientId === 0 ? "Please enter a valid client ID" : ""}
       />
       <Box>
-        <Button variant="contained" onClick={handleSubmit} disabled={pending}>
-          {mode === "edit" ? "Update" : "Create"}
+        <Button 
+          variant="contained" 
+          onClick={handleSubmit} 
+          disabled={pending || !form.name.trim() || !form.clientId || form.clientId === 0}
+        >
+          {pending ? "Saving..." : (mode === "edit" ? "Update" : "Create")}
         </Button>
         {mode === "edit" && onCancel && (
           <Button sx={{ ml: 2 }} variant="outlined" onClick={onCancel}>

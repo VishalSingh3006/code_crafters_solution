@@ -9,9 +9,10 @@ export default defineConfig({
     host: true,
     proxy: {
       "/api": {
-        target: "https://localhost:5000",
+        target: "http://localhost:5000",
         changeOrigin: true,
-        secure: false, // allow self-signed certs in dev
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '/api')
       },
     },
   },

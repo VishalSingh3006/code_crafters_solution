@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { setUser } from "../../store/authSlice";
 import { UpdateProfileRequest } from "../../types";
 import { profileService } from "../../services/profileService";
 import { twoFactorService } from "../../services/twoFactorService";
 
 const Profile: React.FC = () => {
-  const { user, updateUser, refreshProfile } = useAuth();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((s) => s.auth.user);
   const [formData, setFormData] = useState<UpdateProfileRequest>({
     title: "",
     firstName: "",
@@ -36,9 +38,15 @@ const Profile: React.FC = () => {
 
   // Refresh profile only on component mount to get latest 2FA status
   useEffect(() => {
-    refreshProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array - runs only once on mount
+    (async () => {
+      try {
+        const profile = await profileService.getProfile();
+        dispatch(setUser(profile));
+      } catch {
+        // ignore; errors will be shown by other mechanisms if needed
+      }
+    })();
+  }, [dispatch]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -59,7 +67,7 @@ const Profile: React.FC = () => {
     try {
       const response = await profileService.updateProfile(formData);
       if (response.profile) {
-        updateUser(response.profile);
+        dispatch(setUser(response.profile));
       }
       setSuccess("Profile updated successfully!");
     } catch (error: any) {
@@ -82,9 +90,8 @@ const Profile: React.FC = () => {
 
     try {
       await twoFactorService.disable(twoFactorCode);
-      // Update user in context to reflect 2FA disabled
       if (user) {
-        updateUser({ ...user, twoFactorEnabled: false });
+        dispatch(setUser({ ...user, twoFactorEnabled: false }));
       }
       setSuccess("Two-factor authentication disabled successfully!");
       setShowTwoFactorDisable(false);

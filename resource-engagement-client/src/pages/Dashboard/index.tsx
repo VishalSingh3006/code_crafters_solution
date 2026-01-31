@@ -1,10 +1,11 @@
 import React from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuthLogout, useAuthState } from "../../hooks/authHooks";
 import { Box, Paper, Typography, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuthState();
+  const { logout } = useAuthLogout();
   const navigate = useNavigate();
 
   const handleLogout = () => {

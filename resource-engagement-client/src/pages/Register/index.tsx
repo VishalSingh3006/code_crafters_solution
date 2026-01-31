@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
 import { RegisterRequest } from "../../types";
+import { baseServices } from "../../services/baseService";
 import {
   Container,
   Paper,
@@ -20,7 +20,6 @@ import type { SelectChangeEvent } from "@mui/material/Select";
 import { Link as RouterLink } from "react-router-dom";
 
 const Register: React.FC = () => {
-  const { register } = useAuth();
   const [formData, setFormData] = useState<RegisterRequest>({
     email: "",
     password: "",
@@ -59,7 +58,7 @@ const Register: React.FC = () => {
     setLoading(true);
 
     try {
-      await register(formData);
+      await baseServices.post("auth/register", formData);
       setSuccess("Registration successful! You can now login.");
       setFormData({
         email: "",

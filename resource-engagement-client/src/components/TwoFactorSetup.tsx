@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
-import {
-  type TwoFactorSetup as TwoFactorSetupData,
-  EnableTwoFactorRequest,
-} from "../types";
-import { apiService } from "../services/baseService";
+import { type TwoFactorSetup as TwoFactorSetupData } from "../types";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setUser } from "../store/authSlice";
+import { twoFactorService } from "../services/twoFactorService";
+import { profileService } from "../services/profileService";
 
 const TwoFactorSetup: React.FC = () => {
-  const { user, refreshProfile } = useAuth();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((s) => s.auth.user);
   const [setupData, setSetupData] = useState<TwoFactorSetupData | null>(null);
   const [verificationCode, setVerificationCode] = useState("");
   const [error, setError] = useState("");
@@ -19,7 +19,7 @@ const TwoFactorSetup: React.FC = () => {
     const fetchSetupData = async () => {
       setLoading(true);
       try {
-        const data = await apiService.get2FASetup();
+        const data = await twoFactorService.getSetup();
         setSetupData(data);
       } catch (err: any) {
         setError(err.response?.data?.message || "Failed to load 2FA setup");
@@ -38,12 +38,11 @@ const TwoFactorSetup: React.FC = () => {
     setLoading(true);
 
     try {
-      const enableData: EnableTwoFactorRequest = {
-        code: verificationCode,
-      };
-
-      await apiService.enable2FA(enableData);
-      await refreshProfile();
+      await twoFactorService.enable(verificationCode);
+      try {
+        const profile = await profileService.getProfile();
+        dispatch(setUser(profile));
+      } catch {}
       setSuccess("Two-factor authentication has been enabled successfully!");
       setTimeout(() => {
         window.location.href = "/dashboard";

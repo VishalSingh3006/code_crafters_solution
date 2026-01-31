@@ -32,7 +32,7 @@ const Login: React.FC = () => {
   const { login } = useAuthLogin();
   const { verify, loading: twoFactorLoading } = useTwoFactorVerification();
   const theme = useTheme();
-  
+
   const [formData, setFormData] = useState<LoginRequest>({
     email: "",
     password: "",
@@ -359,6 +359,24 @@ const Login: React.FC = () => {
           </Divider>
 
           <Box sx={{ textAlign: "center" }}>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              <MUILink
+                component={RouterLink}
+                to="/forgot-password"
+                sx={{
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  color: theme.palette.primary.main,
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    color: theme.palette.primary.dark,
+                    textDecoration: "underline",
+                  },
+                }}
+              >
+                Forgot your password?
+              </MUILink>
+            </Typography>
             <Typography variant="body2" color="text.secondary">
               Don't have an account?{" "}
               <MUILink

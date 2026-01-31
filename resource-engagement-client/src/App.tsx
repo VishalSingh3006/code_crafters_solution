@@ -31,7 +31,7 @@ const AppLayout: React.FC = () => {
       try {
         const token = localStorage.getItem("authToken");
         const userStr = localStorage.getItem("user");
-        
+
         if (token && userStr) {
           const user = JSON.parse(userStr);
           dispatch(setCredentials({ token, user }));
@@ -52,10 +52,10 @@ const AppLayout: React.FC = () => {
   // Don't render anything until auth is initialized
   if (!authInitialized) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         height: '100vh',
         fontSize: '18px'
       }}>
@@ -67,15 +67,14 @@ const AppLayout: React.FC = () => {
   return (
     <Router>
       <div className="App">
+        <Header />
         {isAuthenticated ? (
           <>
-            <Header />
             <Box sx={{ display: "flex" }}>
               {isAuthenticated && <SideNav />}
               <ErrorBoundary>
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                   {/* Spacer to account for sticky Header height */}
-                  <Toolbar />
                   {isAuthenticated && <AppBreadcrumbs />}
                   <AppRoutes />
                 </Box>

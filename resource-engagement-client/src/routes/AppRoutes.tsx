@@ -4,6 +4,8 @@ import { useAppSelector } from "../store/hooks";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import ForgotPassword from "../pages/ForgotPassword";
+import ChangePassword from "../pages/ChangePassword";
 import Dashboard from "../pages/Dashboard";
 import ProfileEdit from "../pages/Profile";
 import ProfileDetail from "../pages/Profile/Detail";
@@ -46,6 +48,16 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
+        path="/forgot-password"
+        element={
+          isAuthenticated ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <ForgotPassword />
+          )
+        }
+      />
+      <Route
         path="/dashboard"
         element={
           <ProtectedRoute>
@@ -66,6 +78,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <ProfileEdit />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/change-password"
+        element={
+          <ProtectedRoute>
+            <ChangePassword />
           </ProtectedRoute>
         }
       />

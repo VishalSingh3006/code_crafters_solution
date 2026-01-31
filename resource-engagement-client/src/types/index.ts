@@ -1,59 +1,67 @@
-export interface IFieldErrors {
-  [key: string]: string;
+export interface User {
+  userId: string;
+  email: string;
+  title: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  address: string;
+  zipCode: string;
+  twoFactorEnabled: boolean;
 }
 
-// Server error payload shape returned by the API
-export interface IApiErrorResponse {
-  code?: string;
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  title: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  address: string;
+  zipCode: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  token?: string;
+  expiresAt?: string;
+  userId?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
   message?: string;
-  fieldErrors?: IFieldErrors;
-  // Allow additional API-specific fields while keeping strong typing
-  [key: string]: unknown;
+  requiresTwoFactor?: boolean;
 }
 
-export interface IApiError {
-  status: number;
-  code?: string;
+export interface UpdateProfileRequest {
+  title: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  address: string;
+  zipCode: string;
+}
+
+export interface TwoFactorSetup {
+  qrCodeUri: string;
+  qrCodeImage: string;
+  manualEntryKey: string;
+}
+
+export interface TwoFactorVerifyRequest {
+  email: string;
+  code: string;
+}
+
+export interface EnableTwoFactorRequest {
+  code: string;
+}
+
+export interface ApiError {
   message: string;
-  fieldErrors?: IFieldErrors;
-  data?: unknown;
+  errors?: string[];
 }
-
-// Auth response types
-export interface IUser {
-  id: string;
-  email: string;
-  name?: string;
-}
-
-export interface IAuthResponse {
-  accessToken: string;
-  user: IUser;
-}
-
-// JWT token payload interface
-export interface IJwtPayload {
-  sub: string; // Subject (user ID)
-  email: string;
-  name?: string;
-  iat: number; // Issued at
-  exp: number; // Expiration time
-  iss?: string; // Issuer
-  aud?: string; // Audience
-  roles?: string[]; // User roles/permissions
-  [key: string]: unknown; // Allow additional custom claims
-}
-
-// Auth state interface
-export interface IAuthState {
-  user: IUser | null;
-  accessToken: string | null;
-  decodedToken: IJwtPayload | null;
-  loading: boolean;
-  isAuthenticated: boolean;
-  tokenExpiry: Date | null;
-}
-
-// Re-export everything from index for backward compatibility
-export * from "./twoFactor";
-export * from "./theme";

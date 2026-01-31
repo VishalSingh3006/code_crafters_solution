@@ -1,23 +1,57 @@
-import { Suspense } from "react";
-import { useRoutes } from "react-router-dom";
-import { Box } from "@mui/material";
-import { routes } from "./routes/index";
-import { Header } from "./components/header/Header";
-import { LoadingFallback } from "./components/ui/LoadingFallback";
-import { TwoFactorBanner } from "./components/ui/TwoFactorBanner";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Login from './components/Login';
+import Register from './components/Register';
+import Dashboard from './components/Dashboard';
+import Profile from './components/Profile';
+import TwoFactorSetup from './components/TwoFactorSetup';
+import ProtectedRoute from './components/ProtectedRoute';
+import './App.css';
 
-function App() {
-  const element = useRoutes(routes);
+const AppRoutes: React.FC = () => {
+  const { isAuthenticated } = useAuth();
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <Header />
-      <TwoFactorBanner />
-      <Box sx={{ flexGrow: 1 }}>
-        <Suspense fallback={<LoadingFallback />}>{element}</Suspense>
-      </Box>
-    </Box>
+    <Routes>
+      <Route path="/login" element={
+        isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />
+      } />
+      <Route path="/register" element={
+        isAuthenticated ? <Navigate to="/dashboard" replace /> : <Register />
+      } />
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
+      } />
+      <Route path="/2fa-setup" element={
+        <ProtectedRoute>
+          <TwoFactorSetup />
+        </ProtectedRoute>
+      } />
+      <Route path="/" element={
+        isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
+      } />
+    </Routes>
   );
-}
+};
+
+const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <AppRoutes />
+        </div>
+      </Router>
+    </AuthProvider>
+  );
+};
 
 export default App;

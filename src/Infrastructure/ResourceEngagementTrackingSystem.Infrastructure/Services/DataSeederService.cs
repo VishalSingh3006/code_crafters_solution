@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,9 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
 
         public async Task SeedTestDataAsync()
         {
-            // Seed test clients
+            try
+            {
+                // Seed test clients
             if (!await _context.Clients.AnyAsync())
             {
                 var clients = new[]
@@ -41,31 +44,80 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 await _context.SaveChangesAsync();
             }
 
+            // Seed test departments
+            if (!await _context.Departments.AnyAsync())
+            {
+                var departments = new[]
+                {
+                    new Department { Name = "Engineering" },
+                    new Department { Name = "Design" },
+                    new Department { Name = "Management" }
+                };
+
+                _context.Departments.AddRange(departments);
+                await _context.SaveChangesAsync();
+            }
+
+            // Seed test designations
+            if (!await _context.Designations.AnyAsync())
+            {
+                var designations = new[]
+                {
+                    new Designation { Name = "Senior Developer" },
+                    new Designation { Name = "UI/UX Designer" },
+                    new Designation { Name = "Project Manager" }
+                };
+
+                _context.Designations.AddRange(designations);
+                await _context.SaveChangesAsync();
+            }
+
             // Seed test employees
             if (!await _context.Employees.AnyAsync())
             {
+                var departments = await _context.Departments.ToListAsync();
+                var designations = await _context.Designations.ToListAsync();
+
                 var employees = new[]
                 {
                     new Employee
                     {
+                        EmployeeCode = "EMP001",
                         FirstName = "John",
                         LastName = "Developer",
                         Email = "john.dev@company.com",
-                        Position = "Senior Developer"
+                        Phone = "+1234567890",
+                        DateOfJoining = DateTime.Now.AddYears(-2),
+                        DateOfBirth = DateTime.Now.AddYears(-30),
+                        DepartmentId = departments.First(d => d.Name == "Engineering").Id,
+                        DesignationId = designations.First(d => d.Name == "Senior Developer").Id,
+                        EmploymentType = EmploymentType.Permanent
                     },
                     new Employee
                     {
+                        EmployeeCode = "EMP002",
                         FirstName = "Jane",
                         LastName = "Designer",
                         Email = "jane.design@company.com",
-                        Position = "UI/UX Designer"
+                        Phone = "+1234567891",
+                        DateOfJoining = DateTime.Now.AddYears(-1),
+                        DateOfBirth = DateTime.Now.AddYears(-28),
+                        DepartmentId = departments.First(d => d.Name == "Design").Id,
+                        DesignationId = designations.First(d => d.Name == "UI/UX Designer").Id,
+                        EmploymentType = EmploymentType.Permanent
                     },
                     new Employee
                     {
+                        EmployeeCode = "EMP003",
                         FirstName = "Mike",
                         LastName = "Manager",
                         Email = "mike.pm@company.com",
-                        Position = "Project Manager"
+                        Phone = "+1234567892",
+                        DateOfJoining = DateTime.Now.AddYears(-3),
+                        DateOfBirth = DateTime.Now.AddYears(-35),
+                        DepartmentId = departments.First(d => d.Name == "Management").Id,
+                        DesignationId = designations.First(d => d.Name == "Project Manager").Id,
+                        EmploymentType = EmploymentType.Permanent
                     }
                 };
 
@@ -104,6 +156,12 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                     _context.Projects.AddRange(projects);
                     await _context.SaveChangesAsync();
                 }
+            }
+            }
+            catch (Exception ex)
+            {
+                // Log the error and continue - this allows the application to start even if seeding fails
+                Console.WriteLine($"An error occurred while seeding data: {ex.Message}");
             }
         }
     }

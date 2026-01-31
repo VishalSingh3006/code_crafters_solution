@@ -142,7 +142,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
             startDate ??= DateTime.UtcNow.AddMonths(-3);
             endDate ??= DateTime.UtcNow;
 
-            var query = _context.Employees.AsQueryable();
+            var query = _context.Employees.Include(e => e.Designation).AsQueryable();
             
             if (employeeId.HasValue)
             {
@@ -154,7 +154,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 {
                     e.Id,
                     Name = e.FirstName + " " + e.LastName,
-                    e.Position,
+                    Position = e.Designation.Name,
                     TotalDeliveries = _context.Deliveries.Count(d => d.EmployeeId == e.Id && d.PlannedDeliveryDate >= startDate && d.PlannedDeliveryDate <= endDate),
                     CompletedDeliveries = _context.Deliveries.Count(d => d.EmployeeId == e.Id && d.Status == DeliveryStatus.Delivered && d.PlannedDeliveryDate >= startDate && d.PlannedDeliveryDate <= endDate),
                     OnTimeDeliveries = _context.Deliveries.Count(d => d.EmployeeId == e.Id && d.Status == DeliveryStatus.Delivered && d.ActualDeliveryDate <= d.PlannedDeliveryDate && d.PlannedDeliveryDate >= startDate && d.PlannedDeliveryDate <= endDate),

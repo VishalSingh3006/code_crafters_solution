@@ -226,6 +226,50 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.AuditLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("varchar(16)");
+
+                    b.Property<string>("Endpoint")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("EntityName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("NewValues")
+                        .HasMaxLength(4096)
+                        .HasColumnType("varchar(4096)");
+
+                    b.Property<string>("OldValues")
+                        .HasMaxLength(4096)
+                        .HasColumnType("varchar(4096)");
+
+                    b.Property<string>("RequestIp")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<DateTime>("TimestampUtc")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AuditLogs", (string)null);
+                });
+
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Client", b =>
                 {
                     b.Property<int>("Id")
@@ -266,6 +310,62 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Designation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Designations");
+                });
+
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -278,20 +378,46 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateOfJoining")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DesignationId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("EmployeeCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("EmploymentType")
+                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Position")
-                        .HasColumnType("longtext");
+                    b.Property<int?>("ManagerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -301,7 +427,98 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("DesignationId");
+
+                    b.HasIndex("ManagerId");
+
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.EmployeeSkill", b =>
+                {
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
+
+                    b.Property<int>("SkillId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProficiencyLevel")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.HasKey("EmployeeId", "SkillId");
+
+                    b.HasIndex("SkillId");
+
+                    b.ToTable("EmployeeSkills");
+                });
+
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.ExceptionLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("HttpMethod")
+                        .HasMaxLength(16)
+                        .HasColumnType("varchar(16)");
+
+                    b.Property<string>("InnerException")
+                        .HasMaxLength(2048)
+                        .HasColumnType("varchar(2048)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("varchar(2048)");
+
+                    b.Property<string>("RequestBody")
+                        .HasMaxLength(4096)
+                        .HasColumnType("varchar(4096)");
+
+                    b.Property<string>("RequestPath")
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)");
+
+                    b.Property<string>("StackTrace")
+                        .HasMaxLength(4096)
+                        .HasColumnType("varchar(4096)");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TimestampUtc")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("TraceId")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExceptionLogs", (string)null);
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Project", b =>
@@ -577,6 +794,34 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
                     b.ToTable("StaffingRecords");
                 });
 
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Skill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Skills");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -626,6 +871,51 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Employee", b =>
+                {
+                    b.HasOne("ResourceEngagementTrackingSystem.Infrastructure.Models.Department", "Department")
+                        .WithMany("Employees")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ResourceEngagementTrackingSystem.Infrastructure.Models.Designation", "Designation")
+                        .WithMany("Employees")
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ResourceEngagementTrackingSystem.Infrastructure.Models.Employee", "Manager")
+                        .WithMany("Subordinates")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Designation");
+
+                    b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.EmployeeSkill", b =>
+                {
+                    b.HasOne("ResourceEngagementTrackingSystem.Infrastructure.Models.Employee", "Employee")
+                        .WithMany("EmployeeSkills")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResourceEngagementTrackingSystem.Infrastructure.Models.Skill", "Skill")
+                        .WithMany("EmployeeSkills")
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Skill");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Project", b =>
@@ -699,6 +989,28 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Client", b =>
                 {
                     b.Navigation("Projects");
+                });
+
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Department", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Designation", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Employee", b =>
+                {
+                    b.Navigation("EmployeeSkills");
+
+                    b.Navigation("Subordinates");
+                });
+
+            modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Skill", b =>
+                {
+                    b.Navigation("EmployeeSkills");
                 });
 #pragma warning restore 612, 618
         }

@@ -79,6 +79,22 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
+        path="/roles"
+        element={
+          <ProtectedRoute>
+            <RolesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/clients"
+        element={
+          <ProtectedRoute>
+            <ClientsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/"
         element={
           isAuthenticated ? (

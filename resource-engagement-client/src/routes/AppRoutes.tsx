@@ -64,14 +64,6 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/resource-tracking"
-        element={
-          <ProtectedRoute>
-            <ResourceTrackingDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
         path="/resource-tracking/deliveries"
         element={
           <ProtectedRoute>
@@ -84,6 +76,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <StaffingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/resource-tracking"
+        element={
+          <ProtectedRoute>
+            <ResourceTrackingDashboard />
           </ProtectedRoute>
         }
       />

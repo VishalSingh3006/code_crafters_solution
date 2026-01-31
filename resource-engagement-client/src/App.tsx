@@ -1,56 +1,32 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import Login from './components/Login';
-import Register from './components/Register';
-import Dashboard from './components/Dashboard';
-import Profile from './components/Profile';
-import TwoFactorSetup from './components/TwoFactorSetup';
-import ProtectedRoute from './components/ProtectedRoute';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import "./App.css";
+import { ThemeModeProvider } from "./context/ThemeContext";
+import ErrorBoundary from "./components/ErrorBoundary";
+import AppRoutes from "./routes/AppRoutes";
+import { Provider as ReduxProvider } from "react-redux";
+import { store } from "./store/store";
+import Header from "./components/Header";
 
-const AppRoutes: React.FC = () => {
-  const { isAuthenticated } = useAuth();
-
-  return (
-    <Routes>
-      <Route path="/login" element={
-        isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />
-      } />
-      <Route path="/register" element={
-        isAuthenticated ? <Navigate to="/dashboard" replace /> : <Register />
-      } />
-      <Route path="/dashboard" element={
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
-      } />
-      <Route path="/profile" element={
-        <ProtectedRoute>
-          <Profile />
-        </ProtectedRoute>
-      } />
-      <Route path="/2fa-setup" element={
-        <ProtectedRoute>
-          <TwoFactorSetup />
-        </ProtectedRoute>
-      } />
-      <Route path="/" element={
-        isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
-      } />
-    </Routes>
-  );
-};
+// Routes moved to src/routes/AppRoutes.tsx
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="App">
-          <AppRoutes />
-        </div>
-      </Router>
-    </AuthProvider>
+    <ReduxProvider store={store}>
+      <AuthProvider>
+        <ThemeModeProvider>
+          <Router>
+            <div className="App">
+              <Header />
+              <ErrorBoundary>
+                <AppRoutes />
+              </ErrorBoundary>
+            </div>
+          </Router>
+        </ThemeModeProvider>
+      </AuthProvider>
+    </ReduxProvider>
   );
 };
 

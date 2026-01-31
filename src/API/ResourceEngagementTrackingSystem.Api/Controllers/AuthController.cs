@@ -36,7 +36,7 @@ public class AuthController : ControllerBase
         // Check if user already exists
         var existingUser = await _userManager.FindByEmailAsync(dto.Email);
         if (existingUser != null)
-            return BadRequest(new { message = "User with this email already exists" });
+            return BadRequest(new { message = "User with this email already exists." });
 
         var user = new ApplicationUser
         {

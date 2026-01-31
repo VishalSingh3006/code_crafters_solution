@@ -19,16 +19,16 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
 
         public async Task<IEnumerable<Delivery>> GetAllAsync()
         {
-            return await _context.Deliveries
-                .Include(d => d.Project)
+            return await _context
+                .Deliveries.Include(d => d.Project)
                 .Include(d => d.Employee)
                 .ToListAsync();
         }
 
         public async Task<Delivery?> GetByIdAsync(int id)
         {
-            return await _context.Deliveries
-                .Include(d => d.Project)
+            return await _context
+                .Deliveries.Include(d => d.Project)
                 .Include(d => d.Employee)
                 .FirstOrDefaultAsync(d => d.Id == id);
         }
@@ -50,7 +50,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
         public async Task<bool> DeleteAsync(int id)
         {
             var delivery = await _context.Deliveries.FindAsync(id);
-            if (delivery == null) return false;
+            if (delivery == null)
+                return false;
 
             _context.Deliveries.Remove(delivery);
             var result = await _context.SaveChangesAsync();
@@ -59,8 +60,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
 
         public async Task<IEnumerable<Delivery>> GetByProjectIdAsync(int projectId)
         {
-            return await _context.Deliveries
-                .Include(d => d.Project)
+            return await _context
+                .Deliveries.Include(d => d.Project)
                 .Include(d => d.Employee)
                 .Where(d => d.ProjectId == projectId)
                 .ToListAsync();
@@ -68,8 +69,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
 
         public async Task<IEnumerable<Delivery>> GetByEmployeeIdAsync(int employeeId)
         {
-            return await _context.Deliveries
-                .Include(d => d.Project)
+            return await _context
+                .Deliveries.Include(d => d.Project)
                 .Include(d => d.Employee)
                 .Where(d => d.EmployeeId == employeeId)
                 .ToListAsync();
@@ -77,12 +78,14 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
 
         public async Task<IEnumerable<Delivery>> GetOverdueDeliveriesAsync()
         {
-            return await _context.Deliveries
-                .Include(d => d.Project)
+            return await _context
+                .Deliveries.Include(d => d.Project)
                 .Include(d => d.Employee)
-                .Where(d => d.PlannedDeliveryDate < DateTime.Now 
-                           && d.Status != DeliveryStatus.Delivered 
-                           && d.Status != DeliveryStatus.Cancelled)
+                .Where(d =>
+                    d.PlannedDeliveryDate < DateTime.Now
+                    && d.Status != DeliveryStatus.Delivered
+                    && d.Status != DeliveryStatus.Cancelled
+                )
                 .ToListAsync();
         }
     }

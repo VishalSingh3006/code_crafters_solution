@@ -9,12 +9,21 @@ namespace ResourceEngagementTrackingSystem.Application.Interfaces.ResourceTracki
     {
         Task<IEnumerable<StaffingRecordDto>> GetAllStaffingRecordsAsync();
         Task<StaffingRecordDto?> GetStaffingRecordByIdAsync(int id);
-        Task<StaffingRecordDto> CreateStaffingRecordAsync(CreateStaffingRecordDto createStaffingRecordDto);
-        Task<bool> UpdateStaffingRecordAsync(int id, UpdateStaffingRecordDto updateStaffingRecordDto);
+        Task<StaffingRecordDto> CreateStaffingRecordAsync(
+            CreateStaffingRecordDto createStaffingRecordDto
+        );
+        Task<bool> UpdateStaffingRecordAsync(
+            int id,
+            UpdateStaffingRecordDto updateStaffingRecordDto
+        );
         Task<bool> DeleteStaffingRecordAsync(int id);
         Task<IEnumerable<StaffingRecordDto>> GetStaffingRecordsByEmployeeIdAsync(int employeeId);
         Task<IEnumerable<StaffingRecordDto>> GetStaffingRecordsByProjectIdAsync(int projectId);
         Task<IEnumerable<StaffingRecordDto>> GetActiveStaffingRecordsAsync();
-        Task<decimal> GetEmployeeUtilizationAsync(int employeeId, DateTime startDate, DateTime endDate);
+        Task<decimal> GetEmployeeUtilizationAsync(
+            int employeeId,
+            DateTime startDate,
+            DateTime endDate
+        );
     }
 }

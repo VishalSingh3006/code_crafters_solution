@@ -32,7 +32,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetAllBillingRecords_WhenRecordsExist_ReturnsOkWithRecords()
         {
             // Arrange
-            _mockBillingService.Setup(x => x.GetAllBillingRecordsAsync())
+            _mockBillingService
+                .Setup(x => x.GetAllBillingRecordsAsync())
                 .ReturnsAsync(_fixture.SampleBillingRecords);
 
             // Act
@@ -49,7 +50,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetAllBillingRecords_WhenNoRecords_ReturnsOkWithEmptyList()
         {
             // Arrange
-            _mockBillingService.Setup(x => x.GetAllBillingRecordsAsync())
+            _mockBillingService
+                .Setup(x => x.GetAllBillingRecordsAsync())
                 .ReturnsAsync(new List<BillingRecordDto>());
 
             // Act
@@ -65,7 +67,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetAllBillingRecords_WhenServiceThrows_ShouldThrow()
         {
             // Arrange
-            _mockBillingService.Setup(x => x.GetAllBillingRecordsAsync())
+            _mockBillingService
+                .Setup(x => x.GetAllBillingRecordsAsync())
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -81,7 +84,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _mockBillingService.Setup(x => x.GetBillingRecordByIdAsync(recordId))
+            _mockBillingService
+                .Setup(x => x.GetBillingRecordByIdAsync(recordId))
                 .ReturnsAsync(_fixture.SampleBillingRecord);
 
             // Act
@@ -99,7 +103,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 999;
-            _mockBillingService.Setup(x => x.GetBillingRecordByIdAsync(recordId))
+            _mockBillingService
+                .Setup(x => x.GetBillingRecordByIdAsync(recordId))
                 .ReturnsAsync((BillingRecordDto)null);
 
             // Act
@@ -114,7 +119,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _mockBillingService.Setup(x => x.GetBillingRecordByIdAsync(recordId))
+            _mockBillingService
+                .Setup(x => x.GetBillingRecordByIdAsync(recordId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -130,10 +136,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var createDto = _fixture.SampleCreateBillingRecordDto;
-            var createdRecord = new BillingRecordDto 
-            { 
-                Id = 4, 
-                ProjectId = createDto.ProjectId, 
+            var createdRecord = new BillingRecordDto
+            {
+                Id = 4,
+                ProjectId = createDto.ProjectId,
                 EmployeeId = createDto.EmployeeId,
                 BillingDate = createDto.BillingDate,
                 HoursWorked = createDto.HoursWorked,
@@ -143,10 +149,11 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 BillingType = createDto.BillingType,
                 Status = createDto.Status,
                 IsInvoiced = createDto.IsInvoiced,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
             };
-            
-            _mockBillingService.Setup(x => x.CreateBillingRecordAsync(createDto))
+
+            _mockBillingService
+                .Setup(x => x.CreateBillingRecordAsync(createDto))
                 .ReturnsAsync(createdRecord);
 
             // Act
@@ -175,8 +182,11 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<BadRequestObjectResult>();
             var badRequestResult = result as BadRequestObjectResult;
             badRequestResult!.Value.Should().BeOfType<SerializableError>();
-            
-            _mockBillingService.Verify(x => x.CreateBillingRecordAsync(It.IsAny<CreateBillingRecordDto>()), Times.Never);
+
+            _mockBillingService.Verify(
+                x => x.CreateBillingRecordAsync(It.IsAny<CreateBillingRecordDto>()),
+                Times.Never
+            );
         }
 
         [Fact]
@@ -184,7 +194,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var createDto = _fixture.SampleCreateBillingRecordDto;
-            _mockBillingService.Setup(x => x.CreateBillingRecordAsync(createDto))
+            _mockBillingService
+                .Setup(x => x.CreateBillingRecordAsync(createDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -201,7 +212,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var recordId = 1;
             var updateDto = _fixture.SampleUpdateBillingRecordDto;
-            _mockBillingService.Setup(x => x.UpdateBillingRecordAsync(recordId, updateDto))
+            _mockBillingService
+                .Setup(x => x.UpdateBillingRecordAsync(recordId, updateDto))
                 .ReturnsAsync(true);
 
             // Act
@@ -209,7 +221,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
 
             // Assert
             result.Should().BeOfType<NoContentResult>();
-            _mockBillingService.Verify(x => x.UpdateBillingRecordAsync(recordId, updateDto), Times.Once);
+            _mockBillingService.Verify(
+                x => x.UpdateBillingRecordAsync(recordId, updateDto),
+                Times.Once
+            );
         }
 
         [Fact]
@@ -218,7 +233,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var recordId = 999;
             var updateDto = _fixture.SampleUpdateBillingRecordDto;
-            _mockBillingService.Setup(x => x.UpdateBillingRecordAsync(recordId, updateDto))
+            _mockBillingService
+                .Setup(x => x.UpdateBillingRecordAsync(recordId, updateDto))
                 .ReturnsAsync(false);
 
             // Act
@@ -233,7 +249,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _controller.ModelState.AddModelError("HoursWorked", "HoursWorked must be greater than 0");
+            _controller.ModelState.AddModelError(
+                "HoursWorked",
+                "HoursWorked must be greater than 0"
+            );
             var updateDto = new UpdateBillingRecordDto();
 
             // Act
@@ -243,8 +262,12 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<BadRequestObjectResult>();
             var badRequestResult = result as BadRequestObjectResult;
             badRequestResult!.Value.Should().BeOfType<SerializableError>();
-            
-            _mockBillingService.Verify(x => x.UpdateBillingRecordAsync(It.IsAny<int>(), It.IsAny<UpdateBillingRecordDto>()), Times.Never);
+
+            _mockBillingService.Verify(
+                x =>
+                    x.UpdateBillingRecordAsync(It.IsAny<int>(), It.IsAny<UpdateBillingRecordDto>()),
+                Times.Never
+            );
         }
 
         [Fact]
@@ -253,11 +276,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var recordId = 1;
             var updateDto = _fixture.SampleUpdateBillingRecordDto;
-            _mockBillingService.Setup(x => x.UpdateBillingRecordAsync(recordId, updateDto))
+            _mockBillingService
+                .Setup(x => x.UpdateBillingRecordAsync(recordId, updateDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.UpdateBillingRecord(recordId, updateDto));
+            await Assert.ThrowsAsync<Exception>(() =>
+                _controller.UpdateBillingRecord(recordId, updateDto)
+            );
         }
 
         #endregion
@@ -269,8 +295,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _mockBillingService.Setup(x => x.DeleteBillingRecordAsync(recordId))
-                .ReturnsAsync(true);
+            _mockBillingService.Setup(x => x.DeleteBillingRecordAsync(recordId)).ReturnsAsync(true);
 
             // Act
             var result = await _controller.DeleteBillingRecord(recordId);
@@ -285,7 +310,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 999;
-            _mockBillingService.Setup(x => x.DeleteBillingRecordAsync(recordId))
+            _mockBillingService
+                .Setup(x => x.DeleteBillingRecordAsync(recordId))
                 .ReturnsAsync(false);
 
             // Act
@@ -300,7 +326,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _mockBillingService.Setup(x => x.DeleteBillingRecordAsync(recordId))
+            _mockBillingService
+                .Setup(x => x.DeleteBillingRecordAsync(recordId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -317,7 +344,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var month = DateTime.Now.Month;
             var year = DateTime.Now.Year;
-            _mockBillingService.Setup(x => x.GetMonthlyBillingReportAsync(month, year))
+            _mockBillingService
+                .Setup(x => x.GetMonthlyBillingReportAsync(month, year))
                 .ReturnsAsync(_fixture.SampleMonthlyReport);
 
             // Act
@@ -327,7 +355,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleMonthlyReport);
-            _mockBillingService.Verify(x => x.GetMonthlyBillingReportAsync(month, year), Times.Once);
+            _mockBillingService.Verify(
+                x => x.GetMonthlyBillingReportAsync(month, year),
+                Times.Once
+            );
         }
 
         [Fact]
@@ -336,11 +367,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var month = 12;
             var year = 2023;
-            _mockBillingService.Setup(x => x.GetMonthlyBillingReportAsync(month, year))
+            _mockBillingService
+                .Setup(x => x.GetMonthlyBillingReportAsync(month, year))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.GetMonthlyBillingReport(month, year));
+            await Assert.ThrowsAsync<Exception>(() =>
+                _controller.GetMonthlyBillingReport(month, year)
+            );
         }
 
         #endregion

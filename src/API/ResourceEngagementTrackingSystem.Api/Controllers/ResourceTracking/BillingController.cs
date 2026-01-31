@@ -35,22 +35,36 @@ namespace ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking.Bill
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBillingRecord([FromBody] CreateBillingRecordDto createBillingRecordDto)
+        public async Task<IActionResult> CreateBillingRecord(
+            [FromBody] CreateBillingRecordDto createBillingRecordDto
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var billingRecord = await _billingService.CreateBillingRecordAsync(createBillingRecordDto);
-            return CreatedAtAction(nameof(GetBillingRecord), new { id = billingRecord.Id }, billingRecord);
+            var billingRecord = await _billingService.CreateBillingRecordAsync(
+                createBillingRecordDto
+            );
+            return CreatedAtAction(
+                nameof(GetBillingRecord),
+                new { id = billingRecord.Id },
+                billingRecord
+            );
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBillingRecord(int id, [FromBody] UpdateBillingRecordDto updateBillingRecordDto)
+        public async Task<IActionResult> UpdateBillingRecord(
+            int id,
+            [FromBody] UpdateBillingRecordDto updateBillingRecordDto
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var success = await _billingService.UpdateBillingRecordAsync(id, updateBillingRecordDto);
+            var success = await _billingService.UpdateBillingRecordAsync(
+                id,
+                updateBillingRecordDto
+            );
             if (!success)
                 return NotFound();
 

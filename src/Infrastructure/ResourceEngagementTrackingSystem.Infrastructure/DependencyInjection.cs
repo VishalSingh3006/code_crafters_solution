@@ -1,18 +1,17 @@
 using System;
 using System.Text;
-using ResourceEngagementTrackingSystem.Infrastructure.Models;
-using ResourceEngagementTrackingSystem.Infrastructure.Services;
-using ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTracking;
-using ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceTracking;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.IdentityModel.Tokens;
 using ResourceEngagementTrackingSystem.Application.Interfaces;
 using ResourceEngagementTrackingSystem.Application.Interfaces.ResourceTracking;
-using Microsoft.IdentityModel.Tokens;
+using ResourceEngagementTrackingSystem.Infrastructure.Models;
+using ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceTracking;
+using ResourceEngagementTrackingSystem.Infrastructure.Services;
+using ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTracking;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure;
 
@@ -37,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<IDepartmentService, DepartmentService>();
         services.AddScoped<IDesignationService, DesignationService>();
         services.AddScoped<ISkillService, SkillService>();
+        services.AddScoped<IPortfolioCompanyService, PortfolioCompanyService>();
 
         // Register ResourceTracking repositories
         services.AddScoped<IDeliveryRepository, DeliveryRepository>();
@@ -89,7 +89,8 @@ public static class DependencyInjection
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 6;
                 // Enable 2FA
-                options.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+                options.Tokens.AuthenticatorTokenProvider =
+                    TokenOptions.DefaultAuthenticatorProvider;
             })
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()

@@ -35,22 +35,36 @@ namespace ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateStaffingRecord([FromBody] CreateStaffingRecordDto createStaffingRecordDto)
+        public async Task<IActionResult> CreateStaffingRecord(
+            [FromBody] CreateStaffingRecordDto createStaffingRecordDto
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var staffingRecord = await _staffingService.CreateStaffingRecordAsync(createStaffingRecordDto);
-            return CreatedAtAction(nameof(GetStaffingRecord), new { id = staffingRecord.Id }, staffingRecord);
+            var staffingRecord = await _staffingService.CreateStaffingRecordAsync(
+                createStaffingRecordDto
+            );
+            return CreatedAtAction(
+                nameof(GetStaffingRecord),
+                new { id = staffingRecord.Id },
+                staffingRecord
+            );
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStaffingRecord(int id, [FromBody] UpdateStaffingRecordDto updateStaffingRecordDto)
+        public async Task<IActionResult> UpdateStaffingRecord(
+            int id,
+            [FromBody] UpdateStaffingRecordDto updateStaffingRecordDto
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var success = await _staffingService.UpdateStaffingRecordAsync(id, updateStaffingRecordDto);
+            var success = await _staffingService.UpdateStaffingRecordAsync(
+                id,
+                updateStaffingRecordDto
+            );
             if (!success)
                 return NotFound();
 

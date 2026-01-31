@@ -1,5 +1,5 @@
-using ResourceEngagementTrackingSystem.Application.DTOs;
 using System.Collections.Generic;
+using ResourceEngagementTrackingSystem.Application.DTOs;
 
 namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
 {
@@ -13,31 +13,16 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
         {
             SampleDesignations = new List<DesignationDto>
             {
-                new DesignationDto 
-                { 
-                    Id = 1, 
-                    Name = "Software Engineer"
-                },
-                new DesignationDto 
-                { 
-                    Id = 2, 
-                    Name = "Senior Software Engineer"
-                },
-                new DesignationDto 
-                { 
-                    Id = 3, 
-                    Name = "Project Manager"
-                }
+                new DesignationDto { Id = 1, Name = "Software Engineer" },
+                new DesignationDto { Id = 2, Name = "Senior Software Engineer" },
+                new DesignationDto { Id = 3, Name = "Project Manager" },
             };
 
-            SampleCreateDesignationDto = new CreateDesignationDto
-            {
-                Name = "DevOps Engineer"
-            };
+            SampleCreateDesignationDto = new CreateDesignationDto { Name = "DevOps Engineer" };
 
             SampleUpdateDesignationDto = new UpdateDesignationDto
             {
-                Name = "Senior DevOps Engineer"
+                Name = "Senior DevOps Engineer",
             };
         }
     }

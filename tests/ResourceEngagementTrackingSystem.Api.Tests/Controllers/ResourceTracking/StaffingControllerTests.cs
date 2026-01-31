@@ -32,7 +32,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetAllStaffingRecords_ReturnsOkResult_WithStaffingRecordsList()
         {
             // Arrange
-            _mockStaffingService.Setup(x => x.GetAllStaffingRecordsAsync())
+            _mockStaffingService
+                .Setup(x => x.GetAllStaffingRecordsAsync())
                 .ReturnsAsync(_fixture.SampleStaffingRecords);
 
             // Act
@@ -42,7 +43,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleStaffingRecords);
-            
+
             _mockStaffingService.Verify(x => x.GetAllStaffingRecordsAsync(), Times.Once);
         }
 
@@ -50,7 +51,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetAllStaffingRecords_ServiceThrowsException_PropagatesException()
         {
             // Arrange
-            _mockStaffingService.Setup(x => x.GetAllStaffingRecordsAsync())
+            _mockStaffingService
+                .Setup(x => x.GetAllStaffingRecordsAsync())
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -67,7 +69,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _mockStaffingService.Setup(x => x.GetStaffingRecordByIdAsync(recordId))
+            _mockStaffingService
+                .Setup(x => x.GetStaffingRecordByIdAsync(recordId))
                 .ReturnsAsync(_fixture.SampleStaffingRecord);
 
             // Act
@@ -77,7 +80,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleStaffingRecord);
-            
+
             _mockStaffingService.Verify(x => x.GetStaffingRecordByIdAsync(recordId), Times.Once);
         }
 
@@ -86,7 +89,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 999;
-            _mockStaffingService.Setup(x => x.GetStaffingRecordByIdAsync(recordId))
+            _mockStaffingService
+                .Setup(x => x.GetStaffingRecordByIdAsync(recordId))
                 .ReturnsAsync((StaffingRecordDto?)null);
 
             // Act
@@ -102,7 +106,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _mockStaffingService.Setup(x => x.GetStaffingRecordByIdAsync(recordId))
+            _mockStaffingService
+                .Setup(x => x.GetStaffingRecordByIdAsync(recordId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -119,7 +124,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var createDto = _fixture.SampleCreateStaffingRecordDto;
-            _mockStaffingService.Setup(x => x.CreateStaffingRecordAsync(createDto))
+            _mockStaffingService
+                .Setup(x => x.CreateStaffingRecordAsync(createDto))
                 .ReturnsAsync(_fixture.SampleStaffingRecord);
 
             // Act
@@ -131,7 +137,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             createdResult!.ActionName.Should().Be("GetStaffingRecord");
             createdResult.RouteValues!["id"].Should().Be(_fixture.SampleStaffingRecord.Id);
             createdResult.Value.Should().BeEquivalentTo(_fixture.SampleStaffingRecord);
-            
+
             _mockStaffingService.Verify(x => x.CreateStaffingRecordAsync(createDto), Times.Once);
         }
 
@@ -149,8 +155,11 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<BadRequestObjectResult>();
             var badRequestResult = result as BadRequestObjectResult;
             badRequestResult!.Value.Should().BeOfType<SerializableError>();
-            
-            _mockStaffingService.Verify(x => x.CreateStaffingRecordAsync(It.IsAny<CreateStaffingRecordDto>()), Times.Never);
+
+            _mockStaffingService.Verify(
+                x => x.CreateStaffingRecordAsync(It.IsAny<CreateStaffingRecordDto>()),
+                Times.Never
+            );
         }
 
         [Fact]
@@ -158,7 +167,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var createDto = _fixture.SampleCreateStaffingRecordDto;
-            _mockStaffingService.Setup(x => x.CreateStaffingRecordAsync(createDto))
+            _mockStaffingService
+                .Setup(x => x.CreateStaffingRecordAsync(createDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -176,7 +186,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var recordId = 1;
             var updateDto = _fixture.SampleUpdateStaffingRecordDto;
-            _mockStaffingService.Setup(x => x.UpdateStaffingRecordAsync(recordId, updateDto))
+            _mockStaffingService
+                .Setup(x => x.UpdateStaffingRecordAsync(recordId, updateDto))
                 .ReturnsAsync(true);
 
             // Act
@@ -184,7 +195,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
 
             // Assert
             result.Should().BeOfType<NoContentResult>();
-            _mockStaffingService.Verify(x => x.UpdateStaffingRecordAsync(recordId, updateDto), Times.Once);
+            _mockStaffingService.Verify(
+                x => x.UpdateStaffingRecordAsync(recordId, updateDto),
+                Times.Once
+            );
         }
 
         [Fact]
@@ -193,7 +207,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var recordId = 999;
             var updateDto = _fixture.SampleUpdateStaffingRecordDto;
-            _mockStaffingService.Setup(x => x.UpdateStaffingRecordAsync(recordId, updateDto))
+            _mockStaffingService
+                .Setup(x => x.UpdateStaffingRecordAsync(recordId, updateDto))
                 .ReturnsAsync(false);
 
             // Act
@@ -201,7 +216,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
 
             // Assert
             result.Should().BeOfType<NotFoundResult>();
-            _mockStaffingService.Verify(x => x.UpdateStaffingRecordAsync(recordId, updateDto), Times.Once);
+            _mockStaffingService.Verify(
+                x => x.UpdateStaffingRecordAsync(recordId, updateDto),
+                Times.Once
+            );
         }
 
         [Fact]
@@ -219,8 +237,15 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<BadRequestObjectResult>();
             var badRequestResult = result as BadRequestObjectResult;
             badRequestResult!.Value.Should().BeOfType<SerializableError>();
-            
-            _mockStaffingService.Verify(x => x.UpdateStaffingRecordAsync(It.IsAny<int>(), It.IsAny<UpdateStaffingRecordDto>()), Times.Never);
+
+            _mockStaffingService.Verify(
+                x =>
+                    x.UpdateStaffingRecordAsync(
+                        It.IsAny<int>(),
+                        It.IsAny<UpdateStaffingRecordDto>()
+                    ),
+                Times.Never
+            );
         }
 
         [Fact]
@@ -229,12 +254,18 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var recordId = 1;
             var updateDto = _fixture.SampleUpdateStaffingRecordDto;
-            _mockStaffingService.Setup(x => x.UpdateStaffingRecordAsync(recordId, updateDto))
+            _mockStaffingService
+                .Setup(x => x.UpdateStaffingRecordAsync(recordId, updateDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.UpdateStaffingRecord(recordId, updateDto));
-            _mockStaffingService.Verify(x => x.UpdateStaffingRecordAsync(recordId, updateDto), Times.Once);
+            await Assert.ThrowsAsync<Exception>(() =>
+                _controller.UpdateStaffingRecord(recordId, updateDto)
+            );
+            _mockStaffingService.Verify(
+                x => x.UpdateStaffingRecordAsync(recordId, updateDto),
+                Times.Once
+            );
         }
 
         #endregion
@@ -246,7 +277,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _mockStaffingService.Setup(x => x.DeleteStaffingRecordAsync(recordId))
+            _mockStaffingService
+                .Setup(x => x.DeleteStaffingRecordAsync(recordId))
                 .ReturnsAsync(true);
 
             // Act
@@ -262,7 +294,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 999;
-            _mockStaffingService.Setup(x => x.DeleteStaffingRecordAsync(recordId))
+            _mockStaffingService
+                .Setup(x => x.DeleteStaffingRecordAsync(recordId))
                 .ReturnsAsync(false);
 
             // Act
@@ -278,7 +311,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _mockStaffingService.Setup(x => x.DeleteStaffingRecordAsync(recordId))
+            _mockStaffingService
+                .Setup(x => x.DeleteStaffingRecordAsync(recordId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert

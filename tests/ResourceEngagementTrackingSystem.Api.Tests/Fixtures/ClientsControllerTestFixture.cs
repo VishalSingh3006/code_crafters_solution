@@ -20,7 +20,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 Name = "ABC Corporation",
                 Email = "contact@abc-corp.com",
                 ContactName = "John Smith",
-                ContactPhone = "555-1234"
+                ContactPhone = "555-1234",
             };
 
             SampleUpdatedClient = new ClientDto
@@ -29,7 +29,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 Name = "ABC Corporation Ltd", // Updated name
                 Email = "info@abc-corp.com", // Updated email
                 ContactName = "John Smith",
-                ContactPhone = "555-1234"
+                ContactPhone = "555-1234",
             };
 
             var client2 = new ClientDto
@@ -38,7 +38,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 Name = "XYZ Solutions",
                 Email = "hello@xyz-solutions.com",
                 ContactName = "Sarah Johnson",
-                ContactPhone = "555-5678"
+                ContactPhone = "555-5678",
             };
 
             var client3 = new ClientDto
@@ -47,7 +47,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 Name = "Tech Innovations Inc",
                 Email = "contact@techinnovations.com",
                 ContactName = "Michael Brown",
-                ContactPhone = "555-9999"
+                ContactPhone = "555-9999",
             };
 
             SampleClients = new List<ClientDto> { SampleClient, client2, client3 };
@@ -57,7 +57,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 Name = "New Client LLC",
                 Email = "contact@newclient.com",
                 ContactName = "Emily Davis",
-                ContactPhone = "555-4321"
+                ContactPhone = "555-4321",
             };
 
             SampleUpdateClientDto = new UpdateClientDto
@@ -65,7 +65,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 Name = "ABC Corporation Ltd",
                 Email = "info@abc-corp.com",
                 ContactName = "John Smith",
-                ContactPhone = "555-1234"
+                ContactPhone = "555-1234",
             };
         }
     }

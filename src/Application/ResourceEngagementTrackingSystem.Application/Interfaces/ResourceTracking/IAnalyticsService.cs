@@ -8,9 +8,16 @@ namespace ResourceEngagementTrackingSystem.Application.Interfaces.ResourceTracki
     {
         Task<DashboardDataDto> GetDashboardDataAsync();
         Task<ResourceAnalyticsDto> GetResourceAnalyticsAsync();
-        Task<ResourceUtilizationDto> GetResourceUtilizationAsync(DateTime? startDate, DateTime? endDate);
+        Task<ResourceUtilizationDto> GetResourceUtilizationAsync(
+            DateTime? startDate,
+            DateTime? endDate
+        );
         Task<object> GetProjectPerformanceAsync(int? projectId);
-        Task<object> GetEmployeePerformanceAsync(int? employeeId, DateTime? startDate, DateTime? endDate);
+        Task<object> GetEmployeePerformanceAsync(
+            int? employeeId,
+            DateTime? startDate,
+            DateTime? endDate
+        );
         Task<object> GetRevenueAnalysisAsync(int year);
         Task<object> GetCapacityPlanningDataAsync();
     }

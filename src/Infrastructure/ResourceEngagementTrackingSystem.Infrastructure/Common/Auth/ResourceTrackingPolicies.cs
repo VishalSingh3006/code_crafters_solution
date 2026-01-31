@@ -17,35 +17,46 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Common.Auth
 
         public static void AddResourceTrackingPolicies(this AuthorizationOptions options)
         {
-            options.AddPolicy(CanViewDeliveries, policy =>
-                policy.RequireRole("Admin", "Manager", "Employee"));
+            options.AddPolicy(
+                CanViewDeliveries,
+                policy => policy.RequireRole("Admin", "Manager", "Employee")
+            );
 
-            options.AddPolicy(CanManageDeliveries, policy =>
-                policy.RequireRole("Admin", "Manager"));
+            options.AddPolicy(
+                CanManageDeliveries,
+                policy => policy.RequireRole("Admin", "Manager")
+            );
 
-            options.AddPolicy(CanViewStaffing, policy =>
-                policy.RequireRole("Admin", "Manager", "HR"));
+            options.AddPolicy(
+                CanViewStaffing,
+                policy => policy.RequireRole("Admin", "Manager", "HR")
+            );
 
-            options.AddPolicy(CanManageStaffing, policy =>
-                policy.RequireRole("Admin", "Manager", "HR"));
+            options.AddPolicy(
+                CanManageStaffing,
+                policy => policy.RequireRole("Admin", "Manager", "HR")
+            );
 
-            options.AddPolicy(CanViewRecruitment, policy =>
-                policy.RequireRole("Admin", "Manager", "HR"));
+            options.AddPolicy(
+                CanViewRecruitment,
+                policy => policy.RequireRole("Admin", "Manager", "HR")
+            );
 
-            options.AddPolicy(CanManageRecruitment, policy =>
-                policy.RequireRole("Admin", "HR"));
+            options.AddPolicy(CanManageRecruitment, policy => policy.RequireRole("Admin", "HR"));
 
-            options.AddPolicy(CanViewBilling, policy =>
-                policy.RequireRole("Admin", "Manager", "Finance"));
+            options.AddPolicy(
+                CanViewBilling,
+                policy => policy.RequireRole("Admin", "Manager", "Finance")
+            );
 
-            options.AddPolicy(CanManageBilling, policy =>
-                policy.RequireRole("Admin", "Finance"));
+            options.AddPolicy(CanManageBilling, policy => policy.RequireRole("Admin", "Finance"));
 
-            options.AddPolicy(CanViewAnalytics, policy =>
-                policy.RequireRole("Admin", "Manager", "Finance"));
+            options.AddPolicy(
+                CanViewAnalytics,
+                policy => policy.RequireRole("Admin", "Manager", "Finance")
+            );
 
-            options.AddPolicy(CanManageAnalytics, policy =>
-                policy.RequireRole("Admin"));
+            options.AddPolicy(CanManageAnalytics, policy => policy.RequireRole("Admin"));
         }
     }
 }

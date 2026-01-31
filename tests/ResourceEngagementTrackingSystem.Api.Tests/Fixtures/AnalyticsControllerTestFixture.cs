@@ -27,9 +27,24 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                 AverageResourceUtilization = 78.5m,
                 ProjectStatusSummary = new List<ProjectStatusSummaryDto>
                 {
-                    new() { Status = "Active", Count = 10, Percentage = 66.7m },
-                    new() { Status = "On Hold", Count = 3, Percentage = 20.0m },
-                    new() { Status = "Completed", Count = 2, Percentage = 13.3m }
+                    new()
+                    {
+                        Status = "Active",
+                        Count = 10,
+                        Percentage = 66.7m,
+                    },
+                    new()
+                    {
+                        Status = "On Hold",
+                        Count = 3,
+                        Percentage = 20.0m,
+                    },
+                    new()
+                    {
+                        Status = "Completed",
+                        Count = 2,
+                        Percentage = 13.3m,
+                    },
                 },
                 TopUtilizedEmployees = new List<EmployeeUtilizationSummaryDto>
                 {
@@ -38,16 +53,16 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                         EmployeeId = 1,
                         EmployeeName = "John Doe",
                         UtilizationPercentage = 95.5m,
-                        TotalHours = 160
+                        TotalHours = 160,
                     },
                     new()
                     {
                         EmployeeId = 2,
                         EmployeeName = "Jane Smith",
                         UtilizationPercentage = 88.2m,
-                        TotalHours = 152
-                    }
-                }
+                        TotalHours = 152,
+                    },
+                },
             };
 
             SampleResourceUtilizationData = new ResourceUtilizationDto
@@ -65,7 +80,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                         TotalAllocatedHours = 160,
                         TotalWorkedHours = 152,
                         UtilizationPercentage = 95.0m,
-                        ProjectAllocations = new List<ProjectAllocationDto>()
+                        ProjectAllocations = new List<ProjectAllocationDto>(),
                     },
                     new()
                     {
@@ -75,8 +90,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                         TotalAllocatedHours = 160,
                         TotalWorkedHours = 136,
                         UtilizationPercentage = 85.0m,
-                        ProjectAllocations = new List<ProjectAllocationDto>()
-                    }
+                        ProjectAllocations = new List<ProjectAllocationDto>(),
+                    },
                 },
                 DepartmentUtilizations = new List<DepartmentUtilizationDto>
                 {
@@ -84,15 +99,15 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                     {
                         Department = "Engineering",
                         EmployeeCount = 20,
-                        AverageUtilization = 87.5m
+                        AverageUtilization = 87.5m,
                     },
                     new()
                     {
                         Department = "Design",
                         EmployeeCount = 15,
-                        AverageUtilization = 82.3m
-                    }
-                }
+                        AverageUtilization = 82.3m,
+                    },
+                },
             };
 
             SampleProjectPerformanceDataWithId = new
@@ -107,7 +122,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                 SpentAmount = 112500.00m,
                 TeamSize = 8,
                 StartDate = new DateTime(2024, 1, 1),
-                EstimatedEndDate = new DateTime(2024, 6, 30)
+                EstimatedEndDate = new DateTime(2024, 6, 30),
             };
 
             SampleProjectPerformanceData = new
@@ -117,7 +132,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                 TotalHours = 15000,
                 CompletedProjects = 8,
                 OnTrackProjects = 12,
-                DelayedProjects = 5
+                DelayedProjects = 5,
             };
 
             SampleEmployeePerformanceDataWithId = new
@@ -130,7 +145,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                 ProjectsWorkedOn = 3,
                 AverageTaskCompletionTime = 2.5, // hours
                 QualityRating = 4.8,
-                OnTimeDeliveryRate = 92.5
+                OnTimeDeliveryRate = 92.5,
             };
 
             SampleEmployeePerformanceData = new
@@ -139,7 +154,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                 AverageProductivityScore = 7.8,
                 TopPerformer = "Alice Anderson",
                 BottomPerformer = "Charlie Brown",
-                AverageHoursPerEmployee = 156.8
+                AverageHoursPerEmployee = 156.8,
             };
 
             SampleRevenueAnalysisData = new
@@ -153,7 +168,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                     new { Month = "March", Revenue = 195000.00m },
                     new { Month = "April", Revenue = 210000.75m },
                     new { Month = "May", Revenue = 225000.00m },
-                    new { Month = "June", Revenue = 240000.50m }
+                    new { Month = "June", Revenue = 240000.50m },
                 },
                 QuarterlyGrowth = 12.5m,
                 YearOverYearGrowth = 18.3m,
@@ -161,14 +176,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                 {
                     new { ProjectName = "Enterprise Solution", Revenue = 500000.00m },
                     new { ProjectName = "Mobile App Redesign", Revenue = 350000.00m },
-                    new { ProjectName = "Data Analytics Platform", Revenue = 275000.00m }
+                    new { ProjectName = "Data Analytics Platform", Revenue = 275000.00m },
                 },
                 RevenueByDepartment = new[]
                 {
                     new { Department = "Engineering", Revenue = 1200000.00m },
                     new { Department = "Design", Revenue = 800000.00m },
-                    new { Department = "Consulting", Revenue = 500000.75m }
-                }
+                    new { Department = "Consulting", Revenue = 500000.75m },
+                },
             };
 
             SampleCapacityPlanningData = new
@@ -179,31 +194,95 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                 UtilizationPercentage = 82.5,
                 DepartmentCapacity = new[]
                 {
-                    new { Department = "Engineering", Capacity = 800, Utilized = 720, AvailableCapacity = 80 },
-                    new { Department = "Design", Capacity = 400, Utilized = 350, AvailableCapacity = 50 },
-                    new { Department = "QA", Capacity = 300, Utilized = 280, AvailableCapacity = 20 },
-                    new { Department = "DevOps", Capacity = 200, Utilized = 180, AvailableCapacity = 20 },
-                    new { Department = "Project Management", Capacity = 300, Utilized = 120, AvailableCapacity = 180 }
+                    new
+                    {
+                        Department = "Engineering",
+                        Capacity = 800,
+                        Utilized = 720,
+                        AvailableCapacity = 80,
+                    },
+                    new
+                    {
+                        Department = "Design",
+                        Capacity = 400,
+                        Utilized = 350,
+                        AvailableCapacity = 50,
+                    },
+                    new
+                    {
+                        Department = "QA",
+                        Capacity = 300,
+                        Utilized = 280,
+                        AvailableCapacity = 20,
+                    },
+                    new
+                    {
+                        Department = "DevOps",
+                        Capacity = 200,
+                        Utilized = 180,
+                        AvailableCapacity = 20,
+                    },
+                    new
+                    {
+                        Department = "Project Management",
+                        Capacity = 300,
+                        Utilized = 120,
+                        AvailableCapacity = 180,
+                    },
                 },
                 ProjectedCapacityNeeds = new[]
                 {
                     new { Month = "February", RequiredCapacity = 1800 },
                     new { Month = "March", RequiredCapacity = 1900 },
                     new { Month = "April", RequiredCapacity = 2100 },
-                    new { Month = "May", RequiredCapacity = 2200 }
+                    new { Month = "May", RequiredCapacity = 2200 },
                 },
                 SkillGaps = new[]
                 {
-                    new { Skill = "React", CurrentCount = 5, RequiredCount = 8, GapPercentage = 37.5 },
-                    new { Skill = "Python", CurrentCount = 10, RequiredCount = 12, GapPercentage = 16.7 },
-                    new { Skill = "DevOps", CurrentCount = 3, RequiredCount = 6, GapPercentage = 50.0 },
-                    new { Skill = "UI/UX Design", CurrentCount = 8, RequiredCount = 10, GapPercentage = 20.0 }
+                    new
+                    {
+                        Skill = "React",
+                        CurrentCount = 5,
+                        RequiredCount = 8,
+                        GapPercentage = 37.5,
+                    },
+                    new
+                    {
+                        Skill = "Python",
+                        CurrentCount = 10,
+                        RequiredCount = 12,
+                        GapPercentage = 16.7,
+                    },
+                    new
+                    {
+                        Skill = "DevOps",
+                        CurrentCount = 3,
+                        RequiredCount = 6,
+                        GapPercentage = 50.0,
+                    },
+                    new
+                    {
+                        Skill = "UI/UX Design",
+                        CurrentCount = 8,
+                        RequiredCount = 10,
+                        GapPercentage = 20.0,
+                    },
                 },
                 UpcomingProjectsRequirements = new[]
                 {
-                    new { ProjectName = "Mobile App V2", RequiredResources = 250, StartDate = "2024-03-01" },
-                    new { ProjectName = "AI Integration", RequiredResources = 180, StartDate = "2024-04-15" }
-                }
+                    new
+                    {
+                        ProjectName = "Mobile App V2",
+                        RequiredResources = 250,
+                        StartDate = "2024-03-01",
+                    },
+                    new
+                    {
+                        ProjectName = "AI Integration",
+                        RequiredResources = 180,
+                        StartDate = "2024-04-15",
+                    },
+                },
             };
 
             EmptyCapacityPlanningData = new
@@ -214,7 +293,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
                 UtilizationPercentage = 0.0,
                 DepartmentCapacity = Array.Empty<object>(),
                 ProjectedCapacityNeeds = Array.Empty<object>(),
-                SkillGaps = Array.Empty<object>()
+                SkillGaps = Array.Empty<object>(),
             };
         }
     }

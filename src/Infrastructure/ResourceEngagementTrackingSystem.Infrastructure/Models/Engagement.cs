@@ -18,6 +18,6 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
         NotStarted,
         InProgress,
         Completed,
-        Cancelled
+        Cancelled,
     }
 }

@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using ResourceEngagementTrackingSystem.Application.DTOs;
 using ResourceEngagementTrackingSystem.Application.Interfaces;
 using ResourceEngagementTrackingSystem.Infrastructure.Models;
 using ResourceEngagementTrackingSystem.Infrastructure.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/auth")]
@@ -62,7 +62,14 @@ public class AuthController : ControllerBase
         var roleToAssign = UserRoles.AllRoles.Contains(dto.Role) ? dto.Role : UserRoles.User;
         await _userManager.AddToRoleAsync(user, roleToAssign);
 
-        return Ok(new { message = "User registered successfully", userId = user.Id, role = roleToAssign });
+        return Ok(
+            new
+            {
+                message = "User registered successfully",
+                userId = user.Id,
+                role = roleToAssign,
+            }
+        );
     }
 
     [HttpPost("login")]
@@ -111,15 +118,18 @@ public class AuthController : ControllerBase
             LastName = user.LastName,
         };
 
-        return Ok(new { 
-            token = response.Token,
-            expiresAt = response.ExpiresAt,
-            userId = response.UserId,
-            email = response.Email,
-            firstName = response.FirstName,
-            lastName = response.LastName,
-            roles = userRoles
-        });
+        return Ok(
+            new
+            {
+                token = response.Token,
+                expiresAt = response.ExpiresAt,
+                userId = response.UserId,
+                email = response.Email,
+                firstName = response.FirstName,
+                lastName = response.LastName,
+                roles = userRoles,
+            }
+        );
     }
 
     [HttpPost("logout")]
@@ -293,15 +303,18 @@ public class AuthController : ControllerBase
             LastName = user.LastName,
         };
 
-        return Ok(new { 
-            token = response.Token,
-            expiresAt = response.ExpiresAt,
-            userId = response.UserId,
-            email = response.Email,
-            firstName = response.FirstName,
-            lastName = response.LastName,
-            roles = userRoles
-        });
+        return Ok(
+            new
+            {
+                token = response.Token,
+                expiresAt = response.ExpiresAt,
+                userId = response.UserId,
+                email = response.Email,
+                firstName = response.FirstName,
+                lastName = response.LastName,
+                roles = userRoles,
+            }
+        );
     }
 
     [HttpGet("2fa/status")]
@@ -467,14 +480,26 @@ public class AuthController : ControllerBase
     [Authorize(Roles = UserRoles.Admin)]
     public IActionResult AdminOnly()
     {
-        return Ok(new { message = "This endpoint is only accessible by Admins", timestamp = DateTime.UtcNow });
+        return Ok(
+            new
+            {
+                message = "This endpoint is only accessible by Admins",
+                timestamp = DateTime.UtcNow,
+            }
+        );
     }
 
     [HttpGet("manager-and-admin")]
     [Authorize(Roles = UserRoles.Admin + "," + UserRoles.Manager)]
     public IActionResult ManagerAndAdmin()
     {
-        return Ok(new { message = "This endpoint is accessible by Admins and Managers", timestamp = DateTime.UtcNow });
+        return Ok(
+            new
+            {
+                message = "This endpoint is accessible by Admins and Managers",
+                timestamp = DateTime.UtcNow,
+            }
+        );
     }
 
     [HttpGet("authenticated-users")]
@@ -484,12 +509,15 @@ public class AuthController : ControllerBase
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         var user = await _userManager.FindByIdAsync(userId!);
         var userRoles = await _userManager.GetRolesAsync(user!);
-        
-        return Ok(new { 
-            message = "This endpoint is accessible by any authenticated user", 
-            user = user?.Email,
-            roles = userRoles,
-            timestamp = DateTime.UtcNow 
-        });
+
+        return Ok(
+            new
+            {
+                message = "This endpoint is accessible by any authenticated user",
+                user = user?.Email,
+                roles = userRoles,
+                timestamp = DateTime.UtcNow,
+            }
+        );
     }
 }

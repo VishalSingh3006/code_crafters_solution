@@ -32,8 +32,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_WhenProjectsExist_ReturnsOkWithProjects()
         {
             // Arrange
-            _mockProjectService.Setup(x => x.GetAllAsync())
-                .ReturnsAsync(_fixture.SampleProjects);
+            _mockProjectService.Setup(x => x.GetAllAsync()).ReturnsAsync(_fixture.SampleProjects);
 
             // Act
             var result = await _controller.GetAll();
@@ -49,8 +48,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_WhenNoProjects_ReturnsOkWithEmptyList()
         {
             // Arrange
-            _mockProjectService.Setup(x => x.GetAllAsync())
-                .ReturnsAsync(new List<ProjectDto>());
+            _mockProjectService.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<ProjectDto>());
 
             // Act
             var result = await _controller.GetAll();
@@ -65,7 +63,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_WhenServiceThrows_ShouldThrow()
         {
             // Arrange
-            _mockProjectService.Setup(x => x.GetAllAsync())
+            _mockProjectService
+                .Setup(x => x.GetAllAsync())
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -81,7 +80,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var projectId = 1;
-            _mockProjectService.Setup(x => x.GetByIdAsync(projectId))
+            _mockProjectService
+                .Setup(x => x.GetByIdAsync(projectId))
                 .ReturnsAsync(_fixture.SampleProject);
 
             // Act
@@ -99,7 +99,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var projectId = 999;
-            _mockProjectService.Setup(x => x.GetByIdAsync(projectId))
+            _mockProjectService
+                .Setup(x => x.GetByIdAsync(projectId))
                 .ReturnsAsync((ProjectDto)null);
 
             // Act
@@ -114,7 +115,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var projectId = 1;
-            _mockProjectService.Setup(x => x.GetByIdAsync(projectId))
+            _mockProjectService
+                .Setup(x => x.GetByIdAsync(projectId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -130,9 +132,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var createDto = _fixture.SampleCreateProjectDto;
-            var createdProject = new ProjectDto { Id = 4, Name = createDto.Name, Description = createDto.Description, ClientId = createDto.ClientId };
-            _mockProjectService.Setup(x => x.CreateAsync(createDto))
-                .ReturnsAsync(createdProject);
+            var createdProject = new ProjectDto
+            {
+                Id = 4,
+                Name = createDto.Name,
+                Description = createDto.Description,
+                ClientId = createDto.ClientId,
+            };
+            _mockProjectService.Setup(x => x.CreateAsync(createDto)).ReturnsAsync(createdProject);
 
             // Act
             var result = await _controller.Create(createDto);
@@ -151,7 +158,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var createDto = _fixture.SampleCreateProjectDto;
-            _mockProjectService.Setup(x => x.CreateAsync(createDto))
+            _mockProjectService
+                .Setup(x => x.CreateAsync(createDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -168,7 +176,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var projectId = 1;
             var updateDto = _fixture.SampleUpdateProjectDto;
-            _mockProjectService.Setup(x => x.UpdateAsync(projectId, updateDto))
+            _mockProjectService
+                .Setup(x => x.UpdateAsync(projectId, updateDto))
                 .ReturnsAsync(_fixture.SampleUpdatedProject);
 
             // Act
@@ -187,7 +196,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var projectId = 999;
             var updateDto = _fixture.SampleUpdateProjectDto;
-            _mockProjectService.Setup(x => x.UpdateAsync(projectId, updateDto))
+            _mockProjectService
+                .Setup(x => x.UpdateAsync(projectId, updateDto))
                 .ReturnsAsync((ProjectDto)null);
 
             // Act
@@ -203,7 +213,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var projectId = 1;
             var updateDto = _fixture.SampleUpdateProjectDto;
-            _mockProjectService.Setup(x => x.UpdateAsync(projectId, updateDto))
+            _mockProjectService
+                .Setup(x => x.UpdateAsync(projectId, updateDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -219,8 +230,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var projectId = 1;
-            _mockProjectService.Setup(x => x.DeleteAsync(projectId))
-                .ReturnsAsync(true);
+            _mockProjectService.Setup(x => x.DeleteAsync(projectId)).ReturnsAsync(true);
 
             // Act
             var result = await _controller.Delete(projectId);
@@ -235,8 +245,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var projectId = 999;
-            _mockProjectService.Setup(x => x.DeleteAsync(projectId))
-                .ReturnsAsync(false);
+            _mockProjectService.Setup(x => x.DeleteAsync(projectId)).ReturnsAsync(false);
 
             // Act
             var result = await _controller.Delete(projectId);
@@ -250,7 +259,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var projectId = 1;
-            _mockProjectService.Setup(x => x.DeleteAsync(projectId))
+            _mockProjectService
+                .Setup(x => x.DeleteAsync(projectId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert

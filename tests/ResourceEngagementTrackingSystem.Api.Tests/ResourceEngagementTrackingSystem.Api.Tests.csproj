@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -29,5 +28,4 @@
     <ProjectReference Include="..\..\src\Application\ResourceEngagementTrackingSystem.Application\ResourceEngagementTrackingSystem.Application.csproj" />
     <ProjectReference Include="..\..\src\Infrastructure\ResourceEngagementTrackingSystem.Infrastructure\ResourceEngagementTrackingSystem.Infrastructure.csproj" />
   </ItemGroup>
-
 </Project>

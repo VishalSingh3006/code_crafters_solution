@@ -5,7 +5,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTrackin
         Active = 1,
         Inactive = 2,
         Completed = 3,
-        OnHold = 4
+        OnHold = 4,
     }
 
     public enum RecruitmentStatus
@@ -14,13 +14,13 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTrackin
         InProgress = 2,
         Closed = 3,
         OnHold = 4,
-        Cancelled = 5
+        Cancelled = 5,
     }
 
     public enum RecruitmentType
     {
         Internal = 1,
         External = 2,
-        Contract = 3
+        Contract = 3,
     }
 }

@@ -1,4 +1,3 @@
-
 namespace ResourceEngagementTrackingSystem.Application.DTOs;
 
 public class LoginDto

@@ -31,7 +31,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 Notes = "Lead developer on frontend redesign",
                 Status = "Active",
                 CreatedAt = DateTime.Now.AddMonths(-6),
-                UpdatedAt = DateTime.Now
+                UpdatedAt = DateTime.Now,
             };
 
             SampleUpdatedStaffingRecord = new StaffingRecordDto
@@ -51,7 +51,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 Notes = "Promoted to lead developer with increased responsibility",
                 Status = "Active",
                 CreatedAt = DateTime.Now.AddMonths(-6),
-                UpdatedAt = DateTime.Now
+                UpdatedAt = DateTime.Now,
             };
 
             var staffingRecord2 = new StaffingRecordDto
@@ -71,7 +71,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 Notes = "Full-time mobile app developer",
                 Status = "Active",
                 CreatedAt = DateTime.Now.AddMonths(-3),
-                UpdatedAt = DateTime.Now
+                UpdatedAt = DateTime.Now,
             };
 
             var staffingRecord3 = new StaffingRecordDto
@@ -91,14 +91,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 Notes = "Part-time data analytics specialist",
                 Status = "Active",
                 CreatedAt = DateTime.Now.AddMonths(-2),
-                UpdatedAt = DateTime.Now
+                UpdatedAt = DateTime.Now,
             };
 
-            SampleStaffingRecords = new List<StaffingRecordDto> 
-            { 
-                SampleStaffingRecord, 
-                staffingRecord2, 
-                staffingRecord3 
+            SampleStaffingRecords = new List<StaffingRecordDto>
+            {
+                SampleStaffingRecord,
+                staffingRecord2,
+                staffingRecord3,
             };
 
             SampleCreateStaffingRecordDto = new CreateStaffingRecordDto
@@ -112,7 +112,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 HourlyRate = 145.00m,
                 TotalHours = 400,
                 Notes = "New project assignment for Q2",
-                Status = "Active"
+                Status = "Active",
             };
 
             SampleUpdateStaffingRecordDto = new UpdateStaffingRecordDto
@@ -124,7 +124,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 HourlyRate = 155.00m,
                 TotalHours = 500,
                 Notes = "Promoted to senior role with increased allocation",
-                Status = "Active"
+                Status = "Active",
             };
         }
     }

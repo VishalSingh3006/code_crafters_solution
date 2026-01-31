@@ -5,10 +5,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using ResourceEngagementTrackingSystem.Infrastructure.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ResourceEngagementTrackingSystem.Infrastructure.Models;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure.Services;
 
@@ -29,7 +29,7 @@ public class TokenService
         var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);
 
         var userRoles = await _userManager.GetRolesAsync(user);
-        
+
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),

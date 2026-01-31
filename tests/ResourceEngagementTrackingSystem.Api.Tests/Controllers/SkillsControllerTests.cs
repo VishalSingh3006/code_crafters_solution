@@ -32,8 +32,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_WhenSkillsExist_ReturnsOkWithSkills()
         {
             // Arrange
-            _mockSkillService.Setup(x => x.GetAllAsync())
-                .ReturnsAsync(_fixture.SampleSkills);
+            _mockSkillService.Setup(x => x.GetAllAsync()).ReturnsAsync(_fixture.SampleSkills);
 
             // Act
             var result = await _controller.GetAll();
@@ -49,8 +48,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_WhenNoSkills_ReturnsOkWithEmptyList()
         {
             // Arrange
-            _mockSkillService.Setup(x => x.GetAllAsync())
-                .ReturnsAsync(new List<SkillDto>());
+            _mockSkillService.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<SkillDto>());
 
             // Act
             var result = await _controller.GetAll();
@@ -65,7 +63,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_WhenServiceThrows_ShouldThrow()
         {
             // Arrange
-            _mockSkillService.Setup(x => x.GetAllAsync())
+            _mockSkillService
+                .Setup(x => x.GetAllAsync())
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -81,7 +80,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var skillId = 1;
-            _mockSkillService.Setup(x => x.GetByIdAsync(skillId))
+            _mockSkillService
+                .Setup(x => x.GetByIdAsync(skillId))
                 .ReturnsAsync(_fixture.SampleSkill);
 
             // Act
@@ -99,8 +99,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var skillId = 999;
-            _mockSkillService.Setup(x => x.GetByIdAsync(skillId))
-                .ReturnsAsync((SkillDto)null);
+            _mockSkillService.Setup(x => x.GetByIdAsync(skillId)).ReturnsAsync((SkillDto)null);
 
             // Act
             var result = await _controller.Get(skillId);
@@ -114,7 +113,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var skillId = 1;
-            _mockSkillService.Setup(x => x.GetByIdAsync(skillId))
+            _mockSkillService
+                .Setup(x => x.GetByIdAsync(skillId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -130,7 +130,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var createDto = _fixture.SampleCreateSkillDto;
-            _mockSkillService.Setup(x => x.CreateAsync(createDto))
+            _mockSkillService
+                .Setup(x => x.CreateAsync(createDto))
                 .ReturnsAsync(_fixture.SampleSkill);
 
             // Act
@@ -150,7 +151,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var createDto = _fixture.SampleCreateSkillDto;
-            _mockSkillService.Setup(x => x.CreateAsync(createDto))
+            _mockSkillService
+                .Setup(x => x.CreateAsync(createDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -167,7 +169,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var skillId = 1;
             var updateDto = _fixture.SampleUpdateSkillDto;
-            _mockSkillService.Setup(x => x.UpdateAsync(skillId, updateDto))
+            _mockSkillService
+                .Setup(x => x.UpdateAsync(skillId, updateDto))
                 .ReturnsAsync(_fixture.SampleUpdatedSkill);
 
             // Act
@@ -186,7 +189,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var skillId = 999;
             var updateDto = _fixture.SampleUpdateSkillDto;
-            _mockSkillService.Setup(x => x.UpdateAsync(skillId, updateDto))
+            _mockSkillService
+                .Setup(x => x.UpdateAsync(skillId, updateDto))
                 .ReturnsAsync((SkillDto)null);
 
             // Act
@@ -202,7 +206,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var skillId = 1;
             var updateDto = _fixture.SampleUpdateSkillDto;
-            _mockSkillService.Setup(x => x.UpdateAsync(skillId, updateDto))
+            _mockSkillService
+                .Setup(x => x.UpdateAsync(skillId, updateDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -218,8 +223,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var skillId = 1;
-            _mockSkillService.Setup(x => x.DeleteAsync(skillId))
-                .ReturnsAsync(true);
+            _mockSkillService.Setup(x => x.DeleteAsync(skillId)).ReturnsAsync(true);
 
             // Act
             var result = await _controller.Delete(skillId);
@@ -234,8 +238,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var skillId = 999;
-            _mockSkillService.Setup(x => x.DeleteAsync(skillId))
-                .ReturnsAsync(false);
+            _mockSkillService.Setup(x => x.DeleteAsync(skillId)).ReturnsAsync(false);
 
             // Act
             var result = await _controller.Delete(skillId);
@@ -249,7 +252,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var skillId = 1;
-            _mockSkillService.Setup(x => x.DeleteAsync(skillId))
+            _mockSkillService
+                .Setup(x => x.DeleteAsync(skillId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert

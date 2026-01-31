@@ -8,11 +8,18 @@ namespace ResourceEngagementTrackingSystem.Application.Interfaces.ResourceTracki
     {
         Task<IEnumerable<RecruitmentRecordDto>> GetAllRecruitmentRecordsAsync();
         Task<RecruitmentRecordDto?> GetRecruitmentRecordByIdAsync(int id);
-        Task<RecruitmentRecordDto> CreateRecruitmentRecordAsync(CreateRecruitmentRecordDto createRecruitmentRecordDto);
-        Task<bool> UpdateRecruitmentRecordAsync(int id, UpdateRecruitmentRecordDto updateRecruitmentRecordDto);
+        Task<RecruitmentRecordDto> CreateRecruitmentRecordAsync(
+            CreateRecruitmentRecordDto createRecruitmentRecordDto
+        );
+        Task<bool> UpdateRecruitmentRecordAsync(
+            int id,
+            UpdateRecruitmentRecordDto updateRecruitmentRecordDto
+        );
         Task<bool> DeleteRecruitmentRecordAsync(int id);
         Task<IEnumerable<RecruitmentRecordDto>> GetOpenRecruitmentRecordsAsync();
-        Task<IEnumerable<RecruitmentRecordDto>> GetRecruitmentRecordsByDepartmentAsync(string department);
+        Task<IEnumerable<RecruitmentRecordDto>> GetRecruitmentRecordsByDepartmentAsync(
+            string department
+        );
         Task<IEnumerable<RecruitmentRecordDto>> GetRecruitmentRecordsByTypeAsync(string type);
     }
 }

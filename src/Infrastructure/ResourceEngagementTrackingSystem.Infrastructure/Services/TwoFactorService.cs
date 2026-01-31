@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ResourceEngagementTrackingSystem.Infrastructure.Models;
 using Microsoft.AspNetCore.Identity;
 using QRCoder;
+using ResourceEngagementTrackingSystem.Infrastructure.Models;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure.Services;
 

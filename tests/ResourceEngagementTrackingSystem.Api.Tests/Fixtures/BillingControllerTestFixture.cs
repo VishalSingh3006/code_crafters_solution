@@ -33,7 +33,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 InvoicedDate = null,
                 InvoiceNumber = null,
                 CreatedAt = DateTime.Now.AddDays(-5),
-                UpdatedAt = DateTime.Now.AddDays(-1)
+                UpdatedAt = DateTime.Now.AddDays(-1),
             };
 
             SampleUpdatedBillingRecord = new BillingRecordDto
@@ -54,7 +54,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 InvoicedDate = DateTime.Now,
                 InvoiceNumber = "INV-2024-001",
                 CreatedAt = DateTime.Now.AddDays(-5),
-                UpdatedAt = DateTime.Now
+                UpdatedAt = DateTime.Now,
             };
 
             var billingRecord2 = new BillingRecordDto
@@ -73,7 +73,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 Status = "Submitted",
                 IsInvoiced = false,
                 CreatedAt = DateTime.Now.AddDays(-3),
-                UpdatedAt = DateTime.Now.AddDays(-3)
+                UpdatedAt = DateTime.Now.AddDays(-3),
             };
 
             var billingRecord3 = new BillingRecordDto
@@ -92,14 +92,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 Status = "Draft",
                 IsInvoiced = false,
                 CreatedAt = DateTime.Now.AddDays(-2),
-                UpdatedAt = DateTime.Now.AddDays(-2)
+                UpdatedAt = DateTime.Now.AddDays(-2),
             };
 
-            SampleBillingRecords = new List<BillingRecordDto> 
-            { 
-                SampleBillingRecord, 
-                billingRecord2, 
-                billingRecord3 
+            SampleBillingRecords = new List<BillingRecordDto>
+            {
+                SampleBillingRecord,
+                billingRecord2,
+                billingRecord3,
             };
 
             SampleCreateBillingRecordDto = new CreateBillingRecordDto
@@ -112,7 +112,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 Description = "New feature development",
                 BillingType = "Regular",
                 Status = "Draft",
-                IsInvoiced = false
+                IsInvoiced = false,
             };
 
             SampleUpdateBillingRecordDto = new UpdateBillingRecordDto
@@ -125,7 +125,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 Status = "Invoiced",
                 IsInvoiced = true,
                 InvoicedDate = DateTime.Now,
-                InvoiceNumber = "INV-2024-001"
+                InvoiceNumber = "INV-2024-001",
             };
 
             SampleMonthlyReport = new MonthlyBillingReportDto
@@ -143,16 +143,16 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                         ProjectId = 1,
                         ProjectName = "Website Redesign",
                         TotalHours = 12.0m,
-                        TotalAmount = 1840.00m
+                        TotalAmount = 1840.00m,
                     },
                     new ProjectBillingSummaryDto
                     {
                         ProjectId = 2,
                         ProjectName = "Mobile App",
                         TotalHours = 6.5m,
-                        TotalAmount = 910.00m
-                    }
-                }
+                        TotalAmount = 910.00m,
+                    },
+                },
             };
         }
     }

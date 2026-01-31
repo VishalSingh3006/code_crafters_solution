@@ -1,13 +1,13 @@
+using System;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking.Recruitment;
 using ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking;
 using ResourceEngagementTrackingSystem.Application.DTOs.ResourceTracking.Recruitment;
 using ResourceEngagementTrackingSystem.Application.Interfaces.ResourceTracking;
-using System;
-using System.Threading.Tasks;
 using Xunit;
-using FluentAssertions;
 
 namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTracking
 {
@@ -30,7 +30,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetAllRecruitmentRecords_ReturnsOkWithRecords()
         {
             // Arrange
-            _mockRecruitmentService.Setup(x => x.GetAllRecruitmentRecordsAsync())
+            _mockRecruitmentService
+                .Setup(x => x.GetAllRecruitmentRecordsAsync())
                 .ReturnsAsync(_fixture.SampleRecruitmentRecords);
 
             // Act
@@ -46,7 +47,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetAllRecruitmentRecords_WhenServiceThrows_ShouldThrow()
         {
             // Arrange
-            _mockRecruitmentService.Setup(x => x.GetAllRecruitmentRecordsAsync())
+            _mockRecruitmentService
+                .Setup(x => x.GetAllRecruitmentRecordsAsync())
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -63,7 +65,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var recordId = 1;
             var expectedRecord = _fixture.SampleRecruitmentRecords[0];
-            _mockRecruitmentService.Setup(x => x.GetRecruitmentRecordByIdAsync(recordId))
+            _mockRecruitmentService
+                .Setup(x => x.GetRecruitmentRecordByIdAsync(recordId))
                 .ReturnsAsync(expectedRecord);
 
             // Act
@@ -80,7 +83,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 999;
-            _mockRecruitmentService.Setup(x => x.GetRecruitmentRecordByIdAsync(recordId))
+            _mockRecruitmentService
+                .Setup(x => x.GetRecruitmentRecordByIdAsync(recordId))
                 .ReturnsAsync((RecruitmentRecordDto)null!);
 
             // Act
@@ -95,7 +99,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _mockRecruitmentService.Setup(x => x.GetRecruitmentRecordByIdAsync(recordId))
+            _mockRecruitmentService
+                .Setup(x => x.GetRecruitmentRecordByIdAsync(recordId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -111,8 +116,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var createDto = _fixture.SampleCreateRecruitmentRecordDto;
-            var createdRecord = new RecruitmentRecordDto 
-            { 
+            var createdRecord = new RecruitmentRecordDto
+            {
                 Id = 3,
                 Position = createDto.Position,
                 Department = createDto.Department,
@@ -125,10 +130,11 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 Status = createDto.Status,
                 Budget = createDto.Budget,
                 CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
+                UpdatedAt = DateTime.Now,
             };
-            
-            _mockRecruitmentService.Setup(x => x.CreateRecruitmentRecordAsync(createDto))
+
+            _mockRecruitmentService
+                .Setup(x => x.CreateRecruitmentRecordAsync(createDto))
                 .ReturnsAsync(createdRecord);
 
             // Act
@@ -140,7 +146,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             createdResult!.ActionName.Should().Be(nameof(_controller.GetRecruitmentRecord));
             createdResult.RouteValues!["id"].Should().Be(createdRecord.Id);
             createdResult.Value.Should().BeEquivalentTo(createdRecord);
-            _mockRecruitmentService.Verify(x => x.CreateRecruitmentRecordAsync(createDto), Times.Once);
+            _mockRecruitmentService.Verify(
+                x => x.CreateRecruitmentRecordAsync(createDto),
+                Times.Once
+            );
         }
 
         [Fact]
@@ -157,8 +166,11 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<BadRequestObjectResult>();
             var badRequestResult = result as BadRequestObjectResult;
             badRequestResult!.Value.Should().BeOfType<SerializableError>();
-            
-            _mockRecruitmentService.Verify(x => x.CreateRecruitmentRecordAsync(It.IsAny<CreateRecruitmentRecordDto>()), Times.Never);
+
+            _mockRecruitmentService.Verify(
+                x => x.CreateRecruitmentRecordAsync(It.IsAny<CreateRecruitmentRecordDto>()),
+                Times.Never
+            );
         }
 
         [Fact]
@@ -166,11 +178,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var createDto = _fixture.SampleCreateRecruitmentRecordDto;
-            _mockRecruitmentService.Setup(x => x.CreateRecruitmentRecordAsync(createDto))
+            _mockRecruitmentService
+                .Setup(x => x.CreateRecruitmentRecordAsync(createDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.CreateRecruitmentRecord(createDto));
+            await Assert.ThrowsAsync<Exception>(() =>
+                _controller.CreateRecruitmentRecord(createDto)
+            );
         }
 
         #endregion
@@ -183,7 +198,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var recordId = 1;
             var updateDto = _fixture.SampleUpdateRecruitmentRecordDto;
-            _mockRecruitmentService.Setup(x => x.UpdateRecruitmentRecordAsync(recordId, updateDto))
+            _mockRecruitmentService
+                .Setup(x => x.UpdateRecruitmentRecordAsync(recordId, updateDto))
                 .ReturnsAsync(true);
 
             // Act
@@ -191,7 +207,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
 
             // Assert
             result.Should().BeOfType<NoContentResult>();
-            _mockRecruitmentService.Verify(x => x.UpdateRecruitmentRecordAsync(recordId, updateDto), Times.Once);
+            _mockRecruitmentService.Verify(
+                x => x.UpdateRecruitmentRecordAsync(recordId, updateDto),
+                Times.Once
+            );
         }
 
         [Fact]
@@ -200,7 +219,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var recordId = 999;
             var updateDto = _fixture.SampleUpdateRecruitmentRecordDto;
-            _mockRecruitmentService.Setup(x => x.UpdateRecruitmentRecordAsync(recordId, updateDto))
+            _mockRecruitmentService
+                .Setup(x => x.UpdateRecruitmentRecordAsync(recordId, updateDto))
                 .ReturnsAsync(false);
 
             // Act
@@ -225,8 +245,15 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<BadRequestObjectResult>();
             var badRequestResult = result as BadRequestObjectResult;
             badRequestResult!.Value.Should().BeOfType<SerializableError>();
-            
-            _mockRecruitmentService.Verify(x => x.UpdateRecruitmentRecordAsync(It.IsAny<int>(), It.IsAny<UpdateRecruitmentRecordDto>()), Times.Never);
+
+            _mockRecruitmentService.Verify(
+                x =>
+                    x.UpdateRecruitmentRecordAsync(
+                        It.IsAny<int>(),
+                        It.IsAny<UpdateRecruitmentRecordDto>()
+                    ),
+                Times.Never
+            );
         }
 
         [Fact]
@@ -235,11 +262,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var recordId = 1;
             var updateDto = _fixture.SampleUpdateRecruitmentRecordDto;
-            _mockRecruitmentService.Setup(x => x.UpdateRecruitmentRecordAsync(recordId, updateDto))
+            _mockRecruitmentService
+                .Setup(x => x.UpdateRecruitmentRecordAsync(recordId, updateDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.UpdateRecruitmentRecord(recordId, updateDto));
+            await Assert.ThrowsAsync<Exception>(() =>
+                _controller.UpdateRecruitmentRecord(recordId, updateDto)
+            );
         }
 
         #endregion
@@ -251,7 +281,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _mockRecruitmentService.Setup(x => x.DeleteRecruitmentRecordAsync(recordId))
+            _mockRecruitmentService
+                .Setup(x => x.DeleteRecruitmentRecordAsync(recordId))
                 .ReturnsAsync(true);
 
             // Act
@@ -266,7 +297,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 999;
-            _mockRecruitmentService.Setup(x => x.DeleteRecruitmentRecordAsync(recordId))
+            _mockRecruitmentService
+                .Setup(x => x.DeleteRecruitmentRecordAsync(recordId))
                 .ReturnsAsync(false);
 
             // Act
@@ -281,11 +313,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var recordId = 1;
-            _mockRecruitmentService.Setup(x => x.DeleteRecruitmentRecordAsync(recordId))
+            _mockRecruitmentService
+                .Setup(x => x.DeleteRecruitmentRecordAsync(recordId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.DeleteRecruitmentRecord(recordId));
+            await Assert.ThrowsAsync<Exception>(() =>
+                _controller.DeleteRecruitmentRecord(recordId)
+            );
         }
 
         #endregion

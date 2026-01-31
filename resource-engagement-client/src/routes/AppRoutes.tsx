@@ -29,6 +29,7 @@ import CreateDepartmentPage from "../pages/Departments/Create";
 import DesignationsPage from "../pages/Designations";
 import BillingPage from "../components/ResourceTracking/BillingPage";
 import SkillsManagement from "../components/SkillsManagement";
+import PortfolioCompanyManagement from "../components/PortfolioCompanyManagement";
 
 const AppRoutes: React.FC = () => {
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
@@ -150,6 +151,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <SkillsManagement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/portfolio-companies"
+        element={
+          <ProtectedRoute>
+            <PortfolioCompanyManagement />
           </ProtectedRoute>
         }
       />

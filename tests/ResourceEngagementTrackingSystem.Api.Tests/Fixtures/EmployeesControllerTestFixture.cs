@@ -28,10 +28,25 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 ManagerId = 5,
                 Skills = new List<EmployeeSkillDto>
                 {
-                    new EmployeeSkillDto { SkillId = 1, SkillName = "C#", ProficiencyLevel = "Expert" },
-                    new EmployeeSkillDto { SkillId = 2, SkillName = ".NET Core", ProficiencyLevel = "Advanced" },
-                    new EmployeeSkillDto { SkillId = 3, SkillName = "SQL Server", ProficiencyLevel = "Intermediate" }
-                }
+                    new EmployeeSkillDto
+                    {
+                        SkillId = 1,
+                        SkillName = "C#",
+                        ProficiencyLevel = "Expert",
+                    },
+                    new EmployeeSkillDto
+                    {
+                        SkillId = 2,
+                        SkillName = ".NET Core",
+                        ProficiencyLevel = "Advanced",
+                    },
+                    new EmployeeSkillDto
+                    {
+                        SkillId = 3,
+                        SkillName = "SQL Server",
+                        ProficiencyLevel = "Intermediate",
+                    },
+                },
             };
 
             SampleUpdatedEmployee = new EmployeeDto
@@ -48,11 +63,31 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 ManagerId = 5,
                 Skills = new List<EmployeeSkillDto>
                 {
-                    new EmployeeSkillDto { SkillId = 1, SkillName = "C#", ProficiencyLevel = "Expert" },
-                    new EmployeeSkillDto { SkillId = 2, SkillName = ".NET Core", ProficiencyLevel = "Expert" }, // Improved proficiency
-                    new EmployeeSkillDto { SkillId = 3, SkillName = "SQL Server", ProficiencyLevel = "Advanced" }, // Improved proficiency
-                    new EmployeeSkillDto { SkillId = 4, SkillName = "Angular", ProficiencyLevel = "Intermediate" } // New skill
-                }
+                    new EmployeeSkillDto
+                    {
+                        SkillId = 1,
+                        SkillName = "C#",
+                        ProficiencyLevel = "Expert",
+                    },
+                    new EmployeeSkillDto
+                    {
+                        SkillId = 2,
+                        SkillName = ".NET Core",
+                        ProficiencyLevel = "Expert",
+                    }, // Improved proficiency
+                    new EmployeeSkillDto
+                    {
+                        SkillId = 3,
+                        SkillName = "SQL Server",
+                        ProficiencyLevel = "Advanced",
+                    }, // Improved proficiency
+                    new EmployeeSkillDto
+                    {
+                        SkillId = 4,
+                        SkillName = "Angular",
+                        ProficiencyLevel = "Intermediate",
+                    }, // New skill
+                },
             };
 
             var employee2 = new EmployeeDto
@@ -69,9 +104,19 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 ManagerId = 3,
                 Skills = new List<EmployeeSkillDto>
                 {
-                    new EmployeeSkillDto { SkillId = 5, SkillName = "Digital Marketing", ProficiencyLevel = "Expert" },
-                    new EmployeeSkillDto { SkillId = 6, SkillName = "Analytics", ProficiencyLevel = "Advanced" }
-                }
+                    new EmployeeSkillDto
+                    {
+                        SkillId = 5,
+                        SkillName = "Digital Marketing",
+                        ProficiencyLevel = "Expert",
+                    },
+                    new EmployeeSkillDto
+                    {
+                        SkillId = 6,
+                        SkillName = "Analytics",
+                        ProficiencyLevel = "Advanced",
+                    },
+                },
             };
 
             var employee3 = new EmployeeDto
@@ -88,9 +133,19 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 ManagerId = 1,
                 Skills = new List<EmployeeSkillDto>
                 {
-                    new EmployeeSkillDto { SkillId = 1, SkillName = "C#", ProficiencyLevel = "Beginner" },
-                    new EmployeeSkillDto { SkillId = 7, SkillName = "JavaScript", ProficiencyLevel = "Intermediate" }
-                }
+                    new EmployeeSkillDto
+                    {
+                        SkillId = 1,
+                        SkillName = "C#",
+                        ProficiencyLevel = "Beginner",
+                    },
+                    new EmployeeSkillDto
+                    {
+                        SkillId = 7,
+                        SkillName = "JavaScript",
+                        ProficiencyLevel = "Intermediate",
+                    },
+                },
             };
 
             SampleEmployees = new List<EmployeeDto> { SampleEmployee, employee2, employee3 };
@@ -109,8 +164,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 Skills = new List<EmployeeSkillInputDto>
                 {
                     new EmployeeSkillInputDto { SkillId = 1, ProficiencyLevel = "Intermediate" },
-                    new EmployeeSkillInputDto { SkillId = 8, ProficiencyLevel = "Advanced" }
-                }
+                    new EmployeeSkillInputDto { SkillId = 8, ProficiencyLevel = "Advanced" },
+                },
             };
 
             SampleUpdateEmployeeDto = new UpdateEmployeeDto
@@ -128,8 +183,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 {
                     new EmployeeSkillInputDto { SkillId = 1, ProficiencyLevel = "Expert" },
                     new EmployeeSkillInputDto { SkillId = 2, ProficiencyLevel = "Expert" },
-                    new EmployeeSkillInputDto { SkillId = 3, ProficiencyLevel = "Advanced" }
-                }
+                    new EmployeeSkillInputDto { SkillId = 3, ProficiencyLevel = "Advanced" },
+                },
             };
         }
     }

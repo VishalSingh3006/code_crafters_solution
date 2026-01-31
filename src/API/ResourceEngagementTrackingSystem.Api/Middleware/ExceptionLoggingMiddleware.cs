@@ -1,12 +1,12 @@
 using System;
 using System.IO;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Security.Claims;
-using ResourceEngagementTrackingSystem.Infrastructure.Models;
 using ResourceEngagementTrackingSystem.Infrastructure.Logging;
+using ResourceEngagementTrackingSystem.Infrastructure.Models;
 
 namespace ResourceEngagementTrackingSystem.Api.Middleware
 {
@@ -17,7 +17,12 @@ namespace ResourceEngagementTrackingSystem.Api.Middleware
         private readonly IExceptionLogService _exceptionLogService;
         private readonly ExceptionLoggingOptions _options;
 
-        public ExceptionLoggingMiddleware(RequestDelegate next, ILogger<ExceptionLoggingMiddleware> logger, IExceptionLogService exceptionLogService, ExceptionLoggingOptions options)
+        public ExceptionLoggingMiddleware(
+            RequestDelegate next,
+            ILogger<ExceptionLoggingMiddleware> logger,
+            IExceptionLogService exceptionLogService,
+            ExceptionLoggingOptions options
+        )
         {
             _next = next;
             _logger = logger;
@@ -53,23 +58,36 @@ namespace ResourceEngagementTrackingSystem.Api.Middleware
                     StatusCode = statusCode,
                     UserId = userId,
                     TraceId = traceId,
-                    TimestampUtc = timestamp
+                    TimestampUtc = timestamp,
                 };
 
                 if (_options.EnableExceptionLogging)
                 {
                     await _exceptionLogService.LogExceptionAsync(exceptionLog);
                 }
-                _logger.LogError(ex, "Exception caught: {Message}, TraceId: {TraceId}", ex.Message, traceId);
+                _logger.LogError(
+                    ex,
+                    "Exception caught: {Message}, TraceId: {TraceId}",
+                    ex.Message,
+                    traceId
+                );
 
                 context.Response.StatusCode = statusCode;
                 context.Response.ContentType = "application/json";
-                var errorResponse = new { success = false, message = "An unexpected error occurred.", traceId };
+                var errorResponse = new
+                {
+                    success = false,
+                    message = "An unexpected error occurred.",
+                    traceId,
+                };
                 await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
             }
         }
 
-        private async Task<string> ReadRequestBodyAsync(HttpContext context, ExceptionLoggingOptions options)
+        private async Task<string> ReadRequestBodyAsync(
+            HttpContext context,
+            ExceptionLoggingOptions options
+        )
         {
             if (!options.LogRequestBody)
                 return null;
@@ -82,7 +100,10 @@ namespace ResourceEngagementTrackingSystem.Api.Middleware
                 context.Request.Body.Position = 0;
                 return MaskSensitiveFields(body, options);
             }
-            catch { return null; }
+            catch
+            {
+                return null;
+            }
         }
 
         private string MaskSensitiveFields(string body, ExceptionLoggingOptions options)
@@ -93,7 +114,12 @@ namespace ResourceEngagementTrackingSystem.Api.Middleware
             {
                 var pattern = $"\"{field}\"\\s*:\\s*\".*?\"";
                 var replacement = $"\"{field}\":\"***MASKED***\"";
-                body = System.Text.RegularExpressions.Regex.Replace(body, pattern, replacement, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                body = System.Text.RegularExpressions.Regex.Replace(
+                    body,
+                    pattern,
+                    replacement,
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase
+                );
             }
             return body;
         }

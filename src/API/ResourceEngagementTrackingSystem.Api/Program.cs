@@ -7,6 +7,8 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System.Collections.Generic;
 using ResourceEngagementTrackingSystem.Infrastructure;
 using ResourceEngagementTrackingSystem.Infrastructure.Services;
+using ResourceEngagementTrackingSystem.Infrastructure.Models;
+using ResourceEngagementTrackingSystem.Application.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -76,6 +78,12 @@ builder.Services.AddSwaggerGen(c =>
         }
     );
 });
+
+// Configure Email Settings
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
+// Register Email Service
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 // Add AuditLogInterceptor to DbContext

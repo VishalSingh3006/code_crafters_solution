@@ -225,8 +225,8 @@ const RecruitmentList: React.FC = () => {
         >
           <DialogTitle>
             {selectedRecord
-              ? "Edit Recruitment Record"
-              : "Create New Recruitment Record"}
+              ? "Edit Requisition Record"
+              : "Create New Requisition Record"}
           </DialogTitle>
           <DialogContent dividers>
             <RecruitmentForm
@@ -234,12 +234,7 @@ const RecruitmentList: React.FC = () => {
               onSubmit={handleFormSubmit}
               onCancel={handleFormCancel}
             />
-          </DialogContent>
-          <DialogActions>
-            <Button variant="outlined" onClick={handleFormCancel}>
-              Cancel
-            </Button>
-          </DialogActions>
+          </DialogContent>         
         </Dialog>
       </Container>
     </Box>

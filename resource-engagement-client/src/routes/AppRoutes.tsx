@@ -31,6 +31,7 @@ import BillingPage from "../components/ResourceTracking/BillingPage";
 import BillingRates from "../pages/BillingRates";
 import SkillsManagement from "../components/SkillsManagement";
 import PortfolioCompanyManagement from "../components/PortfolioCompanyManagement";
+import { EngagementManagementPage } from "../pages/EngagementManagementPage";
 
 const AppRoutes: React.FC = () => {
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
@@ -168,6 +169,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <PortfolioCompanyManagement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/engagements"
+        element={
+          <ProtectedRoute>
+            <EngagementManagementPage />
           </ProtectedRoute>
         }
       />

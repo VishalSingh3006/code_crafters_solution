@@ -32,6 +32,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Engagement> Engagements { get; set; }
     public DbSet<EngagementPosition> EngagementPositions { get; set; }
     public DbSet<ResourceAllocation> ResourceAllocations { get; set; }
+    public DbSet<ProjectClientEngagement> ProjectClientEngagements { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

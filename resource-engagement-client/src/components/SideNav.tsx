@@ -27,6 +27,7 @@ import {
   ExpandMore as ExpandMoreIcon,
   ChevronRight as ChevronRightIcon,
   Menu as MenuIcon,
+  Hub as HubIcon,
 } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { toggleSideNav } from "../store/uiSlice";
@@ -122,6 +123,20 @@ const SideNav: React.FC = () => {
             <WorkIcon />
           </ListItemIcon>
           {open && <ListItemText primary="Projects" />}
+        </ListItemButton>
+        <ListItemButton
+          component={RouterLink}
+          to="/engagements"
+          selected={location.pathname === "/engagements"}
+          sx={{
+            justifyContent: open ? "flex-start" : "center",
+            px: open ? 2 : 0,
+          }}
+        >
+          <ListItemIcon sx={{ minWidth: open ? 56 : "auto", mr: open ? 0 : 0 }}>
+            <HubIcon />
+          </ListItemIcon>
+          {open && <ListItemText primary="Engagements" />}
         </ListItemButton>
         <ListItemButton
           component={RouterLink}

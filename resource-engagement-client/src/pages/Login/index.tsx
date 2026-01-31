@@ -133,7 +133,12 @@ const Login: React.FC = () => {
               />
               {error && <Alert severity="error">{error}</Alert>}
               <Box sx={{ display: "flex", gap: 2 }}>
-                <Button id="verify-2fa-btn" type="submit" variant="contained" disabled={loading}>
+                <Button
+                  id="verify-2fa-btn"
+                  type="submit"
+                  variant="contained"
+                  disabled={loading}
+                >
                   {loading ? "Verifying..." : "Verify"}
                 </Button>
                 <Button

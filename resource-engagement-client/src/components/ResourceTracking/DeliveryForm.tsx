@@ -397,10 +397,20 @@ const DeliveryForm: React.FC<DeliveryFormProps> = ({
           )}
 
           <Stack direction="row" justifyContent="flex-end" spacing={2}>
-            <Button id="cancel-delivery-form-btn" variant="outlined" type="button" onClick={onCancel}>
+            <Button
+              id="cancel-delivery-form-btn"
+              variant="outlined"
+              type="button"
+              onClick={onCancel}
+            >
               Cancel
             </Button>
-            <Button id="submit-delivery-form-btn" variant="contained" type="submit" disabled={isSubmitting}>
+            <Button
+              id="submit-delivery-form-btn"
+              variant="contained"
+              type="submit"
+              disabled={isSubmitting}
+            >
               {isSubmitting
                 ? "Saving..."
                 : delivery

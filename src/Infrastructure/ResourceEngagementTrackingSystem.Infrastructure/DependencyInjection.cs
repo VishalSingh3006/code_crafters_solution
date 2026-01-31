@@ -40,6 +40,10 @@ public static class DependencyInjection
 
         // Register ResourceTracking services
         services.AddScoped<IDeliveryService, DeliveryService>();
+        services.AddScoped<IAnalyticsService, AnalyticsService>();
+        services.AddScoped<IBillingService, BillingService>();
+        services.AddScoped<IStaffingService, StaffingService>();
+        services.AddScoped<IRecruitmentService, RecruitmentService>();
 
         // JWT Authentication Configuration
         var jwtSettings = config.GetSection("Jwt");
@@ -89,6 +93,7 @@ public static class DependencyInjection
         services.AddScoped<TokenService>();
         services.AddScoped<TwoFactorService>();
         services.AddScoped<RoleSeederService>();
+        services.AddScoped<DataSeederService>();
 
         return services;
     }

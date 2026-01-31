@@ -13,7 +13,7 @@ namespace ResourceEngagementTrackingSystem.Application.Interfaces.ResourceTracki
         Task<bool> DeleteBillingRecordAsync(int id);
         Task<IEnumerable<BillingRecordDto>> GetBillingRecordsByProjectIdAsync(int projectId);
         Task<IEnumerable<BillingRecordDto>> GetBillingRecordsByEmployeeIdAsync(int employeeId);
-        Task<MonthlyBillingReportDto> GetMonthlyBillingReportAsync(int month, int year);
+        Task<object> GetMonthlyBillingReportAsync(int month, int year);
         Task<IEnumerable<BillingRecordDto>> GetUninvoicedBillingRecordsAsync();
         Task<bool> MarkAsInvoicedAsync(int id, string invoiceNumber);
     }

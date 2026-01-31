@@ -7,6 +7,9 @@ import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import TwoFactorSetup from "../pages/TwoFactorSetup";
+import ResourceTrackingDashboard from "../pages/ResourceTracking";
+import DeliveryPage from "../pages/ResourceTracking/DeliveryPage";
+import StaffingPage from "../pages/ResourceTracking/StaffingPage";
 
 const AppRoutes: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -46,6 +49,30 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <TwoFactorSetup />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/resource-tracking"
+        element={
+          <ProtectedRoute>
+            <ResourceTrackingDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/resource-tracking/deliveries"
+        element={
+          <ProtectedRoute>
+            <DeliveryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/resource-tracking/staffing"
+        element={
+          <ProtectedRoute>
+            <StaffingPage />
           </ProtectedRoute>
         }
       />

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ResourceEngagementTrackingSystem.Application.DTOs.ResourceTracking.Delivery;
 using ResourceEngagementTrackingSystem.Application.Interfaces.ResourceTracking;
+using ResourceEngagementTrackingSystem.Infrastructure;
 using ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking;
 using ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking.Enums;
 using ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceTracking;
@@ -13,10 +15,12 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
     public class DeliveryService : IDeliveryService
     {
         private readonly IDeliveryRepository _deliveryRepository;
+        private readonly ApplicationDbContext _context;
 
-        public DeliveryService(IDeliveryRepository deliveryRepository)
+        public DeliveryService(IDeliveryRepository deliveryRepository, ApplicationDbContext context)
         {
             _deliveryRepository = deliveryRepository;
+            _context = context;
         }
 
         public async Task<IEnumerable<DeliveryDto>> GetAllDeliveriesAsync()
@@ -33,6 +37,20 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
 
         public async Task<DeliveryDto> CreateDeliveryAsync(CreateDeliveryDto createDeliveryDto)
         {
+            // Validate that Employee exists
+            var employeeExists = await _context.Employees.AnyAsync(e => e.Id == createDeliveryDto.EmployeeId);
+            if (!employeeExists)
+            {
+                throw new ArgumentException($"Employee with ID {createDeliveryDto.EmployeeId} does not exist.");
+            }
+
+            // Validate that Project exists
+            var projectExists = await _context.Projects.AnyAsync(p => p.Id == createDeliveryDto.ProjectId);
+            if (!projectExists)
+            {
+                throw new ArgumentException($"Project with ID {createDeliveryDto.ProjectId} does not exist.");
+            }
+
             var delivery = new Delivery
             {
                 DeliveryName = createDeliveryDto.DeliveryName,

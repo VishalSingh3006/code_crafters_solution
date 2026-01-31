@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,8 +41,15 @@ namespace ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking.Deli
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var delivery = await _deliveryService.CreateDeliveryAsync(createDeliveryDto);
-            return CreatedAtAction(nameof(GetDelivery), new { id = delivery.Id }, delivery);
+            try
+            {
+                var delivery = await _deliveryService.CreateDeliveryAsync(createDeliveryDto);
+                return CreatedAtAction(nameof(GetDelivery), new { id = delivery.Id }, delivery);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]

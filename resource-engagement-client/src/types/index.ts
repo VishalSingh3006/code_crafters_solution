@@ -10,6 +10,9 @@ export interface User {
   twoFactorEnabled: boolean;
 }
 
+// Export resource tracking types
+export * from './resourceTracking';
+
 export interface RegisterRequest {
   email: string;
   password: string;

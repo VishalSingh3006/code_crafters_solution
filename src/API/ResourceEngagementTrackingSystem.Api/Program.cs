@@ -79,11 +79,15 @@ using (var scope = app.Services.CreateScope())
         
         // Create default admin - you should change these credentials in production
         await roleSeeder.SeedDefaultAdminAsync("admin@company.com", "Admin123!");
+
+        // Seed test data
+        var dataSeeder = services.GetRequiredService<DataSeederService>();
+        await dataSeeder.SeedTestDataAsync();
     }
     catch (Exception ex)
     {
         // Log the error in production
-        Console.WriteLine($"An error occurred while seeding roles: {ex.Message}");
+        Console.WriteLine($"An error occurred while seeding data: {ex.Message}");
     }
 }
 

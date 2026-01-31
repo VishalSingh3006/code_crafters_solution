@@ -39,6 +39,9 @@ const Header: React.FC = () => {
               <Button color="inherit" component={RouterLink} to="/dashboard">
                 Dashboard
               </Button>
+              <Button color="inherit" component={RouterLink} to="/resource-tracking">
+                Resource Tracking
+              </Button>
               <Button color="inherit" component={RouterLink} to="/profile">
                 Profile
               </Button>

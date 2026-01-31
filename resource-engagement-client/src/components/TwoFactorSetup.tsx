@@ -62,7 +62,7 @@ const TwoFactorSetup: React.FC = () => {
           <p className="success">
             Two-factor authentication is already enabled for your account.
           </p>
-          <a href="/dashboard" className="btn">
+          <a id="back-to-dashboard-btn" href="/dashboard" className="btn">
             Back to Dashboard
           </a>
         </div>
@@ -83,7 +83,7 @@ const TwoFactorSetup: React.FC = () => {
       <div className="twofa-content">
         <div className="twofa-header">
           <h2>Setup Two-Factor Authentication</h2>
-          <a href="/dashboard" className="back-link">
+          <a id="nav-back-to-dashboard-btn" href="/dashboard" className="back-link">
             ← Back to Dashboard
           </a>
         </div>
@@ -116,7 +116,7 @@ const TwoFactorSetup: React.FC = () => {
               </div>
             </div>
 
-            <button className="btn" onClick={() => setStep("verify")}>
+            <button id="next-verify-setup-btn" className="btn" onClick={() => setStep("verify")}>
               Next: Verify Setup
             </button>
           </div>
@@ -150,13 +150,14 @@ const TwoFactorSetup: React.FC = () => {
 
               <div className="button-group">
                 <button
+                  id="back-to-setup-btn"
                   type="button"
                   onClick={() => setStep("setup")}
                   className="btn btn-secondary"
                 >
                   Back
                 </button>
-                <button type="submit" disabled={loading} className="btn">
+                <button id="enable-2fa-submit-btn" type="submit" disabled={loading} className="btn">
                   {loading ? "Verifying..." : "Enable 2FA"}
                 </button>
               </div>

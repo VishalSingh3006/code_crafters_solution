@@ -21,7 +21,7 @@ const ClientDetailPage: React.FC = () => {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Paper sx={{ p: 3 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-          <Typography variant="h5">Client Details</Typography>
+          <Typography variant="h5">Portfolio Company Details</Typography>
           <Button variant="outlined" onClick={() => navigate("/clients")}>
             Back
           </Button>

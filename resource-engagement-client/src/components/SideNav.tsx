@@ -58,16 +58,18 @@ const SideNav: React.FC = () => {
       <Toolbar sx={{ justifyContent: open ? "space-between" : "flex-end" }}>
         {open && <Box sx={{ fontWeight: 600 }}>Menu</Box>}
         <IconButton
+          id="menu-toggle-btn"
           onClick={() => dispatch(toggleSideNav())}
           size="small"
           aria-label="toggle menu"
-          sx={{ zIndex: 1, }}
+          sx={{ zIndex: 1 }}
         >
           <MenuIcon />
         </IconButton>
       </Toolbar>
       <List>
         <ListItemButton
+          id="nav-dashboard-btn"
           component={RouterLink}
           to="/dashboard"
           selected={location.pathname === "/dashboard"}
@@ -82,6 +84,7 @@ const SideNav: React.FC = () => {
           {open && <ListItemText primary="Dashboard" />}
         </ListItemButton>
         <ListItemButton
+          id="nav-profile-btn"
           component={RouterLink}
           to="/profile"
           selected={location.pathname === "/profile"}
@@ -96,6 +99,7 @@ const SideNav: React.FC = () => {
           {open && <ListItemText primary="Profile" />}
         </ListItemButton>
         <ListItemButton
+          id="nav-clients-btn"
           component={RouterLink}
           to="/clients"
           selected={location.pathname === "/clients"}
@@ -107,9 +111,10 @@ const SideNav: React.FC = () => {
           <ListItemIcon sx={{ minWidth: open ? 56 : "auto", mr: open ? 0 : 0 }}>
             <BusinessIcon />
           </ListItemIcon>
-          {open && <ListItemText primary="Clients" />}
+          {open && <ListItemText primary="Portfolio Companies" />}
         </ListItemButton>
         <ListItemButton
+          id="nav-projects-btn"
           component={RouterLink}
           to="/projects"
           selected={location.pathname === "/projects"}
@@ -124,6 +129,7 @@ const SideNav: React.FC = () => {
           {open && <ListItemText primary="Projects" />}
         </ListItemButton>
         <ListItemButton
+          id="nav-employees-btn"
           component={RouterLink}
           to="/employees"
           selected={location.pathname === "/employees"}
@@ -137,7 +143,8 @@ const SideNav: React.FC = () => {
           </ListItemIcon>
           {open && <ListItemText primary="Employees" />}
         </ListItemButton>
-        <ListItemButton
+        {/* <ListItemButton
+          id="nav-portfolio-companies-btn"
           component={RouterLink}
           to="/portfolio-companies"
           selected={location.pathname === "/portfolio-companies"}
@@ -150,8 +157,9 @@ const SideNav: React.FC = () => {
             <CorporateFareIcon />
           </ListItemIcon>
           {open && <ListItemText primary="Portfolio Companies" />}
-        </ListItemButton>
+        </ListItemButton> */}
         <ListItemButton
+          id="nav-resource-tracking-btn"
           component={RouterLink}
           to="/resource-tracking"
           selected={location.pathname.startsWith("/resource-tracking")}
@@ -167,6 +175,7 @@ const SideNav: React.FC = () => {
         </ListItemButton>
         {open && (
           <ListItemButton
+            id="nav-settings-toggle-btn"
             onClick={() => setSettingsOpen((s) => !s)}
             aria-expanded={settingsOpen}
             aria-controls="settings-collapse"
@@ -180,6 +189,7 @@ const SideNav: React.FC = () => {
         )}
         {!open && (
           <ListItemButton
+            id="nav-settings-collapsed-btn"
             component={RouterLink}
             to="/roles"
             selected={location.pathname === "/roles"}
@@ -199,6 +209,7 @@ const SideNav: React.FC = () => {
           >
             <List component="div" disablePadding>
               <ListItemButton
+                id="nav-roles-btn"
                 sx={{ pl: 4 }}
                 component={RouterLink}
                 to="/roles"
@@ -210,6 +221,7 @@ const SideNav: React.FC = () => {
                 <ListItemText primary="Roles" />
               </ListItemButton>
               <ListItemButton
+                id="nav-departments-btn"
                 sx={{ pl: 4 }}
                 component={RouterLink}
                 to="/departments"
@@ -221,6 +233,7 @@ const SideNav: React.FC = () => {
                 <ListItemText primary="Departments" />
               </ListItemButton>
               <ListItemButton
+                id="nav-designations-btn"
                 sx={{ pl: 4 }}
                 component={RouterLink}
                 to="/designations"
@@ -232,6 +245,7 @@ const SideNav: React.FC = () => {
                 <ListItemText primary="Designations" />
               </ListItemButton>
               <ListItemButton
+                id="nav-skills-btn"
                 sx={{ pl: 4 }}
                 component={RouterLink}
                 to="/skills"
@@ -242,7 +256,7 @@ const SideNav: React.FC = () => {
                 </ListItemIcon>
                 <ListItemText primary="Skills" />
               </ListItemButton>
-              <ListItemButton
+              {/* <ListItemButton
                 sx={{ pl: 4 }}
                 component={RouterLink}
                 to="/portfolio-companies"
@@ -252,7 +266,7 @@ const SideNav: React.FC = () => {
                   <CorporateFareIcon />
                 </ListItemIcon>
                 <ListItemText primary="Portfolio Companies" />
-              </ListItemButton>
+              </ListItemButton> */}
             </List>
           </Collapse>
         )}

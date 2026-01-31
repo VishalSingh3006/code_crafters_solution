@@ -65,7 +65,7 @@ const DeliveryPage: React.FC = () => {
               Track and manage project deliveries, timelines, and effort
             </Typography>
           </Box>
-          <Button variant="contained" onClick={handleCreateNew}>
+          <Button id="new-delivery-btn" variant="contained" onClick={handleCreateNew}>
             New Delivery
           </Button>
         </Stack>
@@ -87,7 +87,7 @@ const DeliveryPage: React.FC = () => {
             />
           </DialogContent>
           <DialogActions>
-            <Button variant="outlined" onClick={handleFormCancel}>
+            <Button id="cancel-delivery-dialog-btn" variant="outlined" onClick={handleFormCancel}>
               Cancel
             </Button>
           </DialogActions>

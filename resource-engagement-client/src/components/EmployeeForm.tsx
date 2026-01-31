@@ -479,6 +479,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
 
       <Box>
         <Button
+          id="submit-employee-form-btn"
           variant="contained"
           onClick={handleSubmit(onSubmit)}
           disabled={pending}
@@ -486,7 +487,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           {mode === "edit" ? "Update" : "Create"}
         </Button>
         {onCancel && (
-          <Button sx={{ ml: 2 }} variant="outlined" onClick={onCancel}>
+          <Button id="cancel-employee-form-btn" sx={{ ml: 2 }} variant="outlined" onClick={onCancel}>
             Cancel
           </Button>
         )}

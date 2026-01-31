@@ -72,8 +72,8 @@ const SkillDialog: React.FC<SkillDialogProps> = ({ open, skill, onClose, onSave 
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained">
+        <Button id="cancel-skill-dialog-btn" onClick={onClose}>Cancel</Button>
+        <Button id="save-skill-btn" onClick={handleSave} variant="contained">
           {skill ? "Update" : "Create"}
         </Button>
       </DialogActions>
@@ -161,6 +161,7 @@ export const SkillsManagement: React.FC = () => {
           Skills Management
         </Typography>
         <Button
+          id="add-skill-btn"
           variant="contained"
           startIcon={<AddIcon />}
           onClick={handleCreateSkill}
@@ -199,6 +200,7 @@ export const SkillsManagement: React.FC = () => {
                       <TableCell align="right">
                         <Stack direction="row" spacing={1} justifyContent="flex-end">
                           <IconButton
+                            id={`edit-skill-${skill.id}-btn`}
                             size="small"
                             onClick={() => handleEditSkill(skill)}
                             color="primary"
@@ -207,6 +209,7 @@ export const SkillsManagement: React.FC = () => {
                             <EditIcon />
                           </IconButton>
                           <IconButton
+                            id={`delete-skill-${skill.id}-btn`}
                             size="small"
                             onClick={() => handleDeleteSkill(skill)}
                             color="error"

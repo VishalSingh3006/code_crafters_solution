@@ -37,6 +37,7 @@ const ProjectsPage: React.FC = () => {
         <Box sx={{ mb: 3, display: "flex", justifyContent: "space-between" }}>
           <Box />
           <Button
+            id="create-project-btn"
             variant="contained"
             onClick={() => navigate("/projects/create")}
           >
@@ -92,6 +93,7 @@ const ProjectsPage: React.FC = () => {
                         justifyContent="flex-end"
                       >
                         <Button
+                          id={`edit-project-${p.id}-btn`}
                           size="small"
                           variant="contained"
                           onClick={(e) => {
@@ -102,6 +104,7 @@ const ProjectsPage: React.FC = () => {
                           Edit
                         </Button>
                         <Button
+                          id={`delete-project-${p.id}-btn`}
                           size="small"
                           variant="contained"
                           color="error"

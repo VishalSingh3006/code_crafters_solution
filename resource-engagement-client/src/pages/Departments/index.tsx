@@ -47,6 +47,7 @@ const DepartmentsPage: React.FC = () => {
         <Box sx={{ mb: 3, display: "flex", justifyContent: "space-between" }}>
           <Box />
           <Button
+            id="create-department-btn"
             variant="contained"
             onClick={() => navigate("/departments/create")}
           >
@@ -99,6 +100,7 @@ const DepartmentsPage: React.FC = () => {
                     <TableCell>
                       <Stack direction="row" spacing={1}>
                         <Button
+                          id={`edit-department-${dept.id}-btn`}
                           size="small"
                           variant="contained"
                           onClick={() => startEdit(dept)}
@@ -106,6 +108,7 @@ const DepartmentsPage: React.FC = () => {
                           Edit
                         </Button>
                         <Button
+                          id={`delete-department-${dept.id}-btn`}
                           size="small"
                           variant="contained"
                           onClick={() => handleDelete(dept.id)}

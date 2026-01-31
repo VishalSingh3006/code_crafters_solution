@@ -322,10 +322,10 @@ const StaffingForm: React.FC<StaffingFormProps> = ({
         justifyContent="flex-end"
         sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: "divider" }}
       >
-        <Button variant="outlined" onClick={onCancel} disabled={loading}>
+        <Button id="cancel-staffing-form-btn" variant="outlined" onClick={onCancel} disabled={loading}>
           Cancel
         </Button>
-        <Button type="submit" variant="contained" disabled={loading}>
+        <Button id="submit-staffing-form-btn" type="submit" variant="contained" disabled={loading}>
           {loading ? "Saving..." : staffingRecord ? "Update" : "Create"}
         </Button>
       </Stack>

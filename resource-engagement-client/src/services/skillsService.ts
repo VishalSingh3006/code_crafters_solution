@@ -15,11 +15,11 @@ export interface UpdateSkillRequest {
 
 class SkillsService {
   async getAll(): Promise<Skill[]> {
-    return baseServices.get<Skill[]>("skills");
+    return baseServices.get("skills");
   }
 
   async getById(id: number): Promise<Skill> {
-    return baseServices.get<Skill>(`skills/${id}`);
+    return baseServices.get(`skills/${id}`);
   }
 
   async create(skill: CreateSkillRequest): Promise<Skill> {

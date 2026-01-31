@@ -19,10 +19,14 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { useEmployeeActions } from "../hooks/employeesHooks";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { skillsService, type Skill } from "../services/skillsService";
+import { departmentsService } from "../services/departmentsService";
+import { designationsService } from "../services/designationsService";
+import type { Department } from "../types/departments";
+import type { Designation } from "../types/designations";
 
 type Mode = "create" | "edit";
 
@@ -88,6 +92,10 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   const { create, update, pending, error } = useEmployeeActions(onSuccess);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [skillsLoading, setSkillsLoading] = useState(true);
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [designations, setDesignations] = useState<Designation[]>([]);
+  const [departmentsLoading, setDepartmentsLoading] = useState(true);
+  const [designationsLoading, setDesignationsLoading] = useState(true);
 
   const defaultValues: CreateEmployeeRequest = {
     employeeCode: "",
@@ -132,16 +140,53 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
     loadSkills();
   }, []);
 
+  // Load departments from API
   useEffect(() => {
-    if (mode === "edit" && employee) {
+    const loadDepartments = async () => {
+      try {
+        const response = await departmentsService.getAll();
+        setDepartments(response || []);
+      } catch (error) {
+        console.error("Failed to load departments:", error);
+        setDepartments([]);
+      } finally {
+        setDepartmentsLoading(false);
+      }
+    };
+    loadDepartments();
+  }, []);
+
+  // Load designations from API
+  useEffect(() => {
+    const loadDesignations = async () => {
+      try {
+        const response = await designationsService.getAll();
+        setDesignations(response || []);
+      } catch (error) {
+        console.error("Failed to load designations:", error);
+        setDesignations([]);
+      } finally {
+        setDesignationsLoading(false);
+      }
+    };
+    loadDesignations();
+  }, []);
+
+  useEffect(() => {
+    if (mode === "edit" && employee && departments.length > 0 && designations.length > 0) {
+      // Find the department ID by matching the department name
+      const departmentId = departments.find(dept => dept.name === employee.department)?.id || 1;
+      // Find the designation ID by matching the designation name
+      const designationId = designations.find(designation => designation.name === employee.designation)?.id || 1;
+      
       reset({
         employeeCode: employee.employeeCode,
         firstName: employee.firstName,
         lastName: employee.lastName,
         email: employee.email,
         phone: employee.phone,
-        departmentId: 1, // TODO: Map department string to ID
-        designationId: 1, // TODO: Map designation string to ID  
+        departmentId: departmentId,
+        designationId: designationId,
         employmentType: employee.employmentType,
         managerId: employee.managerId ?? null,
         skills: employee.skills.map((s) => ({
@@ -152,7 +197,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
     } else if (mode === "create") {
       reset(defaultValues);
     }
-  }, [mode, employee, reset]);
+  }, [mode, employee, reset, departments, designations]);
 
   const onSubmit = async (data: CreateEmployeeRequest) => {
     if (mode === "edit" && employee) {
@@ -178,16 +223,22 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
         />
         <FormControl fullWidth error={!!errors.employmentType}>
           <InputLabel>Employment Type</InputLabel>
-          <Select
-            label="Employment Type"
-            {...register("employmentType")}
-            defaultValue="Full-Time"
-          >
-            <MenuItem value="Full-Time">Full-Time</MenuItem>
-            <MenuItem value="Part-Time">Part-Time</MenuItem>
-            <MenuItem value="Contract">Contract</MenuItem>
-            <MenuItem value="Intern">Intern</MenuItem>
-          </Select>
+          <Controller
+            name="employmentType"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                label="Employment Type"
+                value={field.value || "Full-Time"}
+              >
+                <MenuItem value="Full-Time">Full-Time</MenuItem>
+                <MenuItem value="Part-Time">Part-Time</MenuItem>
+                <MenuItem value="Contract">Contract</MenuItem>
+                <MenuItem value="Intern">Intern</MenuItem>
+              </Select>
+            )}
+          />
           {errors.employmentType && (
             <FormHelperText>{errors.employmentType?.message}</FormHelperText>
           )}
@@ -229,24 +280,61 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
         />
       </Stack>
       <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-        <TextField
-          label="Department ID"
-          type="number"
-          {...register("departmentId", { valueAsNumber: true })}
-          error={!!errors.departmentId}
-          helperText={errors.departmentId?.message || "Enter the department ID (e.g., 1 for IT, 2 for HR)"}
-          fullWidth
-          inputProps={{ min: 1 }}
-        />
-        <TextField
-          label="Designation ID"
-          type="number"
-          {...register("designationId", { valueAsNumber: true })}
-          error={!!errors.designationId}
-          helperText={errors.designationId?.message || "Enter the designation ID (e.g., 1 for Developer, 2 for Manager)"}
-          fullWidth
-          inputProps={{ min: 1 }}
-        />
+        <FormControl fullWidth error={!!errors.departmentId}>
+          <InputLabel>Department</InputLabel>
+          <Controller
+            name="departmentId"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                label="Department"
+                displayEmpty
+                disabled={departmentsLoading}
+                value={field.value || ""}
+              >
+                {departmentsLoading ? (
+                  <MenuItem value="">Loading departments...</MenuItem>
+                ) : (
+                  departments.map((dept) => (
+                    <MenuItem key={dept.id} value={dept.id}>
+                      {dept.name}
+                    </MenuItem>
+                  ))
+                )}
+              </Select>
+            )}
+          />
+          <FormHelperText>{errors.departmentId?.message || (departmentsLoading ? "Loading departments..." : "Select a department")}</FormHelperText>
+        </FormControl>
+
+        <FormControl fullWidth error={!!errors.designationId}>
+          <InputLabel>Designation</InputLabel>
+          <Controller
+            name="designationId"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                label="Designation"
+                displayEmpty
+                disabled={designationsLoading}
+                value={field.value || ""}
+              >
+                {designationsLoading ? (
+                  <MenuItem value="">Loading designations...</MenuItem>
+                ) : (
+                  designations.map((designation) => (
+                    <MenuItem key={designation.id} value={designation.id}>
+                      {designation.name}
+                    </MenuItem>
+                  ))
+                )}
+              </Select>
+            )}
+          />
+          <FormHelperText>{errors.designationId?.message || (designationsLoading ? "Loading designations..." : "Select a designation")}</FormHelperText>
+        </FormControl>
       </Stack>
       <TextField
         label="Manager ID (Optional)"
@@ -275,20 +363,24 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
             >
               <FormControl fullWidth error={!!errors.skills?.[idx]?.skillId}>
                 <InputLabel>Skill</InputLabel>
-                <Select
-                  label="Skill"
-                  {...register(`skills.${idx}.skillId` as const, {
-                    valueAsNumber: true,
-                  })}
-                  defaultValue=""
-                  disabled={skillsLoading}
-                >
-                  {skills.map((skill) => (
-                    <MenuItem key={skill.id} value={skill.id}>
-                      {skill.name}
-                    </MenuItem>
-                  ))}
-                </Select>
+                <Controller
+                  name={`skills.${idx}.skillId` as const}
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      label="Skill"
+                      disabled={skillsLoading}
+                      value={field.value || ""}
+                    >
+                      {skills.map((skill) => (
+                        <MenuItem key={skill.id} value={skill.id}>
+                          {skill.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
                 {errors.skills?.[idx]?.skillId && (
                   <FormHelperText>
                     {errors.skills?.[idx]?.skillId?.message}
@@ -297,16 +389,22 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               </FormControl>
               <FormControl fullWidth>
                 <InputLabel>Proficiency Level</InputLabel>
-                <Select
-                  label="Proficiency Level"
-                  {...register(`skills.${idx}.proficiencyLevel` as const)}
-                  defaultValue=""
-                >
-                  <MenuItem value="Beginner">Beginner</MenuItem>
-                  <MenuItem value="Intermediate">Intermediate</MenuItem>
-                  <MenuItem value="Advanced">Advanced</MenuItem>
-                  <MenuItem value="Expert">Expert</MenuItem>
-                </Select>
+                <Controller
+                  name={`skills.${idx}.proficiencyLevel` as const}
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      label="Proficiency Level"
+                      value={field.value || ""}
+                    >
+                      <MenuItem value="Beginner">Beginner</MenuItem>
+                      <MenuItem value="Intermediate">Intermediate</MenuItem>
+                      <MenuItem value="Advanced">Advanced</MenuItem>
+                      <MenuItem value="Expert">Expert</MenuItem>
+                    </Select>
+                  )}
+                />
                 {errors.skills?.[idx]?.proficiencyLevel && (
                   <FormHelperText error>
                     {errors.skills?.[idx]?.proficiencyLevel?.message}

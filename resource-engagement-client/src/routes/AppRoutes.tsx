@@ -17,7 +17,7 @@ import CreateEmployeePage from "../pages/Employees/Create";
 
 const AppRoutes: React.FC = () => {
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
-
+  
   return (
     <Routes>
       <Route

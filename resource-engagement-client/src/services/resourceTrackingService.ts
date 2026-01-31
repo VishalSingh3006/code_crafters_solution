@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { apiService } from "./baseService";
+import { baseServices } from "./baseService";
 import {
   Delivery,
   CreateDeliveryDto,
@@ -33,7 +33,7 @@ class ResourceTrackingService {
   constructor() {
     // Add request interceptor to include auth token using the same method as baseService
     this.api.interceptors.request.use((config) => {
-      const token = apiService.getAuthToken();
+      const token = localStorage.getItem("authToken");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }

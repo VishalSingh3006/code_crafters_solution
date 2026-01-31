@@ -45,12 +45,10 @@ class BaseServices {
   private instance: AxiosInstance;
 
   constructor() {
-    // const baseURL = import.meta.env.VITE_API_BASE_URL ?? "/api/auth";
-    const baseURL = "http://localhost:5000/api/";
-    console.log("API Base URL:", baseURL);
+    // Use relative path to leverage Vite proxy configuration
+    const baseURL = "/api/";
     this.instance = axios.create({
       baseURL,
-      withCredentials: true,
       timeout: 15000,
       validateStatus: (status) => status >= 200 && status < 300,
     });
@@ -135,8 +133,10 @@ class BaseServices {
       }
     } else if (error.request) {
       console.error("No response received:", error.request);
+      console.error("This usually means the backend server is not running");
+      console.error("Expected server at: http://localhost:5000/api/");
       throw new Error(
-        "Network error. Please check your internet connection and try again.",
+        "Backend server is not responding. Please check if the server is running on port 5000.",
       );
     } else {
       console.error("Error", error.message);

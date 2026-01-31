@@ -25,13 +25,17 @@ export function useAuthLogin() {
           return resp;
         }
         if (resp.token) {
-          dispatch(setCredentials({ user: null, token: resp.token }));
-          try {
-            const profile = await baseServices.get("auth/profile");
-            dispatch(setUser(profile));
-          } catch (e) {
-            // Profile fetch failure shouldn't block login; surface minimal error
-            console.warn("Failed to fetch profile after login", e);
+          dispatch(setCredentials({ user: resp.user, token: resp.token }));
+          
+          // If we have user data from response, no need to fetch profile
+          if (!resp.user) {
+            try {
+              const profile = await baseServices.get("auth/profile");
+              dispatch(setUser(profile));
+            } catch (e) {
+              // Profile fetch failure shouldn't block login; surface minimal error
+              console.warn("Failed to fetch profile after login", e);
+            }
           }
         }
         return resp;

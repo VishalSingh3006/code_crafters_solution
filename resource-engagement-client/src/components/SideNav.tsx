@@ -87,13 +87,6 @@ const SideNav: React.FC = () => {
           </ListItemButton>
           <ListItemButton
             component={RouterLink}
-            to="/designations"
-            selected={location.pathname === "/designations"}
-          >
-            <ListItemText primary="Designations" />
-          </ListItemButton>
-          <ListItemButton
-            component={RouterLink}
             to="/resource-tracking"
             selected={location.pathname.startsWith("/resource-tracking")}
           >

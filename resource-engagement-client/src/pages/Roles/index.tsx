@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRolesData, useRolesAdmin } from "../../hooks/rolesHooks";
 import type { Role } from "../../types";
 import { DEFAULT_ROLES } from "../../types/roles";
@@ -35,6 +35,37 @@ const RolesPage: React.FC = () => {
 
   const [email, setEmail] = useState<string>("");
   const [role, setRole] = useState<Role | "">("");
+  const [showError, setShowError] = useState(false);
+  const [showAdminError, setShowAdminError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (error) {
+      setShowError(true);
+      const t = setTimeout(() => setShowError(false), 3000);
+      return () => clearTimeout(t);
+    } else {
+      setShowError(false);
+    }
+  }, [error]);
+  useEffect(() => {
+    if (adminError) {
+      setShowAdminError(true);
+      const t = setTimeout(() => setShowAdminError(false), 3000);
+      return () => clearTimeout(t);
+    } else {
+      setShowAdminError(false);
+    }
+  }, [adminError]);
+  useEffect(() => {
+    if (success) {
+      setShowSuccess(true);
+      const t = setTimeout(() => setShowSuccess(false), 3000);
+      return () => clearTimeout(t);
+    } else {
+      setShowSuccess(false);
+    }
+  }, [success]);
 
   const handleAssign = async () => {
     if (!email || !role) return;
@@ -54,9 +85,21 @@ const RolesPage: React.FC = () => {
         <Typography variant="h5" gutterBottom>
           Role Management
         </Typography>
-        {error && <Alert severity="error">{error}</Alert>}
-        {adminError && <Alert severity="error">{adminError}</Alert>}
-        {success && <Alert severity="success">{success}</Alert>}
+        {error && showError && (
+          <Alert severity="error" onClose={() => setShowError(false)}>
+            {error}
+          </Alert>
+        )}
+        {adminError && showAdminError && (
+          <Alert severity="error" onClose={() => setShowAdminError(false)}>
+            {adminError}
+          </Alert>
+        )}
+        {success && showSuccess && (
+          <Alert severity="success" onClose={() => setShowSuccess(false)}>
+            {success}
+          </Alert>
+        )}
 
         <Stack
           direction={{ xs: "column", md: "row" }}

@@ -9,7 +9,7 @@ namespace ResourceEngagementTrackingSystem.Application.DTOs.ResourceTracking.Sta
 
         public DateTime? EndDate { get; set; }
 
-        [Range(0.1, 1.0)]
+        [Range(1, 100)]
         public decimal? AllocationPercentage { get; set; }
 
         [MaxLength(100)]

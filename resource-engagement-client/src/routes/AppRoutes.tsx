@@ -17,6 +17,7 @@ import ProjectDetailPage from "../pages/Projects/Detail";
 import ResourceTrackingDashboard from "../pages/ResourceTracking";
 import DeliveryPage from "../pages/ResourceTracking/DeliveryPage";
 import StaffingPage from "../pages/ResourceTracking/StaffingPage";
+import RecruitmentPage from "../pages/ResourceTracking/RecruitmentPage";
 import EmployeesPage from "../pages/Employees";
 import CreateEmployeePage from "../pages/Employees/Create";
 import EmployeeDetailPage from "../pages/Employees/Detail";
@@ -91,6 +92,14 @@ const AppRoutes: React.FC = () => {
       <Route
         path="/resource-tracking/billing"
         element={<ProtectedRoute><BillingPage /></ProtectedRoute>}
+      />
+      <Route
+        path="/resource-tracking/recruitment"
+        element={
+          <ProtectedRoute>
+            <RecruitmentPage />
+          </ProtectedRoute>
+        }
       />
       <Route
         path="/designations"

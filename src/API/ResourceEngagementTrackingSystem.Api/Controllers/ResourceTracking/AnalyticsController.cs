@@ -19,6 +19,13 @@ namespace ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking.Anal
             _analyticsService = analyticsService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetResourceAnalytics()
+        {
+            var analytics = await _analyticsService.GetResourceAnalyticsAsync();
+            return Ok(analytics);
+        }
+
         [HttpGet("dashboard")]
         public async Task<IActionResult> GetDashboardData()
         {

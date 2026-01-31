@@ -5,23 +5,33 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuthLogout, useAuthState } from "../hooks/authHooks";
 import { ThemeModeContext } from "../context/ThemeContext";
 
 const Header: React.FC = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated } = useAuthState();
+  const { logout } = useAuthLogout();
   const navigate = useNavigate();
   const { mode, toggleTheme } = useContext(ThemeModeContext);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login", { replace: true });
+  };
+
+  const handleHomeClick = () => {
+    navigate(isAuthenticated ? "/dashboard" : "/login", { replace: true });
   };
 
   return (
     <AppBar position="sticky" color="primary" elevation={1} enableColorOnDark>
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography
+          variant="h6"
+          component="div"
+          onClick={handleHomeClick}
+          sx={{ flexGrow: 1, cursor: "pointer" }}
+        >
           Resource Engagement Tracking
         </Typography>
 

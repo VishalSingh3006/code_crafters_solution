@@ -72,3 +72,4 @@ export interface ApiError {
 // Re-export role-related types
 export * from "./roles";
 export * from "./clients";
+export * from "./employees";

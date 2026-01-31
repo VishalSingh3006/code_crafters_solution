@@ -1,10 +1,12 @@
 import { useState, useCallback } from "react";
 import { profileService } from "../services/profileService";
-import { useAuth } from "../context/AuthContext";
-import type { UpdateProfileRequest, TwoFactorSetup, User } from "../types";
+import type { UpdateProfileRequest, TwoFactorSetup } from "../types";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setUser } from "../store/authSlice";
 
 export function useProfile() {
-  const { user, updateUser, refreshProfile } = useAuth();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((s) => s.auth.user);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -17,7 +19,7 @@ export function useProfile() {
       try {
         const res = await profileService.updateProfile(data);
         if (res.profile) {
-          updateUser(res.profile);
+          dispatch(setUser(res.profile));
           setSuccess("Profile updated successfully!");
         } else {
           setSuccess(res.message ?? "Profile updated.");
@@ -28,22 +30,24 @@ export function useProfile() {
         setLoading(false);
       }
     },
-    [updateUser],
+    [dispatch],
   );
 
   const reload = useCallback(async () => {
     try {
-      await refreshProfile();
+      const profile = await profileService.getProfile();
+      dispatch(setUser(profile));
     } catch (e: any) {
       // swallow
     }
-  }, [refreshProfile]);
+  }, [dispatch]);
 
   return { user, update, reload, loading, error, success };
 }
 
 export function useTwoFactor() {
-  const { user, updateUser } = useAuth();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((s) => s.auth.user);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [setup, setSetup] = useState<TwoFactorSetup | null>(null);
@@ -67,16 +71,17 @@ export function useTwoFactor() {
       setError(null);
       try {
         const res = await profileService.enableTwoFactor(code);
-        if (user) {
-          updateUser({ ...user, twoFactorEnabled: res.twoFactorEnabled });
-        }
+        if (user)
+          dispatch(
+            setUser({ ...user, twoFactorEnabled: res.twoFactorEnabled }),
+          );
       } catch (e: any) {
         setError(e?.message ?? "Failed to enable 2FA");
       } finally {
         setLoading(false);
       }
     },
-    [user, updateUser],
+    [user, dispatch],
   );
 
   const disable = useCallback(
@@ -85,16 +90,17 @@ export function useTwoFactor() {
       setError(null);
       try {
         const res = await profileService.disableTwoFactor(code);
-        if (user) {
-          updateUser({ ...user, twoFactorEnabled: res.twoFactorEnabled });
-        }
+        if (user)
+          dispatch(
+            setUser({ ...user, twoFactorEnabled: res.twoFactorEnabled }),
+          );
       } catch (e: any) {
         setError(e?.message ?? "Failed to disable 2FA");
       } finally {
         setLoading(false);
       }
     },
-    [user, updateUser],
+    [user, dispatch],
   );
 
   const status = useCallback(async (): Promise<boolean> => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAppSelector } from "../store/hooks";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -12,9 +12,11 @@ import ClientsPage from "../pages/Clients";
 import ResourceTrackingDashboard from "../pages/ResourceTracking";
 import DeliveryPage from "../pages/ResourceTracking/DeliveryPage";
 import StaffingPage from "../pages/ResourceTracking/StaffingPage";
+import EmployeesPage from "../pages/Employees";
+import CreateEmployeePage from "../pages/Employees/Create";
 
 const AppRoutes: React.FC = () => {
-  const { isAuthenticated } = useAuth();
+  const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
 
   return (
     <Routes>
@@ -91,6 +93,22 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <ClientsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/employees"
+        element={
+          <ProtectedRoute>
+            <EmployeesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/employees/create"
+        element={
+          <ProtectedRoute>
+            <CreateEmployeePage />
           </ProtectedRoute>
         }
       />

@@ -32,7 +32,9 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
             return recruitmentRecord != null ? MapToDto(recruitmentRecord) : null;
         }
 
-        public async Task<RecruitmentRecordDto> CreateRecruitmentRecordAsync(CreateRecruitmentRecordDto createRecruitmentRecordDto)
+        public async Task<RecruitmentRecordDto> CreateRecruitmentRecordAsync(
+            CreateRecruitmentRecordDto createRecruitmentRecordDto
+        )
         {
             var recruitmentRecord = new RecruitmentRecord
             {
@@ -40,12 +42,14 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 Department = createRecruitmentRecordDto.Department,
                 PostedDate = createRecruitmentRecordDto.PostedDate,
                 ClosedDate = createRecruitmentRecordDto.ClosedDate,
-                RecruitmentType = Enum.Parse<RecruitmentType>(createRecruitmentRecordDto.RecruitmentType),
+                RecruitmentType = Enum.Parse<RecruitmentType>(
+                    createRecruitmentRecordDto.RecruitmentType
+                ),
                 JobDescription = createRecruitmentRecordDto.JobDescription,
                 Requirements = createRecruitmentRecordDto.Requirements,
                 NumberOfOpenings = createRecruitmentRecordDto.NumberOfOpenings,
                 Status = Enum.Parse<RecruitmentStatus>(createRecruitmentRecordDto.Status),
-                Budget = createRecruitmentRecordDto.Budget
+                Budget = createRecruitmentRecordDto.Budget,
             };
 
             _context.RecruitmentRecords.Add(recruitmentRecord);
@@ -54,10 +58,14 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
             return MapToDto(recruitmentRecord);
         }
 
-        public async Task<bool> UpdateRecruitmentRecordAsync(int id, UpdateRecruitmentRecordDto updateRecruitmentRecordDto)
+        public async Task<bool> UpdateRecruitmentRecordAsync(
+            int id,
+            UpdateRecruitmentRecordDto updateRecruitmentRecordDto
+        )
         {
             var recruitmentRecord = await _context.RecruitmentRecords.FindAsync(id);
-            if (recruitmentRecord == null) return false;
+            if (recruitmentRecord == null)
+                return false;
 
             if (!string.IsNullOrEmpty(updateRecruitmentRecordDto.Position))
                 recruitmentRecord.Position = updateRecruitmentRecordDto.Position;
@@ -66,15 +74,21 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
             if (updateRecruitmentRecordDto.ClosedDate.HasValue)
                 recruitmentRecord.ClosedDate = updateRecruitmentRecordDto.ClosedDate;
             if (!string.IsNullOrEmpty(updateRecruitmentRecordDto.RecruitmentType))
-                recruitmentRecord.RecruitmentType = Enum.Parse<RecruitmentType>(updateRecruitmentRecordDto.RecruitmentType);
+                recruitmentRecord.RecruitmentType = Enum.Parse<RecruitmentType>(
+                    updateRecruitmentRecordDto.RecruitmentType
+                );
             if (updateRecruitmentRecordDto.JobDescription != null)
                 recruitmentRecord.JobDescription = updateRecruitmentRecordDto.JobDescription;
             if (updateRecruitmentRecordDto.Requirements != null)
                 recruitmentRecord.Requirements = updateRecruitmentRecordDto.Requirements;
             if (updateRecruitmentRecordDto.NumberOfOpenings.HasValue)
-                recruitmentRecord.NumberOfOpenings = updateRecruitmentRecordDto.NumberOfOpenings.Value;
+                recruitmentRecord.NumberOfOpenings = updateRecruitmentRecordDto
+                    .NumberOfOpenings
+                    .Value;
             if (!string.IsNullOrEmpty(updateRecruitmentRecordDto.Status))
-                recruitmentRecord.Status = Enum.Parse<RecruitmentStatus>(updateRecruitmentRecordDto.Status);
+                recruitmentRecord.Status = Enum.Parse<RecruitmentStatus>(
+                    updateRecruitmentRecordDto.Status
+                );
             if (updateRecruitmentRecordDto.Budget.HasValue)
                 recruitmentRecord.Budget = updateRecruitmentRecordDto.Budget;
 
@@ -85,7 +99,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
         public async Task<bool> DeleteRecruitmentRecordAsync(int id)
         {
             var recruitmentRecord = await _context.RecruitmentRecords.FindAsync(id);
-            if (recruitmentRecord == null) return false;
+            if (recruitmentRecord == null)
+                return false;
 
             _context.RecruitmentRecords.Remove(recruitmentRecord);
             await _context.SaveChangesAsync();
@@ -94,29 +109,33 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
 
         public async Task<IEnumerable<RecruitmentRecordDto>> GetOpenRecruitmentRecordsAsync()
         {
-            var recruitmentRecords = await _context.RecruitmentRecords
-                .Where(r => r.Status == RecruitmentStatus.Open)
+            var recruitmentRecords = await _context
+                .RecruitmentRecords.Where(r => r.Status == RecruitmentStatus.Open)
                 .ToListAsync();
 
             return recruitmentRecords.Select(MapToDto);
         }
 
-        public async Task<IEnumerable<RecruitmentRecordDto>> GetRecruitmentRecordsByDepartmentAsync(string department)
+        public async Task<IEnumerable<RecruitmentRecordDto>> GetRecruitmentRecordsByDepartmentAsync(
+            string department
+        )
         {
-            var recruitmentRecords = await _context.RecruitmentRecords
-                .Where(r => r.Department.ToLower() == department.ToLower())
+            var recruitmentRecords = await _context
+                .RecruitmentRecords.Where(r => r.Department.ToLower() == department.ToLower())
                 .ToListAsync();
 
             return recruitmentRecords.Select(MapToDto);
         }
 
-        public async Task<IEnumerable<RecruitmentRecordDto>> GetRecruitmentRecordsByTypeAsync(string type)
+        public async Task<IEnumerable<RecruitmentRecordDto>> GetRecruitmentRecordsByTypeAsync(
+            string type
+        )
         {
             if (!Enum.TryParse<RecruitmentType>(type, out var recruitmentType))
                 return new List<RecruitmentRecordDto>();
 
-            var recruitmentRecords = await _context.RecruitmentRecords
-                .Where(r => r.RecruitmentType == recruitmentType)
+            var recruitmentRecords = await _context
+                .RecruitmentRecords.Where(r => r.RecruitmentType == recruitmentType)
                 .ToListAsync();
 
             return recruitmentRecords.Select(MapToDto);
@@ -138,7 +157,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 Status = recruitmentRecord.Status.ToString(),
                 Budget = recruitmentRecord.Budget,
                 CreatedAt = recruitmentRecord.CreatedAt,
-                UpdatedAt = recruitmentRecord.UpdatedAt
+                UpdatedAt = recruitmentRecord.UpdatedAt,
             };
         }
     }

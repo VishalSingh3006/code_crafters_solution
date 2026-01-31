@@ -18,16 +18,16 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
 
         public async Task<IEnumerable<StaffingRecord>> GetAllAsync()
         {
-            return await _context.StaffingRecords
-                .Include(s => s.Employee)
+            return await _context
+                .StaffingRecords.Include(s => s.Employee)
                 .Include(s => s.Project)
                 .ToListAsync();
         }
 
         public async Task<StaffingRecord?> GetByIdAsync(int id)
         {
-            return await _context.StaffingRecords
-                .Include(s => s.Employee)
+            return await _context
+                .StaffingRecords.Include(s => s.Employee)
                 .Include(s => s.Project)
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
@@ -73,8 +73,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
 
         public async Task<IEnumerable<StaffingRecord>> GetByEmployeeIdAsync(int employeeId)
         {
-            return await _context.StaffingRecords
-                .Include(s => s.Employee)
+            return await _context
+                .StaffingRecords.Include(s => s.Employee)
                 .Include(s => s.Project)
                 .Where(s => s.EmployeeId == employeeId)
                 .ToListAsync();
@@ -82,8 +82,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
 
         public async Task<IEnumerable<StaffingRecord>> GetByProjectIdAsync(int projectId)
         {
-            return await _context.StaffingRecords
-                .Include(s => s.Employee)
+            return await _context
+                .StaffingRecords.Include(s => s.Employee)
                 .Include(s => s.Project)
                 .Where(s => s.ProjectId == projectId)
                 .ToListAsync();
@@ -91,19 +91,25 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
 
         public async Task<IEnumerable<StaffingRecord>> GetActiveRecordsAsync()
         {
-            return await _context.StaffingRecords
-                .Include(s => s.Employee)
+            return await _context
+                .StaffingRecords.Include(s => s.Employee)
                 .Include(s => s.Project)
                 .Where(s => s.EndDate == null || s.EndDate > DateTime.Now)
                 .ToListAsync();
         }
 
-        public async Task<decimal> GetEmployeeUtilizationAsync(int employeeId, DateTime startDate, DateTime endDate)
+        public async Task<decimal> GetEmployeeUtilizationAsync(
+            int employeeId,
+            DateTime startDate,
+            DateTime endDate
+        )
         {
-            var staffingRecords = await _context.StaffingRecords
-                .Where(s => s.EmployeeId == employeeId &&
-                           s.StartDate <= endDate &&
-                           (s.EndDate == null || s.EndDate >= startDate))
+            var staffingRecords = await _context
+                .StaffingRecords.Where(s =>
+                    s.EmployeeId == employeeId
+                    && s.StartDate <= endDate
+                    && (s.EndDate == null || s.EndDate >= startDate)
+                )
                 .ToListAsync();
 
             if (!staffingRecords.Any())

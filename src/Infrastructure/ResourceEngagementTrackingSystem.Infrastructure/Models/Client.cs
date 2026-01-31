@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,11 +7,14 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
     {
         [Key]
         public new int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+
         [Required]
         [MaxLength(150)]
         public string ContactName { get; set; }

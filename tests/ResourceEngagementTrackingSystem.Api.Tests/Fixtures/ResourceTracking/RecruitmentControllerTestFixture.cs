@@ -1,6 +1,6 @@
-using ResourceEngagementTrackingSystem.Application.DTOs.ResourceTracking.Recruitment;
 using System;
 using System.Collections.Generic;
+using ResourceEngagementTrackingSystem.Application.DTOs.ResourceTracking.Recruitment;
 
 namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
 {
@@ -14,8 +14,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
         {
             SampleRecruitmentRecords = new List<RecruitmentRecordDto>
             {
-                new RecruitmentRecordDto 
-                { 
+                new RecruitmentRecordDto
+                {
                     Id = 1,
                     Position = "Senior Software Engineer",
                     Department = "Engineering",
@@ -28,10 +28,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
                     Status = "Open",
                     Budget = 120000m,
                     CreatedAt = DateTime.Now.AddDays(-10),
-                    UpdatedAt = DateTime.Now.AddDays(-2)
+                    UpdatedAt = DateTime.Now.AddDays(-2),
                 },
-                new RecruitmentRecordDto 
-                { 
+                new RecruitmentRecordDto
+                {
                     Id = 2,
                     Position = "DevOps Engineer",
                     Department = "Engineering",
@@ -44,8 +44,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
                     Status = "Closed",
                     Budget = 100000m,
                     CreatedAt = DateTime.Now.AddDays(-20),
-                    UpdatedAt = DateTime.Now.AddDays(-5)
-                }
+                    UpdatedAt = DateTime.Now.AddDays(-5),
+                },
             };
 
             SampleCreateRecruitmentRecordDto = new CreateRecruitmentRecordDto
@@ -58,7 +58,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
                 Requirements = "2+ years experience with React, TypeScript, CSS",
                 NumberOfOpenings = 1,
                 Status = "Open",
-                Budget = 85000m
+                Budget = 85000m,
             };
 
             SampleUpdateRecruitmentRecordDto = new UpdateRecruitmentRecordDto
@@ -72,7 +72,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
                 Requirements = "4+ years experience with React, TypeScript, Next.js",
                 NumberOfOpenings = 1,
                 Status = "InProgress",
-                Budget = 110000m
+                Budget = 110000m,
             };
         }
     }

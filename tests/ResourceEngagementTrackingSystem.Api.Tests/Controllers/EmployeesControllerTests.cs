@@ -30,7 +30,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_ReturnsOkResult_WithEmployeesList()
         {
             // Arrange
-            _mockEmployeeService.Setup(x => x.GetAllAsync())
+            _mockEmployeeService
+                .Setup(x => x.GetAllAsync())
                 .ReturnsAsync(_fixture.SampleEmployees);
 
             // Act
@@ -40,7 +41,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleEmployees);
-            
+
             _mockEmployeeService.Verify(x => x.GetAllAsync(), Times.Once);
         }
 
@@ -48,7 +49,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_ServiceThrowsException_PropagatesException()
         {
             // Arrange
-            _mockEmployeeService.Setup(x => x.GetAllAsync())
+            _mockEmployeeService
+                .Setup(x => x.GetAllAsync())
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -65,7 +67,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var employeeId = 1;
-            _mockEmployeeService.Setup(x => x.GetByIdAsync(employeeId))
+            _mockEmployeeService
+                .Setup(x => x.GetByIdAsync(employeeId))
                 .ReturnsAsync(_fixture.SampleEmployee);
 
             // Act
@@ -75,7 +78,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleEmployee);
-            
+
             _mockEmployeeService.Verify(x => x.GetByIdAsync(employeeId), Times.Once);
         }
 
@@ -84,7 +87,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var employeeId = 999;
-            _mockEmployeeService.Setup(x => x.GetByIdAsync(employeeId))
+            _mockEmployeeService
+                .Setup(x => x.GetByIdAsync(employeeId))
                 .ReturnsAsync((EmployeeDto?)null);
 
             // Act
@@ -100,7 +104,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var employeeId = 1;
-            _mockEmployeeService.Setup(x => x.GetByIdAsync(employeeId))
+            _mockEmployeeService
+                .Setup(x => x.GetByIdAsync(employeeId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -117,7 +122,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var createDto = _fixture.SampleCreateEmployeeDto;
-            _mockEmployeeService.Setup(x => x.CreateAsync(createDto))
+            _mockEmployeeService
+                .Setup(x => x.CreateAsync(createDto))
                 .ReturnsAsync(_fixture.SampleEmployee);
 
             // Act
@@ -129,7 +135,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             createdResult!.ActionName.Should().Be("Get");
             createdResult.RouteValues!["id"].Should().Be(_fixture.SampleEmployee.Id);
             createdResult.Value.Should().BeEquivalentTo(_fixture.SampleEmployee);
-            
+
             _mockEmployeeService.Verify(x => x.CreateAsync(createDto), Times.Once);
         }
 
@@ -138,7 +144,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var createDto = _fixture.SampleCreateEmployeeDto;
-            _mockEmployeeService.Setup(x => x.CreateAsync(createDto))
+            _mockEmployeeService
+                .Setup(x => x.CreateAsync(createDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -156,7 +163,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var employeeId = 1;
             var updateDto = _fixture.SampleUpdateEmployeeDto;
-            _mockEmployeeService.Setup(x => x.UpdateAsync(employeeId, updateDto))
+            _mockEmployeeService
+                .Setup(x => x.UpdateAsync(employeeId, updateDto))
                 .ReturnsAsync(_fixture.SampleUpdatedEmployee);
 
             // Act
@@ -166,7 +174,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleUpdatedEmployee);
-            
+
             _mockEmployeeService.Verify(x => x.UpdateAsync(employeeId, updateDto), Times.Once);
         }
 
@@ -176,7 +184,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var employeeId = 999;
             var updateDto = _fixture.SampleUpdateEmployeeDto;
-            _mockEmployeeService.Setup(x => x.UpdateAsync(employeeId, updateDto))
+            _mockEmployeeService
+                .Setup(x => x.UpdateAsync(employeeId, updateDto))
                 .ReturnsAsync((EmployeeDto?)null);
 
             // Act
@@ -193,7 +202,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var employeeId = 1;
             var updateDto = _fixture.SampleUpdateEmployeeDto;
-            _mockEmployeeService.Setup(x => x.UpdateAsync(employeeId, updateDto))
+            _mockEmployeeService
+                .Setup(x => x.UpdateAsync(employeeId, updateDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -210,8 +220,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var employeeId = 1;
-            _mockEmployeeService.Setup(x => x.DeleteAsync(employeeId))
-                .ReturnsAsync(true);
+            _mockEmployeeService.Setup(x => x.DeleteAsync(employeeId)).ReturnsAsync(true);
 
             // Act
             var result = await _controller.Delete(employeeId);
@@ -226,8 +235,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var employeeId = 999;
-            _mockEmployeeService.Setup(x => x.DeleteAsync(employeeId))
-                .ReturnsAsync(false);
+            _mockEmployeeService.Setup(x => x.DeleteAsync(employeeId)).ReturnsAsync(false);
 
             // Act
             var result = await _controller.Delete(employeeId);
@@ -242,7 +250,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var employeeId = 1;
-            _mockEmployeeService.Setup(x => x.DeleteAsync(employeeId))
+            _mockEmployeeService
+                .Setup(x => x.DeleteAsync(employeeId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert

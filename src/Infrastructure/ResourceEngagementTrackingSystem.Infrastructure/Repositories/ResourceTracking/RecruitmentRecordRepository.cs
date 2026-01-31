@@ -68,8 +68,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
 
         public async Task<IEnumerable<RecruitmentRecord>> GetByPositionAsync(string position)
         {
-            return await _context.RecruitmentRecords
-                .Where(r => r.Position.Contains(position))
+            return await _context
+                .RecruitmentRecords.Where(r => r.Position.Contains(position))
                 .ToListAsync();
         }
 
@@ -77,8 +77,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
         {
             if (Enum.TryParse<RecruitmentStatus>(status, true, out var statusEnum))
             {
-                return await _context.RecruitmentRecords
-                    .Where(r => r.Status == statusEnum)
+                return await _context
+                    .RecruitmentRecords.Where(r => r.Status == statusEnum)
                     .ToListAsync();
             }
             return await _context.RecruitmentRecords.Where(r => false).ToListAsync();
@@ -86,8 +86,10 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
 
         public async Task<IEnumerable<RecruitmentRecord>> GetActiveRecordsAsync()
         {
-            return await _context.RecruitmentRecords
-                .Where(r => r.Status == RecruitmentStatus.Open || r.Status == RecruitmentStatus.InProgress)
+            return await _context
+                .RecruitmentRecords.Where(r =>
+                    r.Status == RecruitmentStatus.Open || r.Status == RecruitmentStatus.InProgress
+                )
                 .ToListAsync();
         }
     }

@@ -1,5 +1,5 @@
-using ResourceEngagementTrackingSystem.Application.DTOs;
 using System.Collections.Generic;
+using ResourceEngagementTrackingSystem.Application.DTOs;
 
 namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
 {
@@ -12,52 +12,46 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures
 
         public RoleControllerTestFixture()
         {
-            SampleAvailableRoles = new List<string>
-            {
-                "Admin",
-                "Manager", 
-                "Employee",
-                "User"
-            };
+            SampleAvailableRoles = new List<string> { "Admin", "Manager", "Employee", "User" };
 
             SampleAssignRoleDto = new AssignRoleDto
             {
                 Email = "john.doe@company.com",
-                Role = "Manager"
+                Role = "Manager",
             };
 
             SampleRemoveRoleDto = new RemoveRoleDto
             {
                 Email = "jane.smith@company.com",
-                Role = "Employee"
+                Role = "Employee",
             };
 
             SampleUserRoles = new List<UserRolesResponseDto>
             {
-                new UserRolesResponseDto 
-                { 
-                    UserId = "user-1", 
+                new UserRolesResponseDto
+                {
+                    UserId = "user-1",
                     Email = "admin@company.com",
                     FirstName = "Admin",
                     LastName = "User",
-                    Roles = new List<string> { "Admin" }
+                    Roles = new List<string> { "Admin" },
                 },
-                new UserRolesResponseDto 
-                { 
-                    UserId = "user-2", 
+                new UserRolesResponseDto
+                {
+                    UserId = "user-2",
                     Email = "manager@company.com",
                     FirstName = "Manager",
                     LastName = "User",
-                    Roles = new List<string> { "Manager", "Employee" }
+                    Roles = new List<string> { "Manager", "Employee" },
                 },
-                new UserRolesResponseDto 
-                { 
-                    UserId = "user-3", 
+                new UserRolesResponseDto
+                {
+                    UserId = "user-3",
                     Email = "employee@company.com",
                     FirstName = "Employee",
                     LastName = "User",
-                    Roles = new List<string> { "Employee" }
-                }
+                    Roles = new List<string> { "Employee" },
+                },
             };
         }
     }

@@ -12,9 +12,10 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Configurations
             builder.Property(e => e.Name).IsRequired().HasMaxLength(200);
             builder.Property(e => e.Description).HasMaxLength(1000);
             builder.Property(e => e.OutcomeStatus).IsRequired();
-            builder.HasMany(e => e.Positions)
-                   .WithOne(p => p.Engagement)
-                   .HasForeignKey(p => p.EngagementId);
+            builder
+                .HasMany(e => e.Positions)
+                .WithOne(p => p.Engagement)
+                .HasForeignKey(p => p.EngagementId);
         }
     }
 }

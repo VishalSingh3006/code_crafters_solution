@@ -7,9 +7,11 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
     {
         [Key]
         public new int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+
         [ForeignKey("Client")]
         public int ClientId { get; set; }
         public Client Client { get; set; }

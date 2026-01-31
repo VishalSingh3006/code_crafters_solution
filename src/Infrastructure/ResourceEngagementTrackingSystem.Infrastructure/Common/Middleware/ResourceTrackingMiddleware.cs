@@ -10,7 +10,10 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Common.Middleware
         private readonly RequestDelegate _next;
         private readonly ILogger<ResourceTrackingMiddleware> _logger;
 
-        public ResourceTrackingMiddleware(RequestDelegate next, ILogger<ResourceTrackingMiddleware> logger)
+        public ResourceTrackingMiddleware(
+            RequestDelegate next,
+            ILogger<ResourceTrackingMiddleware> logger
+        )
         {
             _next = next;
             _logger = logger;
@@ -26,8 +29,13 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Common.Middleware
                 var path = context.Request.Path;
                 var userEmail = context.User?.Identity?.Name ?? "Anonymous";
 
-                _logger.LogInformation("Resource Tracking API Call Started: {Method} {Path} by {User} at {StartTime}", 
-                    method, path, userEmail, startTime);
+                _logger.LogInformation(
+                    "Resource Tracking API Call Started: {Method} {Path} by {User} at {StartTime}",
+                    method,
+                    path,
+                    userEmail,
+                    startTime
+                );
 
                 await _next(context);
 
@@ -35,8 +43,14 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Common.Middleware
                 var duration = endTime - startTime;
                 var statusCode = context.Response.StatusCode;
 
-                _logger.LogInformation("Resource Tracking API Call Completed: {Method} {Path} by {User} - Status: {StatusCode}, Duration: {Duration}ms", 
-                    method, path, userEmail, statusCode, duration.TotalMilliseconds);
+                _logger.LogInformation(
+                    "Resource Tracking API Call Completed: {Method} {Path} by {User} - Status: {StatusCode}, Duration: {Duration}ms",
+                    method,
+                    path,
+                    userEmail,
+                    statusCode,
+                    duration.TotalMilliseconds
+                );
             }
             else
             {

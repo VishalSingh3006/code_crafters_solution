@@ -4,6 +4,6 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
     {
         Active = 0,
         OnHold = 1,
-        Closed = 2
+        Closed = 2,
     }
 }

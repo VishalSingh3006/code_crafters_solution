@@ -30,7 +30,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetDashboardData_ReturnsOkResult_WithDashboardData()
         {
             // Arrange
-            _mockAnalyticsService.Setup(x => x.GetDashboardDataAsync())
+            _mockAnalyticsService
+                .Setup(x => x.GetDashboardDataAsync())
                 .ReturnsAsync(_fixture.SampleDashboardData);
 
             // Act
@@ -40,7 +41,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleDashboardData);
-            
+
             _mockAnalyticsService.Verify(x => x.GetDashboardDataAsync(), Times.Once);
         }
 
@@ -48,7 +49,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetDashboardData_ServiceThrowsException_ThrowsException()
         {
             // Arrange
-            _mockAnalyticsService.Setup(x => x.GetDashboardDataAsync())
+            _mockAnalyticsService
+                .Setup(x => x.GetDashboardDataAsync())
                 .ThrowsAsync(new Exception("Service error"));
 
             // Act & Assert
@@ -66,8 +68,9 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var startDate = new DateTime(2024, 1, 1);
             var endDate = new DateTime(2024, 1, 31);
-            
-            _mockAnalyticsService.Setup(x => x.GetResourceUtilizationAsync(startDate, endDate))
+
+            _mockAnalyticsService
+                .Setup(x => x.GetResourceUtilizationAsync(startDate, endDate))
                 .ReturnsAsync(_fixture.SampleResourceUtilizationData);
 
             // Act
@@ -77,15 +80,19 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleResourceUtilizationData);
-            
-            _mockAnalyticsService.Verify(x => x.GetResourceUtilizationAsync(startDate, endDate), Times.Once);
+
+            _mockAnalyticsService.Verify(
+                x => x.GetResourceUtilizationAsync(startDate, endDate),
+                Times.Once
+            );
         }
 
         [Fact]
         public async Task GetResourceUtilization_WithNullDates_ReturnsOkResult()
         {
             // Arrange
-            _mockAnalyticsService.Setup(x => x.GetResourceUtilizationAsync(null, null))
+            _mockAnalyticsService
+                .Setup(x => x.GetResourceUtilizationAsync(null, null))
                 .ReturnsAsync(_fixture.SampleResourceUtilizationData);
 
             // Act
@@ -95,8 +102,11 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleResourceUtilizationData);
-            
-            _mockAnalyticsService.Verify(x => x.GetResourceUtilizationAsync(null, null), Times.Once);
+
+            _mockAnalyticsService.Verify(
+                x => x.GetResourceUtilizationAsync(null, null),
+                Times.Once
+            );
         }
 
         [Fact]
@@ -106,14 +116,19 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             var startDate = new DateTime(2024, 1, 1);
             var endDate = new DateTime(2024, 1, 31);
 
-            _mockAnalyticsService.Setup(x => x.GetResourceUtilizationAsync(startDate, endDate))
+            _mockAnalyticsService
+                .Setup(x => x.GetResourceUtilizationAsync(startDate, endDate))
                 .ThrowsAsync(new ArgumentException("Invalid date range"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => 
-                _controller.GetResourceUtilization(startDate, endDate));
-            
-            _mockAnalyticsService.Verify(x => x.GetResourceUtilizationAsync(startDate, endDate), Times.Once);
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                _controller.GetResourceUtilization(startDate, endDate)
+            );
+
+            _mockAnalyticsService.Verify(
+                x => x.GetResourceUtilizationAsync(startDate, endDate),
+                Times.Once
+            );
         }
 
         #endregion
@@ -125,8 +140,9 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var projectId = 123;
-            
-            _mockAnalyticsService.Setup(x => x.GetProjectPerformanceAsync(projectId))
+
+            _mockAnalyticsService
+                .Setup(x => x.GetProjectPerformanceAsync(projectId))
                 .ReturnsAsync(_fixture.SampleProjectPerformanceDataWithId);
 
             // Act
@@ -136,7 +152,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleProjectPerformanceDataWithId);
-            
+
             _mockAnalyticsService.Verify(x => x.GetProjectPerformanceAsync(projectId), Times.Once);
         }
 
@@ -144,7 +160,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetProjectPerformance_WithNullProjectId_ReturnsOkResult()
         {
             // Arrange
-            _mockAnalyticsService.Setup(x => x.GetProjectPerformanceAsync(null))
+            _mockAnalyticsService
+                .Setup(x => x.GetProjectPerformanceAsync(null))
                 .ReturnsAsync(_fixture.SampleProjectPerformanceData);
 
             // Act
@@ -154,7 +171,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleProjectPerformanceData);
-            
+
             _mockAnalyticsService.Verify(x => x.GetProjectPerformanceAsync(null), Times.Once);
         }
 
@@ -163,13 +180,15 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var projectId = 999;
-            _mockAnalyticsService.Setup(x => x.GetProjectPerformanceAsync(projectId))
+            _mockAnalyticsService
+                .Setup(x => x.GetProjectPerformanceAsync(projectId))
                 .ThrowsAsync(new InvalidOperationException("Project not found"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => 
-                _controller.GetProjectPerformance(projectId));
-            
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                _controller.GetProjectPerformance(projectId)
+            );
+
             _mockAnalyticsService.Verify(x => x.GetProjectPerformanceAsync(projectId), Times.Once);
         }
 
@@ -184,8 +203,9 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             var employeeId = 456;
             var startDate = new DateTime(2024, 1, 1);
             var endDate = new DateTime(2024, 3, 31);
-            
-            _mockAnalyticsService.Setup(x => x.GetEmployeePerformanceAsync(employeeId, startDate, endDate))
+
+            _mockAnalyticsService
+                .Setup(x => x.GetEmployeePerformanceAsync(employeeId, startDate, endDate))
                 .ReturnsAsync(_fixture.SampleEmployeePerformanceDataWithId);
 
             // Act
@@ -195,15 +215,19 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleEmployeePerformanceDataWithId);
-            
-            _mockAnalyticsService.Verify(x => x.GetEmployeePerformanceAsync(employeeId, startDate, endDate), Times.Once);
+
+            _mockAnalyticsService.Verify(
+                x => x.GetEmployeePerformanceAsync(employeeId, startDate, endDate),
+                Times.Once
+            );
         }
 
         [Fact]
         public async Task GetEmployeePerformance_WithNullParameters_ReturnsOkResult()
         {
             // Arrange
-            _mockAnalyticsService.Setup(x => x.GetEmployeePerformanceAsync(null, null, null))
+            _mockAnalyticsService
+                .Setup(x => x.GetEmployeePerformanceAsync(null, null, null))
                 .ReturnsAsync(_fixture.SampleEmployeePerformanceData);
 
             // Act
@@ -213,8 +237,11 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleEmployeePerformanceData);
-            
-            _mockAnalyticsService.Verify(x => x.GetEmployeePerformanceAsync(null, null, null), Times.Once);
+
+            _mockAnalyticsService.Verify(
+                x => x.GetEmployeePerformanceAsync(null, null, null),
+                Times.Once
+            );
         }
 
         [Fact]
@@ -225,14 +252,19 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             var startDate = new DateTime(2024, 1, 1);
             var endDate = new DateTime(2024, 3, 31);
 
-            _mockAnalyticsService.Setup(x => x.GetEmployeePerformanceAsync(employeeId, startDate, endDate))
+            _mockAnalyticsService
+                .Setup(x => x.GetEmployeePerformanceAsync(employeeId, startDate, endDate))
                 .ThrowsAsync(new ArgumentException("Employee not found"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => 
-                _controller.GetEmployeePerformance(employeeId, startDate, endDate));
-            
-            _mockAnalyticsService.Verify(x => x.GetEmployeePerformanceAsync(employeeId, startDate, endDate), Times.Once);
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                _controller.GetEmployeePerformance(employeeId, startDate, endDate)
+            );
+
+            _mockAnalyticsService.Verify(
+                x => x.GetEmployeePerformanceAsync(employeeId, startDate, endDate),
+                Times.Once
+            );
         }
 
         #endregion
@@ -244,8 +276,9 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var year = 2024;
-            
-            _mockAnalyticsService.Setup(x => x.GetRevenueAnalysisAsync(year))
+
+            _mockAnalyticsService
+                .Setup(x => x.GetRevenueAnalysisAsync(year))
                 .ReturnsAsync(_fixture.SampleRevenueAnalysisData);
 
             // Act
@@ -255,7 +288,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleRevenueAnalysisData);
-            
+
             _mockAnalyticsService.Verify(x => x.GetRevenueAnalysisAsync(year), Times.Once);
         }
 
@@ -264,13 +297,17 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var invalidYear = 1990;
-            _mockAnalyticsService.Setup(x => x.GetRevenueAnalysisAsync(invalidYear))
-                .ThrowsAsync(new ArgumentOutOfRangeException(nameof(invalidYear), "Year must be valid"));
+            _mockAnalyticsService
+                .Setup(x => x.GetRevenueAnalysisAsync(invalidYear))
+                .ThrowsAsync(
+                    new ArgumentOutOfRangeException(nameof(invalidYear), "Year must be valid")
+                );
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => 
-                _controller.GetRevenueAnalysis(invalidYear));
-            
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() =>
+                _controller.GetRevenueAnalysis(invalidYear)
+            );
+
             _mockAnalyticsService.Verify(x => x.GetRevenueAnalysisAsync(invalidYear), Times.Once);
         }
 
@@ -279,8 +316,9 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var currentYear = DateTime.Now.Year;
-            
-            _mockAnalyticsService.Setup(x => x.GetRevenueAnalysisAsync(currentYear))
+
+            _mockAnalyticsService
+                .Setup(x => x.GetRevenueAnalysisAsync(currentYear))
                 .ReturnsAsync(_fixture.SampleRevenueAnalysisData);
 
             // Act
@@ -290,7 +328,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleRevenueAnalysisData);
-            
+
             _mockAnalyticsService.Verify(x => x.GetRevenueAnalysisAsync(currentYear), Times.Once);
         }
 
@@ -302,7 +340,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetCapacityPlanningData_ReturnsOkResult_WithCapacityData()
         {
             // Arrange
-            _mockAnalyticsService.Setup(x => x.GetCapacityPlanningDataAsync())
+            _mockAnalyticsService
+                .Setup(x => x.GetCapacityPlanningDataAsync())
                 .ReturnsAsync(_fixture.SampleCapacityPlanningData);
 
             // Act
@@ -312,7 +351,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleCapacityPlanningData);
-            
+
             _mockAnalyticsService.Verify(x => x.GetCapacityPlanningDataAsync(), Times.Once);
         }
 
@@ -320,13 +359,15 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetCapacityPlanningData_ServiceThrowsException_ThrowsException()
         {
             // Arrange
-            _mockAnalyticsService.Setup(x => x.GetCapacityPlanningDataAsync())
+            _mockAnalyticsService
+                .Setup(x => x.GetCapacityPlanningDataAsync())
                 .ThrowsAsync(new InvalidOperationException("Unable to calculate capacity"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => 
-                _controller.GetCapacityPlanningData());
-            
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                _controller.GetCapacityPlanningData()
+            );
+
             _mockAnalyticsService.Verify(x => x.GetCapacityPlanningDataAsync(), Times.Once);
         }
 
@@ -334,7 +375,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetCapacityPlanningData_ReturnsEmptyData_WhenNoDataAvailable()
         {
             // Arrange
-            _mockAnalyticsService.Setup(x => x.GetCapacityPlanningDataAsync())
+            _mockAnalyticsService
+                .Setup(x => x.GetCapacityPlanningDataAsync())
                 .ReturnsAsync(_fixture.EmptyCapacityPlanningData);
 
             // Act
@@ -344,7 +386,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.EmptyCapacityPlanningData);
-            
+
             _mockAnalyticsService.Verify(x => x.GetCapacityPlanningDataAsync(), Times.Once);
         }
 

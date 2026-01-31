@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using ResourceEngagementTrackingSystem.Infrastructure.Models;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure.Logging
@@ -12,12 +12,17 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Logging
     public class AuditLogInterceptor : SaveChangesInterceptor
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+
         public AuditLogInterceptor(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
+            DbContextEventData eventData,
+            InterceptionResult<int> result,
+            CancellationToken cancellationToken = default
+        )
         {
             var context = eventData.Context;
             var httpContext = _httpContextAccessor.HttpContext;
@@ -26,8 +31,13 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Logging
             var endpoint = httpContext?.Request?.Path.Value;
             var timestamp = DateTime.UtcNow;
 
-            var entries = context.ChangeTracker.Entries()
-                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted)
+            var entries = context
+                .ChangeTracker.Entries()
+                .Where(e =>
+                    e.State == EntityState.Added
+                    || e.State == EntityState.Modified
+                    || e.State == EntityState.Deleted
+                )
                 .ToList();
 
             foreach (var entry in entries)
@@ -37,12 +47,22 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Logging
                     Id = Guid.NewGuid(),
                     EntityName = entry.Entity.GetType().Name,
                     Action = entry.State.ToString().ToUpper(),
-                    OldValues = entry.State == EntityState.Added ? null : System.Text.Json.JsonSerializer.Serialize(entry.OriginalValues.ToObject()),
-                    NewValues = entry.State == EntityState.Deleted ? null : System.Text.Json.JsonSerializer.Serialize(entry.CurrentValues.ToObject()),
+                    OldValues =
+                        entry.State == EntityState.Added
+                            ? null
+                            : System.Text.Json.JsonSerializer.Serialize(
+                                entry.OriginalValues.ToObject()
+                            ),
+                    NewValues =
+                        entry.State == EntityState.Deleted
+                            ? null
+                            : System.Text.Json.JsonSerializer.Serialize(
+                                entry.CurrentValues.ToObject()
+                            ),
                     UserId = userId,
                     RequestIp = ip,
                     Endpoint = endpoint,
-                    TimestampUtc = timestamp
+                    TimestampUtc = timestamp,
                 };
                 context.Set<AuditLog>().Add(audit);
             }

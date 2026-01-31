@@ -19,7 +19,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 Id = 1,
                 Name = "Website Redesign",
                 Description = "Complete redesign of company website with modern UI/UX",
-                ClientId = 1
+                ClientId = 1,
             };
 
             SampleUpdatedProject = new ProjectDto
@@ -27,7 +27,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 Id = 1,
                 Name = "Website Redesign Phase 2", // Updated name
                 Description = "Enhanced website redesign with mobile optimization", // Updated description
-                ClientId = 1
+                ClientId = 1,
             };
 
             var project2 = new ProjectDto
@@ -35,7 +35,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 Id = 2,
                 Name = "Mobile App Development",
                 Description = "Cross-platform mobile application for customer engagement",
-                ClientId = 2
+                ClientId = 2,
             };
 
             var project3 = new ProjectDto
@@ -43,7 +43,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
                 Id = 3,
                 Name = "Data Analytics Platform",
                 Description = "Business intelligence dashboard with real-time analytics",
-                ClientId = 3
+                ClientId = 3,
             };
 
             SampleProjects = new List<ProjectDto> { SampleProject, project2, project3 };
@@ -52,14 +52,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             {
                 Name = "E-commerce Platform",
                 Description = "Custom e-commerce solution with payment integration",
-                ClientId = 1
+                ClientId = 1,
             };
 
             SampleUpdateProjectDto = new UpdateProjectDto
             {
                 Name = "Website Redesign Phase 2",
                 Description = "Enhanced website redesign with mobile optimization",
-                ClientId = 1
+                ClientId = 1,
             };
         }
     }

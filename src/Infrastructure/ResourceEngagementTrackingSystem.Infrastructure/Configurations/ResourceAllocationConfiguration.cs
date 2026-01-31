@@ -10,9 +10,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Configurations
         {
             builder.HasKey(ra => ra.Id);
             builder.Property(ra => ra.AllocationPercentage).IsRequired();
-            builder.HasOne(ra => ra.Employee)
-                   .WithMany()
-                   .HasForeignKey(ra => ra.EmployeeId);
+            builder.HasOne(ra => ra.Employee).WithMany().HasForeignKey(ra => ra.EmployeeId);
         }
     }
 }

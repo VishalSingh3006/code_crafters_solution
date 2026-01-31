@@ -16,7 +16,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
                 type: "decimal(5,2)",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "decimal(5,4)");
+                oldType: "decimal(5,4)"
+            );
         }
 
         /// <inheritdoc />
@@ -28,7 +29,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
                 type: "decimal(5,4)",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "decimal(5,2)");
+                oldType: "decimal(5,2)"
+            );
         }
     }
 }

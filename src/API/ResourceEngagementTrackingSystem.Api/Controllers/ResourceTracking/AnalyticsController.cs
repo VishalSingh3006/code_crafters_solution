@@ -34,9 +34,15 @@ namespace ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking.Anal
         }
 
         [HttpGet("resource-utilization")]
-        public async Task<IActionResult> GetResourceUtilization([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+        public async Task<IActionResult> GetResourceUtilization(
+            [FromQuery] DateTime? startDate,
+            [FromQuery] DateTime? endDate
+        )
         {
-            var utilizationData = await _analyticsService.GetResourceUtilizationAsync(startDate, endDate);
+            var utilizationData = await _analyticsService.GetResourceUtilizationAsync(
+                startDate,
+                endDate
+            );
             return Ok(utilizationData);
         }
 
@@ -48,9 +54,17 @@ namespace ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking.Anal
         }
 
         [HttpGet("employee-performance")]
-        public async Task<IActionResult> GetEmployeePerformance([FromQuery] int? employeeId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+        public async Task<IActionResult> GetEmployeePerformance(
+            [FromQuery] int? employeeId,
+            [FromQuery] DateTime? startDate,
+            [FromQuery] DateTime? endDate
+        )
         {
-            var performanceData = await _analyticsService.GetEmployeePerformanceAsync(employeeId, startDate, endDate);
+            var performanceData = await _analyticsService.GetEmployeePerformanceAsync(
+                employeeId,
+                startDate,
+                endDate
+            );
             return Ok(performanceData);
         }
 

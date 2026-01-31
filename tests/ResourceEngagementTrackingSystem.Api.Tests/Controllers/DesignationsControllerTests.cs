@@ -1,14 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using ResourceEngagementTrackingSystem.Api.Controllers;
 using ResourceEngagementTrackingSystem.Api.Tests.Fixtures;
 using ResourceEngagementTrackingSystem.Application.DTOs;
 using ResourceEngagementTrackingSystem.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
-using FluentAssertions;
 
 namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
 {
@@ -31,7 +31,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_ReturnsOkWithDesignations()
         {
             // Arrange
-            _mockDesignationService.Setup(x => x.GetAllAsync())
+            _mockDesignationService
+                .Setup(x => x.GetAllAsync())
                 .ReturnsAsync(_fixture.SampleDesignations);
 
             // Act
@@ -47,7 +48,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_WhenServiceThrows_ShouldThrow()
         {
             // Arrange
-            _mockDesignationService.Setup(x => x.GetAllAsync())
+            _mockDesignationService
+                .Setup(x => x.GetAllAsync())
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -64,7 +66,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var designationId = 1;
             var expectedDesignation = _fixture.SampleDesignations[0];
-            _mockDesignationService.Setup(x => x.GetByIdAsync(designationId))
+            _mockDesignationService
+                .Setup(x => x.GetByIdAsync(designationId))
                 .ReturnsAsync(expectedDesignation);
 
             // Act
@@ -81,7 +84,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var designationId = 999;
-            _mockDesignationService.Setup(x => x.GetByIdAsync(designationId))
+            _mockDesignationService
+                .Setup(x => x.GetByIdAsync(designationId))
                 .ReturnsAsync((DesignationDto)null!);
 
             // Act
@@ -96,7 +100,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var designationId = 1;
-            _mockDesignationService.Setup(x => x.GetByIdAsync(designationId))
+            _mockDesignationService
+                .Setup(x => x.GetByIdAsync(designationId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -112,13 +117,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var createDto = _fixture.SampleCreateDesignationDto;
-            var createdDesignation = new DesignationDto 
-            { 
-                Id = 4, 
-                Name = createDto.Name
-            };
-            
-            _mockDesignationService.Setup(x => x.CreateAsync(createDto))
+            var createdDesignation = new DesignationDto { Id = 4, Name = createDto.Name };
+
+            _mockDesignationService
+                .Setup(x => x.CreateAsync(createDto))
                 .ReturnsAsync(createdDesignation);
 
             // Act
@@ -137,7 +139,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var createDto = _fixture.SampleCreateDesignationDto;
-            _mockDesignationService.Setup(x => x.CreateAsync(createDto))
+            _mockDesignationService
+                .Setup(x => x.CreateAsync(createDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -154,13 +157,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var designationId = 1;
             var updateDto = _fixture.SampleUpdateDesignationDto;
-            var updatedDesignation = new DesignationDto 
-            { 
-                Id = designationId, 
-                Name = updateDto.Name
+            var updatedDesignation = new DesignationDto
+            {
+                Id = designationId,
+                Name = updateDto.Name,
             };
-            
-            _mockDesignationService.Setup(x => x.UpdateAsync(designationId, updateDto))
+
+            _mockDesignationService
+                .Setup(x => x.UpdateAsync(designationId, updateDto))
                 .ReturnsAsync(updatedDesignation);
 
             // Act
@@ -178,7 +182,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var designationId = 999;
             var updateDto = _fixture.SampleUpdateDesignationDto;
-            _mockDesignationService.Setup(x => x.UpdateAsync(designationId, updateDto))
+            _mockDesignationService
+                .Setup(x => x.UpdateAsync(designationId, updateDto))
                 .ReturnsAsync((DesignationDto)null!);
 
             // Act
@@ -194,7 +199,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var designationId = 1;
             var updateDto = _fixture.SampleUpdateDesignationDto;
-            _mockDesignationService.Setup(x => x.UpdateAsync(designationId, updateDto))
+            _mockDesignationService
+                .Setup(x => x.UpdateAsync(designationId, updateDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -210,8 +216,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var designationId = 1;
-            _mockDesignationService.Setup(x => x.DeleteAsync(designationId))
-                .ReturnsAsync(true);
+            _mockDesignationService.Setup(x => x.DeleteAsync(designationId)).ReturnsAsync(true);
 
             // Act
             var result = await _controller.Delete(designationId);
@@ -225,8 +230,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var designationId = 999;
-            _mockDesignationService.Setup(x => x.DeleteAsync(designationId))
-                .ReturnsAsync(false);
+            _mockDesignationService.Setup(x => x.DeleteAsync(designationId)).ReturnsAsync(false);
 
             // Act
             var result = await _controller.Delete(designationId);
@@ -240,7 +244,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var designationId = 1;
-            _mockDesignationService.Setup(x => x.DeleteAsync(designationId))
+            _mockDesignationService
+                .Setup(x => x.DeleteAsync(designationId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert

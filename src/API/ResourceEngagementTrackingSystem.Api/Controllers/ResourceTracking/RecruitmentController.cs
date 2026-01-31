@@ -35,22 +35,36 @@ namespace ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking.Recr
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRecruitmentRecord([FromBody] CreateRecruitmentRecordDto createRecruitmentRecordDto)
+        public async Task<IActionResult> CreateRecruitmentRecord(
+            [FromBody] CreateRecruitmentRecordDto createRecruitmentRecordDto
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var recruitmentRecord = await _recruitmentService.CreateRecruitmentRecordAsync(createRecruitmentRecordDto);
-            return CreatedAtAction(nameof(GetRecruitmentRecord), new { id = recruitmentRecord.Id }, recruitmentRecord);
+            var recruitmentRecord = await _recruitmentService.CreateRecruitmentRecordAsync(
+                createRecruitmentRecordDto
+            );
+            return CreatedAtAction(
+                nameof(GetRecruitmentRecord),
+                new { id = recruitmentRecord.Id },
+                recruitmentRecord
+            );
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRecruitmentRecord(int id, [FromBody] UpdateRecruitmentRecordDto updateRecruitmentRecordDto)
+        public async Task<IActionResult> UpdateRecruitmentRecord(
+            int id,
+            [FromBody] UpdateRecruitmentRecordDto updateRecruitmentRecordDto
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var success = await _recruitmentService.UpdateRecruitmentRecordAsync(id, updateRecruitmentRecordDto);
+            var success = await _recruitmentService.UpdateRecruitmentRecordAsync(
+                id,
+                updateRecruitmentRecordDto
+            );
             if (!success)
                 return NotFound();
 

@@ -1,4 +1,3 @@
-
 namespace ResourceEngagementTrackingSystem.Application.DTOs;
 
 public class RegisterDto
@@ -11,7 +10,7 @@ public class RegisterDto
     public string PhoneNumber { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
     public string ZipCode { get; set; } = string.Empty;
-    
+
     // Optional role assignment (defaults to "User" if not specified)
     public string Role { get; set; } = "User";
 }

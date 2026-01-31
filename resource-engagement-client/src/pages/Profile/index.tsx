@@ -13,6 +13,7 @@ import {
   Link,
   Divider,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setUser } from "../../store/authSlice";
 import { UpdateProfileRequest } from "../../types";
@@ -21,6 +22,7 @@ import { twoFactorService } from "../../services/twoFactorService";
 
 const Profile: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const user = useAppSelector((s) => s.auth.user);
   const {
     control,
@@ -200,6 +202,25 @@ const Profile: React.FC = () => {
               {isSubmitting ? "Updating..." : "Update Profile"}
             </Button>
           </Stack>
+        </Box>
+
+        <Divider sx={{ my: 3 }} />
+
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Change Password
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            Update your account password to keep your account secure.
+          </Typography>
+
+          <Button
+            type="button"
+            variant="contained"
+            onClick={() => navigate("/change-password")}
+          >
+            Change Password
+          </Button>
         </Box>
 
         <Divider sx={{ my: 3 }} />

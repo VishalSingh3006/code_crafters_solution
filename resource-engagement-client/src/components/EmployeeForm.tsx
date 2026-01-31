@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import type {
   CreateEmployeeRequest,
   Employee,
@@ -22,6 +22,12 @@ import { useEmployeeActions } from "../hooks/employeesHooks";
 import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { baseServices } from "../services/baseService";
+
+interface Skill {
+  id: number;
+  name: string;
+}
 
 type Mode = "create" | "edit";
 
@@ -85,6 +91,8 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   onCancel,
 }) => {
   const { create, update, pending, error } = useEmployeeActions(onSuccess);
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [skillsLoading, setSkillsLoading] = useState(true);
 
   const defaultValues: CreateEmployeeRequest = {
     employeeCode: "",
@@ -112,6 +120,22 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   });
 
   const { fields, append, remove } = useFieldArray({ control, name: "skills" });
+
+  // Load available skills from API
+  useEffect(() => {
+    const loadSkills = async () => {
+      try {
+        const response = await baseServices.get("skills");
+        setSkills(response || []);
+      } catch (error) {
+        console.error("Failed to load skills:", error);
+        setSkills([]);
+      } finally {
+        setSkillsLoading(false);
+      }
+    };
+    loadSkills();
+  }, []);
 
   useEffect(() => {
     if (mode === "edit" && employee) {
@@ -254,18 +278,28 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               key={s.id}
               alignItems="center"
             >
-              <TextField
-                label="Skill ID"
-                type="number"
-                {...register(`skills.${idx}.skillId` as const, {
-                  valueAsNumber: true,
-                })}
-                error={!!errors.skills?.[idx]?.skillId}
-                helperText={errors.skills?.[idx]?.skillId?.message || "Enter skill ID (1-JavaScript, 2-Python, etc.)"}
-                placeholder="e.g., 1"
-                inputProps={{ min: 1 }}
-                fullWidth
-              />
+              <FormControl fullWidth error={!!errors.skills?.[idx]?.skillId}>
+                <InputLabel>Skill</InputLabel>
+                <Select
+                  label="Skill"
+                  {...register(`skills.${idx}.skillId` as const, {
+                    valueAsNumber: true,
+                  })}
+                  defaultValue=""
+                  disabled={skillsLoading}
+                >
+                  {skills.map((skill) => (
+                    <MenuItem key={skill.id} value={skill.id}>
+                      {skill.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.skills?.[idx]?.skillId && (
+                  <FormHelperText>
+                    {errors.skills?.[idx]?.skillId?.message}
+                  </FormHelperText>
+                )}
+              </FormControl>
               <FormControl fullWidth>
                 <InputLabel>Proficiency Level</InputLabel>
                 <Select
@@ -296,10 +330,14 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           ))}
           <Button
             variant="outlined"
-            onClick={() => append({ skillId: 1, proficiencyLevel: "Beginner" })}
+            onClick={() => append({ 
+              skillId: skills.length > 0 ? skills[0].id : 1, 
+              proficiencyLevel: "Beginner" 
+            })}
             sx={{ alignSelf: "flex-start" }}
+            disabled={skillsLoading || skills.length === 0}
           >
-            + Add Skill
+            {skillsLoading ? "Loading..." : skills.length === 0 ? "No Skills Available" : "+ Add Skill"}
           </Button>
         </Stack>
       </Box>

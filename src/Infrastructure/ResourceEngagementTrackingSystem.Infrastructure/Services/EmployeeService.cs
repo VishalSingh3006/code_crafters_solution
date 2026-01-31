@@ -88,7 +88,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 Phone = dto.Phone,
                 DepartmentId = dto.DepartmentId,
                 DesignationId = dto.DesignationId,
-                EmploymentType = Enum.Parse<EmploymentType>(dto.EmploymentType),
+                EmploymentType = ParseEmploymentType(dto.EmploymentType),
                 ManagerId = dto.ManagerId
             };
             if (dto.Skills != null)
@@ -96,7 +96,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 e.EmployeeSkills = dto.Skills.Select(s => new EmployeeSkill
                 {
                     SkillId = s.SkillId,
-                    ProficiencyLevel = Enum.Parse<ProficiencyLevel>(s.ProficiencyLevel),
+                    ProficiencyLevel = ParseProficiencyLevel(s.ProficiencyLevel),
                 }).ToList();
             }
             _context.Employees.Add(e);
@@ -116,7 +116,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
             e.Phone = dto.Phone;
             e.DepartmentId = dto.DepartmentId;
             e.DesignationId = dto.DesignationId;
-            e.EmploymentType = Enum.Parse<EmploymentType>(dto.EmploymentType);
+            e.EmploymentType = ParseEmploymentType(dto.EmploymentType);
             e.ManagerId = dto.ManagerId;
             // Update skills
             e.EmployeeSkills.Clear();
@@ -128,7 +128,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                     {
                         EmployeeId = e.Id,
                         SkillId = s.SkillId,
-                        ProficiencyLevel = Enum.Parse<ProficiencyLevel>(s.ProficiencyLevel)
+                        ProficiencyLevel = ParseProficiencyLevel(s.ProficiencyLevel)
                     });
                 }
             }
@@ -143,6 +143,41 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
             _context.Employees.Remove(e);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        private static EmploymentType ParseEmploymentType(string employmentType)
+        {
+            if (string.IsNullOrWhiteSpace(employmentType))
+                return EmploymentType.Permanent; // Default value
+
+            return employmentType.ToLowerInvariant().Replace("-", "").Replace(" ", "") switch
+            {
+                "fulltime" => EmploymentType.Permanent,
+                "permanent" => EmploymentType.Permanent,
+                "parttime" => EmploymentType.Contract, // Map part-time to contract
+                "contract" => EmploymentType.Contract,
+                "contractor" => EmploymentType.Contract,
+                "intern" => EmploymentType.Intern,
+                "internship" => EmploymentType.Intern,
+                _ => Enum.TryParse<EmploymentType>(employmentType, true, out var result) 
+                     ? result 
+                     : EmploymentType.Permanent // Default fallback
+            };
+        }
+
+        private ProficiencyLevel ParseProficiencyLevel(string proficiencyLevel)
+        {
+            if (string.IsNullOrWhiteSpace(proficiencyLevel))
+                return ProficiencyLevel.Beginner;
+            
+            return proficiencyLevel.ToLower().Replace(" ", "").Replace("-", "") switch
+            {
+                "beginner" => ProficiencyLevel.Beginner,
+                "intermediate" => ProficiencyLevel.Intermediate,
+                "expert" => ProficiencyLevel.Expert,
+                "advanced" => ProficiencyLevel.Expert, // Map advanced to expert since it's not in enum
+                _ => ProficiencyLevel.Beginner // Default fallback
+            };
         }
     }
 }

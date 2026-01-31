@@ -80,6 +80,58 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
             };
         }
 
+        public async Task<ResourceAnalyticsDto> GetResourceAnalyticsAsync()
+        {
+            // Delivery metrics
+            var totalDeliveries = await _context.Deliveries.CountAsync();
+            var completedDeliveries = await _context.Deliveries
+                .CountAsync(d => d.Status == DeliveryStatus.Delivered);
+            var onTimeDeliveries = await _context.Deliveries
+                .CountAsync(d => d.Status == DeliveryStatus.Delivered && 
+                                d.ActualDeliveryDate <= d.PlannedDeliveryDate);
+            var averageEffort = await _context.Deliveries
+                .Where(d => d.ActualEffort.HasValue)
+                .AverageAsync(d => (decimal?)d.ActualEffort) ?? 0;
+
+            // Staffing metrics
+            var totalStaffingRecords = await _context.StaffingRecords.CountAsync();
+            var activeStaffing = await _context.StaffingRecords
+                .CountAsync(s => s.Status == StaffingStatus.Active);
+            var utilizationRate = await _context.StaffingRecords
+                .Where(s => s.Status == StaffingStatus.Active)
+                .AverageAsync(s => (decimal?)s.AllocationPercentage) ?? 0;
+
+            // Billing metrics
+            var totalBillingAmount = await _context.BillingRecords
+                .SumAsync(b => (decimal?)b.TotalAmount) ?? 0;
+            var paidAmount = await _context.BillingRecords
+                .Where(b => b.Status == BillingStatus.Invoiced)
+                .SumAsync(b => (decimal?)b.TotalAmount) ?? 0;
+            var pendingAmount = totalBillingAmount - paidAmount;
+
+            // Recruitment metrics
+            var activeRecruitments = await _context.RecruitmentRecords
+                .CountAsync(r => r.Status == RecruitmentStatus.Open);
+            var filledPositions = await _context.RecruitmentRecords
+                .CountAsync(r => r.Status == RecruitmentStatus.Closed);
+
+            return new ResourceAnalyticsDto
+            {
+                TotalDeliveries = totalDeliveries,
+                CompletedDeliveries = completedDeliveries,
+                OnTimeDeliveries = onTimeDeliveries,
+                AverageEffort = averageEffort,
+                TotalStaffingRecords = totalStaffingRecords,
+                ActiveStaffing = activeStaffing,
+                UtilizationRate = utilizationRate,
+                TotalBillingAmount = totalBillingAmount,
+                PaidAmount = paidAmount,
+                PendingAmount = pendingAmount,
+                ActiveRecruitments = activeRecruitments,
+                FilledPositions = filledPositions
+            };
+        }
+
         public async Task<ResourceUtilizationDto> GetResourceUtilizationAsync(DateTime? startDate, DateTime? endDate)
         {
             startDate ??= DateTime.UtcNow.AddMonths(-1);

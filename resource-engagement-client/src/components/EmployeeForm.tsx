@@ -12,6 +12,11 @@ import {
   Stack,
   TextField,
   Typography,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  FormHelperText,
 } from "@mui/material";
 import { useEmployeeActions } from "../hooks/employeesHooks";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -87,9 +92,9 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
     lastName: "",
     email: "",
     phone: "",
-    departmentId: 0,
-    designationId: 0,
-    employmentType: "",
+    departmentId: 1,
+    designationId: 1,
+    employmentType: "Full-Time",
     managerId: null,
     skills: [],
   };
@@ -116,8 +121,8 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
         lastName: employee.lastName,
         email: employee.email,
         phone: employee.phone,
-        departmentId: 0,
-        designationId: 0,
+        departmentId: 1, // TODO: Map department string to ID
+        designationId: 1, // TODO: Map designation string to ID  
         employmentType: employee.employmentType,
         managerId: employee.managerId ?? null,
         skills: employee.skills.map((s) => ({
@@ -150,14 +155,24 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           error={!!errors.employeeCode}
           helperText={errors.employeeCode?.message}
           fullWidth
+          placeholder="e.g., EMP001"
         />
-        <TextField
-          label="Employment Type"
-          {...register("employmentType")}
-          error={!!errors.employmentType}
-          helperText={errors.employmentType?.message}
-          fullWidth
-        />
+        <FormControl fullWidth error={!!errors.employmentType}>
+          <InputLabel>Employment Type</InputLabel>
+          <Select
+            label="Employment Type"
+            {...register("employmentType")}
+            defaultValue="Full-Time"
+          >
+            <MenuItem value="Full-Time">Full-Time</MenuItem>
+            <MenuItem value="Part-Time">Part-Time</MenuItem>
+            <MenuItem value="Contract">Contract</MenuItem>
+            <MenuItem value="Intern">Intern</MenuItem>
+          </Select>
+          {errors.employmentType && (
+            <FormHelperText>{errors.employmentType?.message}</FormHelperText>
+          )}
+        </FormControl>
       </Stack>
       <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
         <TextField
@@ -178,10 +193,12 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
       <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
         <TextField
           label="Email"
+          type="email"
           {...register("email")}
           error={!!errors.email}
           helperText={errors.email?.message}
           fullWidth
+          placeholder="john.doe@company.com"
         />
         <TextField
           label="Phone"
@@ -189,35 +206,40 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           error={!!errors.phone}
           helperText={errors.phone?.message}
           fullWidth
+          placeholder="+1-234-567-8900"
         />
       </Stack>
       <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
         <TextField
-          label="Department Id"
+          label="Department ID"
           type="number"
           {...register("departmentId", { valueAsNumber: true })}
           error={!!errors.departmentId}
-          helperText={errors.departmentId?.message}
+          helperText={errors.departmentId?.message || "Enter the department ID (e.g., 1 for IT, 2 for HR)"}
           fullWidth
+          inputProps={{ min: 1 }}
         />
         <TextField
-          label="Designation Id"
+          label="Designation ID"
           type="number"
           {...register("designationId", { valueAsNumber: true })}
           error={!!errors.designationId}
-          helperText={errors.designationId?.message}
+          helperText={errors.designationId?.message || "Enter the designation ID (e.g., 1 for Developer, 2 for Manager)"}
           fullWidth
+          inputProps={{ min: 1 }}
         />
       </Stack>
       <TextField
-        label="Manager Id"
+        label="Manager ID (Optional)"
         type="number"
         {...register("managerId", {
-          setValueAs: (v) => (v === "" ? null : Number(v)),
+          setValueAs: (v) => (v === "" || v === "0" ? null : Number(v)),
         })}
         error={!!errors.managerId}
-        helperText={errors.managerId?.message as string | undefined}
+        helperText={errors.managerId?.message as string | undefined || "Leave empty if no manager"}
         fullWidth
+        placeholder="Enter manager's employee ID"
+        inputProps={{ min: 0 }}
       />
 
       <Box>
@@ -229,33 +251,55 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
             <Stack
               direction={{ xs: "column", md: "row" }}
               spacing={1}
-              key={idx}
+              key={s.id}
+              alignItems="center"
             >
               <TextField
-                label="Skill Id"
+                label="Skill ID"
                 type="number"
                 {...register(`skills.${idx}.skillId` as const, {
                   valueAsNumber: true,
                 })}
                 error={!!errors.skills?.[idx]?.skillId}
-                helperText={errors.skills?.[idx]?.skillId?.message}
+                helperText={errors.skills?.[idx]?.skillId?.message || "Enter skill ID (1-JavaScript, 2-Python, etc.)"}
+                placeholder="e.g., 1"
+                inputProps={{ min: 1 }}
+                fullWidth
               />
-              <TextField
-                label="Proficiency"
-                {...register(`skills.${idx}.proficiencyLevel` as const)}
-                error={!!errors.skills?.[idx]?.proficiencyLevel}
-                helperText={errors.skills?.[idx]?.proficiencyLevel?.message}
-              />
-              <Button color="error" onClick={() => remove(idx)}>
+              <FormControl fullWidth>
+                <InputLabel>Proficiency Level</InputLabel>
+                <Select
+                  label="Proficiency Level"
+                  {...register(`skills.${idx}.proficiencyLevel` as const)}
+                  defaultValue=""
+                >
+                  <MenuItem value="Beginner">Beginner</MenuItem>
+                  <MenuItem value="Intermediate">Intermediate</MenuItem>
+                  <MenuItem value="Advanced">Advanced</MenuItem>
+                  <MenuItem value="Expert">Expert</MenuItem>
+                </Select>
+                {errors.skills?.[idx]?.proficiencyLevel && (
+                  <FormHelperText error>
+                    {errors.skills?.[idx]?.proficiencyLevel?.message}
+                  </FormHelperText>
+                )}
+              </FormControl>
+              <Button 
+                color="error" 
+                onClick={() => remove(idx)}
+                variant="outlined"
+                size="small"
+              >
                 Remove
               </Button>
             </Stack>
           ))}
           <Button
             variant="outlined"
-            onClick={() => append({ skillId: 0, proficiencyLevel: "" })}
+            onClick={() => append({ skillId: 1, proficiencyLevel: "Beginner" })}
+            sx={{ alignSelf: "flex-start" }}
           >
-            Add Skill
+            + Add Skill
           </Button>
         </Stack>
       </Box>

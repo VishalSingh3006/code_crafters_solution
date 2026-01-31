@@ -3,6 +3,7 @@ import authReducer from "./authSlice";
 import clientsReducer from "./clientsSlice";
 import projectsReducer from "./projectsSlice";
 import uiReducer from "./uiSlice";
+import billingRatesReducer from "./billingRateSlice";
 import {
   persistStore,
   persistReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   ui: uiReducer,
   clients: clientsReducer,
   projects: projectsReducer,
+  billingRates: billingRatesReducer,
 });
 
 const persistConfig = {

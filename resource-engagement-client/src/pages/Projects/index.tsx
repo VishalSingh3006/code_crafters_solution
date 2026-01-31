@@ -93,6 +93,7 @@ const ProjectsPage: React.FC = () => {
                       >
                         <Button
                           size="small"
+                          variant="contained"
                           onClick={(e) => {
                             e.stopPropagation();
                             setEditing(p);
@@ -102,6 +103,7 @@ const ProjectsPage: React.FC = () => {
                         </Button>
                         <Button
                           size="small"
+                          variant="contained"
                           color="error"
                           onClick={(e) => {
                             e.stopPropagation();

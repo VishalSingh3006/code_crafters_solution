@@ -1,6 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { Delivery, DeliveryStatus, DeliveryPriority } from '../../types/resourceTracking';
-import resourceTrackingService from '../../services/resourceTrackingService';
+import React, { useState, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import {
+  Box,
+  Stack,
+  Typography,
+  Alert,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Card,
+  CardContent,
+  Button,
+  Chip,
+  CircularProgress,
+} from "@mui/material";
+import {
+  Delivery,
+  DeliveryStatus,
+  DeliveryPriority,
+} from "../../types/resourceTracking";
+import resourceTrackingService from "../../services/resourceTrackingService";
 
 interface DeliveryListProps {
   onEditDelivery: (delivery: Delivery) => void;
@@ -8,20 +28,21 @@ interface DeliveryListProps {
   refreshTrigger?: number;
 }
 
-const DeliveryList: React.FC<DeliveryListProps> = ({ 
-  onEditDelivery, 
-  onDeleteDelivery, 
-  refreshTrigger 
+const DeliveryList: React.FC<DeliveryListProps> = ({
+  onEditDelivery,
+  onDeleteDelivery,
+  refreshTrigger,
 }) => {
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
-  const [filter, setFilter] = useState<{
-    status: DeliveryStatus | 'all';
-    priority: DeliveryPriority | 'all';
-  }>({
-    status: 'all',
-    priority: 'all'
+  const [error, setError] = useState<string>("");
+  type FilterValues = {
+    status: DeliveryStatus | "all";
+    priority: DeliveryPriority | "all";
+  };
+
+  const { control, watch } = useForm<FilterValues>({
+    defaultValues: { status: "all", priority: "all" },
   });
 
   useEffect(() => {
@@ -34,186 +55,274 @@ const DeliveryList: React.FC<DeliveryListProps> = ({
       const data = await resourceTrackingService.getAllDeliveries();
       setDeliveries(data);
     } catch (err: any) {
-      setError('Failed to load deliveries: ' + (err.response?.data?.message || err.message));
+      setError(
+        "Failed to load deliveries: " +
+          (err.response?.data?.message || err.message),
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (deliveryId: number) => {
-    if (window.confirm('Are you sure you want to delete this delivery?')) {
+    if (window.confirm("Are you sure you want to delete this delivery?")) {
       try {
         await resourceTrackingService.deleteDelivery(deliveryId);
         onDeleteDelivery(deliveryId);
         await loadDeliveries(); // Refresh the list
       } catch (err: any) {
-        setError('Failed to delete delivery: ' + (err.response?.data?.message || err.message));
+        setError(
+          "Failed to delete delivery: " +
+            (err.response?.data?.message || err.message),
+        );
       }
     }
   };
 
-  const getStatusColor = (status: DeliveryStatus): string => {
+  const getStatusColor = (
+    status: DeliveryStatus,
+  ):
+    | "default"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "error"
+    | "info"
+    | "warning" => {
     switch (status) {
       case DeliveryStatus.Completed:
-        return 'bg-green-100 text-green-800';
+        return "success";
       case DeliveryStatus.InProgress:
-        return 'bg-blue-100 text-blue-800';
+        return "info";
       case DeliveryStatus.OnHold:
-        return 'bg-yellow-100 text-yellow-800';
+        return "warning";
       case DeliveryStatus.Cancelled:
-        return 'bg-red-100 text-red-800';
+        return "error";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "default";
     }
   };
 
-  const getPriorityColor = (priority: DeliveryPriority): string => {
+  const getPriorityColor = (
+    priority: DeliveryPriority,
+  ):
+    | "default"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "error"
+    | "info"
+    | "warning" => {
     switch (priority) {
       case DeliveryPriority.Critical:
-        return 'bg-red-100 text-red-800';
+        return "error";
       case DeliveryPriority.High:
-        return 'bg-orange-100 text-orange-800';
+        return "warning";
       case DeliveryPriority.Medium:
-        return 'bg-yellow-100 text-yellow-800';
+        return "info";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "default";
     }
   };
 
-  const filteredDeliveries = deliveries.filter(delivery => {
-    const statusMatch = filter.status === 'all' || delivery.status === filter.status;
-    const priorityMatch = filter.priority === 'all' || delivery.priority === filter.priority;
+  const statusFilter = watch("status");
+  const priorityFilter = watch("priority");
+
+  const filteredDeliveries = deliveries.filter((delivery) => {
+    const statusMatch =
+      statusFilter === "all" || delivery.status === statusFilter;
+    const priorityMatch =
+      priorityFilter === "all" || delivery.priority === priorityFilter;
     return statusMatch && priorityMatch;
   });
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-2">Loading deliveries...</span>
-      </div>
+      <Box
+        sx={{
+          py: 6,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+        }}
+      >
+        <CircularProgress size={28} />
+        <Typography>Loading deliveries...</Typography>
+      </Box>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <Box>
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+        <Alert severity="error" sx={{ mb: 2 }}>
           {error}
-        </div>
+        </Alert>
       )}
 
-      {/* Filters */}
-      <div className="bg-white p-4 rounded-lg shadow-sm border">
-        <div className="flex flex-wrap gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Status Filter
-            </label>
-            <select
-              value={filter.status}
-              onChange={(e) => setFilter(prev => ({ ...prev, status: e.target.value as DeliveryStatus | 'all' }))}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Status</option>
-              {Object.values(DeliveryStatus).map(status => (
-                <option key={status} value={status}>{status}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Priority Filter
-            </label>
-            <select
-              value={filter.priority}
-              onChange={(e) => setFilter(prev => ({ ...prev, priority: e.target.value as DeliveryPriority | 'all' }))}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Priorities</option>
-              {Object.values(DeliveryPriority).map(priority => (
-                <option key={priority} value={priority}>{priority}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
+      <Card elevation={1} sx={{ p: 2, mb: 2 }}>
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+          <FormControl fullWidth>
+            <InputLabel id="status-filter-label">Status Filter</InputLabel>
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  labelId="status-filter-label"
+                  label="Status Filter"
+                >
+                  <MenuItem value="all">All Status</MenuItem>
+                  {Object.values(DeliveryStatus).map((status) => (
+                    <MenuItem key={status} value={status}>
+                      {status}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </FormControl>
 
-      {/* Deliveries Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <FormControl fullWidth>
+            <InputLabel id="priority-filter-label">Priority Filter</InputLabel>
+            <Controller
+              name="priority"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  labelId="priority-filter-label"
+                  label="Priority Filter"
+                >
+                  <MenuItem value="all">All Priorities</MenuItem>
+                  {Object.values(DeliveryPriority).map((priority) => (
+                    <MenuItem key={priority} value={priority}>
+                      {priority}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </FormControl>
+        </Stack>
+      </Card>
+
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr", lg: "1fr 1fr 1fr" },
+          gap: 2,
+        }}
+      >
         {filteredDeliveries.map((delivery) => (
-          <div key={delivery.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 truncate">
-                {delivery.deliveryName}
-              </h3>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => onEditDelivery(delivery)}
-                  className="text-blue-600 hover:text-blue-800 text-sm"
+          <Card key={delivery.id} variant="outlined">
+            <CardContent>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="flex-start"
+                mb={2}
+              >
+                <Typography variant="subtitle1" fontWeight={700} noWrap>
+                  {delivery.deliveryName}
+                </Typography>
+                <Stack direction="row" spacing={1}>
+                  <Button size="small" onClick={() => onEditDelivery(delivery)}>
+                    Edit
+                  </Button>
+                  <Button
+                    size="small"
+                    color="error"
+                    onClick={() => handleDelete(delivery.id)}
+                  >
+                    Delete
+                  </Button>
+                </Stack>
+              </Stack>
+
+              {delivery.description && (
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                  noWrap
                 >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(delivery.id)}
-                  className="text-red-600 hover:text-red-800 text-sm"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-
-            {delivery.description && (
-              <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                {delivery.description}
-              </p>
-            )}
-
-            <div className="space-y-2 mb-4">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Planned Date:</span>
-                <span className="text-gray-900">
-                  {new Date(delivery.plannedDeliveryDate).toLocaleDateString()}
-                </span>
-              </div>
-              {delivery.actualDeliveryDate && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Actual Date:</span>
-                  <span className="text-gray-900">
-                    {new Date(delivery.actualDeliveryDate).toLocaleDateString()}
-                  </span>
-                </div>
+                  {delivery.description}
+                </Typography>
               )}
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Estimated Effort:</span>
-                <span className="text-gray-900">{delivery.estimatedEffort}h</span>
-              </div>
-              {delivery.actualEffort && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Actual Effort:</span>
-                  <span className="text-gray-900">{delivery.actualEffort}h</span>
-                </div>
-              )}
-            </div>
 
-            <div className="flex justify-between items-center">
-              <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(delivery.status)}`}>
-                {delivery.status}
-              </span>
-              <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(delivery.priority)}`}>
-                {delivery.priority}
-              </span>
-            </div>
-          </div>
+              <Stack spacing={1} sx={{ mb: 2 }}>
+                <Stack direction="row" justifyContent="space-between">
+                  <Typography variant="caption" color="text.secondary">
+                    Planned Date
+                  </Typography>
+                  <Typography variant="caption">
+                    {new Date(
+                      delivery.plannedDeliveryDate,
+                    ).toLocaleDateString()}
+                  </Typography>
+                </Stack>
+                {delivery.actualDeliveryDate && (
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="caption" color="text.secondary">
+                      Actual Date
+                    </Typography>
+                    <Typography variant="caption">
+                      {new Date(
+                        delivery.actualDeliveryDate,
+                      ).toLocaleDateString()}
+                    </Typography>
+                  </Stack>
+                )}
+                <Stack direction="row" justifyContent="space-between">
+                  <Typography variant="caption" color="text.secondary">
+                    Estimated Effort
+                  </Typography>
+                  <Typography variant="caption">
+                    {delivery.estimatedEffort}h
+                  </Typography>
+                </Stack>
+                {delivery.actualEffort && (
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="caption" color="text.secondary">
+                      Actual Effort
+                    </Typography>
+                    <Typography variant="caption">
+                      {delivery.actualEffort}h
+                    </Typography>
+                  </Stack>
+                )}
+              </Stack>
+
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Chip
+                  label={delivery.status}
+                  color={getStatusColor(delivery.status)}
+                  size="small"
+                />
+                <Chip
+                  label={delivery.priority}
+                  color={getPriorityColor(delivery.priority)}
+                  size="small"
+                />
+              </Stack>
+            </CardContent>
+          </Card>
         ))}
-      </div>
+      </Box>
 
       {filteredDeliveries.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
+        <Typography align="center" sx={{ py: 6 }} color="text.secondary">
           No deliveries found matching the current filters.
-        </div>
+        </Typography>
       )}
-    </div>
+    </Box>
   );
 };
 

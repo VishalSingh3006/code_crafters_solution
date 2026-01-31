@@ -1,65 +1,107 @@
 import React from "react";
-import { useAuthLogout, useAuthState } from "../../hooks/authHooks";
-import { Box, Paper, Typography, Button, Stack } from "@mui/material";
+import { Box, Paper, Typography, Button, Stack, Skeleton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useProjects } from "../../hooks/projectsHooks";
+import { useEmployees } from "../../hooks/employeesHooks";
+import { useClients } from "../../hooks/clientsHooks";
 
 const Dashboard: React.FC = () => {
-  const { user } = useAuthState();
-  const { logout } = useAuthLogout();
   const navigate = useNavigate();
+  const { items: projects, loading: projectsLoading } = useProjects();
+  const { items: employees, loading: employeesLoading } = useEmployees();
+  const { items: clients, loading: clientsLoading } = useClients();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login", { replace: true });
-  };
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  const cards = [
+    {
+      title: "Projects",
+      count: projects?.length ?? 0,
+      loading: projectsLoading,
+      actionLabel: "View Projects",
+      onClick: () => navigate("/projects"),
+    },
+    {
+      title: "Employees",
+      count: employees?.length ?? 0,
+      loading: employeesLoading,
+      actionLabel: "View Employees",
+      onClick: () => navigate("/employees"),
+    },
+    {
+      title: "Clients",
+      count: clients?.length ?? 0,
+      loading: clientsLoading,
+      actionLabel: "View Clients",
+      onClick: () => navigate("/clients"),
+    },
+  ];
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Welcome, {user.firstName} {user.lastName}!
-      </Typography>
-      <Paper sx={{ p: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          Your Profile
-        </Typography>
-        <Stack spacing={1}>
-          <Typography>Title: {user.title}</Typography>
-          <Typography>
-            Name: {user.firstName} {user.lastName}
-          </Typography>
-          <Typography>Email: {user.email}</Typography>
-          <Typography>Phone: {user.phoneNumber || "Not provided"}</Typography>
-          <Typography>Address: {user.address || "Not provided"}</Typography>
-          <Typography>Zip Code: {user.zipCode || "Not provided"}</Typography>
-          <Typography>
-            2FA Enabled: {user.twoFactorEnabled ? "Yes" : "No"}
-          </Typography>
-        </Stack>
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={2}
-          sx={{ mt: 2 }}
+      <Stack spacing={3}>
+        <Box
+          sx={{
+            display: "grid",
+            gap: 2,
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(3, 1fr)",
+            },
+          }}
         >
-          <Button 
-            variant="contained" 
-            onClick={() => navigate("/profile")}
-          >
-            Edit Profile
-          </Button>
-          {!user.twoFactorEnabled && (
-            <Button 
-              variant="outlined" 
-              onClick={() => navigate("/2fa-setup")}
-            >
-              Setup 2FA
-            </Button>
-          )}
+          {cards.map((card) => (
+            <Paper key={card.title} elevation={1} sx={{ p: 2 }}>
+              <Stack spacing={1}>
+                <Typography variant="subtitle2" color="text.secondary">
+                  {card.title}
+                </Typography>
+                {card.loading ? (
+                  <Skeleton variant="text" width={80} height={40} />
+                ) : (
+                  <Typography variant="h4" fontWeight={700}>
+                    {card.count}
+                  </Typography>
+                )}
+                <Button
+                  variant="contained"
+                  onClick={card.onClick}
+                  disabled={card.loading}
+                >
+                  {card.actionLabel}
+                </Button>
+              </Stack>
+            </Paper>
+          ))}
+        </Box>
+
+        <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+          <Paper elevation={1} sx={{ p: 2, flex: 1 }}>
+            <Typography variant="subtitle1" fontWeight={700} mb={1}>
+              Quick Actions
+            </Typography>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
+              <Button
+                variant="outlined"
+                onClick={() => navigate("/projects/create")}
+              >
+                New Project
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => navigate("/employees/create")}
+              >
+                New Employee
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => navigate("/clients/create")}
+              >
+                New Client
+              </Button>
+            </Stack>
+          </Paper>
         </Stack>
-      </Paper>
+      </Stack>
     </Box>
   );
 };

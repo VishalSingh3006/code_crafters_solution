@@ -1,6 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { RecruitmentRecord, CreateRecruitmentRecordDto, UpdateRecruitmentRecordDto, RecruitmentStatus, JobLevel } from '../../types/Recruitment';
-import recruitmentService from '../../services/recruitmentService';
+import React, { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import {
+  Box,
+  TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Alert,
+  Stack,
+  Button,
+} from "@mui/material";
+import {
+  RecruitmentRecord,
+  CreateRecruitmentRecordDto,
+  UpdateRecruitmentRecordDto,
+  RecruitmentStatus,
+  JobLevel,
+} from "../../types/Recruitment";
+import recruitmentService from "../../services/recruitmentService";
 
 interface RecruitmentFormProps {
   recruitmentRecord?: RecruitmentRecord;
@@ -8,324 +26,331 @@ interface RecruitmentFormProps {
   onCancel: () => void;
 }
 
-const RecruitmentForm: React.FC<RecruitmentFormProps> = ({ recruitmentRecord, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState({
-    positionTitle: '',
-    jobLevel: JobLevel.Junior,
-    department: '',
-    requestedBy: '',
-    hiringManagerId: 0,
-    numberOfOpenings: 1,
-    openDate: '',
-    postingDate: '',
-    closeDate: '',
-    status: RecruitmentStatus.Open,
-    notes: ''
+type FormValues = {
+  positionTitle: string;
+  jobLevel: JobLevel;
+  department: string;
+  requestedBy: string;
+  hiringManagerId: number;
+  numberOfOpenings: number;
+  openDate: string;
+  postingDate: string;
+  closeDate: string;
+  status: RecruitmentStatus;
+  notes: string;
+};
+
+const RecruitmentForm: React.FC<RecruitmentFormProps> = ({
+  recruitmentRecord,
+  onSubmit,
+  onCancel,
+}) => {
+  const { control, handleSubmit, reset } = useForm<FormValues>({
+    defaultValues: {
+      positionTitle: "",
+      jobLevel: JobLevel.Junior,
+      department: "",
+      requestedBy: "",
+      hiringManagerId: 0,
+      numberOfOpenings: 1,
+      openDate: "",
+      postingDate: "",
+      closeDate: "",
+      status: RecruitmentStatus.Open,
+      notes: "",
+    },
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (recruitmentRecord) {
-      setFormData({
+      reset({
         positionTitle: recruitmentRecord.positionTitle,
         jobLevel: recruitmentRecord.jobLevel,
         department: recruitmentRecord.department,
         requestedBy: recruitmentRecord.requestedBy,
         hiringManagerId: recruitmentRecord.hiringManagerId,
         numberOfOpenings: recruitmentRecord.numberOfOpenings,
-        openDate: recruitmentRecord.openDate ? new Date(recruitmentRecord.openDate).toISOString().split('T')[0] : '',
-        postingDate: recruitmentRecord.postingDate ? new Date(recruitmentRecord.postingDate).toISOString().split('T')[0] : '',
-        closeDate: recruitmentRecord.closeDate ? new Date(recruitmentRecord.closeDate).toISOString().split('T')[0] : '',
+        openDate: recruitmentRecord.openDate
+          ? new Date(recruitmentRecord.openDate).toISOString().split("T")[0]
+          : "",
+        postingDate: recruitmentRecord.postingDate
+          ? new Date(recruitmentRecord.postingDate).toISOString().split("T")[0]
+          : "",
+        closeDate: recruitmentRecord.closeDate
+          ? new Date(recruitmentRecord.closeDate).toISOString().split("T")[0]
+          : "",
         status: recruitmentRecord.status,
-        notes: recruitmentRecord.notes || ''
+        notes: recruitmentRecord.notes || "",
       });
     }
-  }, [recruitmentRecord]);
+  }, [recruitmentRecord, reset]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'hiringManagerId' || name === 'numberOfOpenings'
-        ? Number(value)
-        : value
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmitForm = async (values: FormValues) => {
     setLoading(true);
-    setError('');
-
+    setError("");
     try {
       if (recruitmentRecord) {
         const updateDto: UpdateRecruitmentRecordDto = {
-          positionTitle: formData.positionTitle,
-          jobLevel: formData.jobLevel,
-          department: formData.department,
-          requestedBy: formData.requestedBy,
-          hiringManagerId: formData.hiringManagerId,
-          numberOfOpenings: formData.numberOfOpenings,
-          openDate: formData.openDate ? `${formData.openDate}T00:00:00` : '',
-          postingDate: formData.postingDate ? `${formData.postingDate}T00:00:00` : '',
-          closeDate: formData.closeDate ? `${formData.closeDate}T23:59:59` : '',
-          status: formData.status,
-          notes: formData.notes
+          positionTitle: values.positionTitle,
+          jobLevel: values.jobLevel,
+          department: values.department,
+          requestedBy: values.requestedBy,
+          hiringManagerId: values.hiringManagerId,
+          numberOfOpenings: values.numberOfOpenings,
+          openDate: values.openDate ? `${values.openDate}T00:00:00` : "",
+          postingDate: values.postingDate
+            ? `${values.postingDate}T00:00:00`
+            : "",
+          closeDate: values.closeDate ? `${values.closeDate}T23:59:59` : "",
+          status: values.status,
+          notes: values.notes,
         };
-        await recruitmentService.updateRecruitmentRecord(recruitmentRecord.id, updateDto);
+        await recruitmentService.updateRecruitmentRecord(
+          recruitmentRecord.id,
+          updateDto,
+        );
       } else {
         const createDto: CreateRecruitmentRecordDto = {
-          positionTitle: formData.positionTitle,
-          jobLevel: formData.jobLevel,
-          department: formData.department,
-          requestedBy: formData.requestedBy,
-          hiringManagerId: formData.hiringManagerId,
-          numberOfOpenings: formData.numberOfOpenings,
-          openDate: formData.openDate ? `${formData.openDate}T00:00:00` : '',
-          postingDate: formData.postingDate ? `${formData.postingDate}T00:00:00` : '',
-          closeDate: formData.closeDate ? `${formData.closeDate}T23:59:59` : '',
-          status: formData.status,
-          notes: formData.notes
+          positionTitle: values.positionTitle,
+          jobLevel: values.jobLevel,
+          department: values.department,
+          requestedBy: values.requestedBy,
+          hiringManagerId: values.hiringManagerId,
+          numberOfOpenings: values.numberOfOpenings,
+          openDate: values.openDate ? `${values.openDate}T00:00:00` : "",
+          postingDate: values.postingDate
+            ? `${values.postingDate}T00:00:00`
+            : "",
+          closeDate: values.closeDate ? `${values.closeDate}T23:59:59` : "",
+          status: values.status,
+          notes: values.notes,
         };
         await recruitmentService.createRecruitmentRecord(createDto);
       }
       onSubmit();
     } catch (err: any) {
-      setError(err.response?.data?.message || err.message || 'Failed to save recruitment record');
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to save recruitment record",
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="px-6 py-4 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">
-            {recruitmentRecord ? 'Edit Recruitment Record' : 'Create New Recruitment Record'}
-          </h2>
-        </div>
-        <form onSubmit={handleSubmit} className="px-6 py-4">
-          {error && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-              {error}
-            </div>
-          )}
+    <Box component="form" onSubmit={handleSubmit(onSubmitForm)} sx={{ pt: 1 }}>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Position Title */}
-            <div>
-              <label htmlFor="positionTitle" className="block text-sm font-medium text-gray-700 mb-1">
-                Position Title *
-              </label>
-              <input
-                type="text"
-                id="positionTitle"
-                name="positionTitle"
-                value={formData.positionTitle}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g., Software Engineer"
-              />
-            </div>
-
-            {/* Job Level */}
-            <div>
-              <label htmlFor="jobLevel" className="block text-sm font-medium text-gray-700 mb-1">
-                Job Level *
-              </label>
-              <select
-                id="jobLevel"
-                name="jobLevel"
-                value={formData.jobLevel}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value={JobLevel.Junior}>Junior</option>
-                <option value={JobLevel.Mid}>Mid</option>
-                <option value={JobLevel.Senior}>Senior</option>
-                <option value={JobLevel.Lead}>Lead</option>
-              </select>
-            </div>
-
-            {/* Department */}
-            <div>
-              <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-1">
-                Department *
-              </label>
-              <input
-                type="text"
-                id="department"
-                name="department"
-                value={formData.department}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g., Engineering"
-              />
-            </div>
-
-            {/* Requested By */}
-            <div>
-              <label htmlFor="requestedBy" className="block text-sm font-medium text-gray-700 mb-1">
-                Requested By *
-              </label>
-              <input
-                type="text"
-                id="requestedBy"
-                name="requestedBy"
-                value={formData.requestedBy}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g., John Doe"
-              />
-            </div>
-
-            {/* Hiring Manager ID */}
-            <div>
-              <label htmlFor="hiringManagerId" className="block text-sm font-medium text-gray-700 mb-1">
-                Hiring Manager ID *
-              </label>
-              <input
-                type="number"
-                id="hiringManagerId"
-                name="hiringManagerId"
-                value={formData.hiringManagerId}
-                onChange={handleInputChange}
-                required
-                min="1"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Number of Openings */}
-            <div>
-              <label htmlFor="numberOfOpenings" className="block text-sm font-medium text-gray-700 mb-1">
-                Number of Openings *
-              </label>
-              <input
-                type="number"
-                id="numberOfOpenings"
-                name="numberOfOpenings"
-                value={formData.numberOfOpenings}
-                onChange={handleInputChange}
-                required
-                min="1"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Open Date */}
-            <div>
-              <label htmlFor="openDate" className="block text-sm font-medium text-gray-700 mb-1">
-                Open Date *
-              </label>
-              <input
-                type="date"
-                id="openDate"
-                name="openDate"
-                value={formData.openDate}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Posting Date */}
-            <div>
-              <label htmlFor="postingDate" className="block text-sm font-medium text-gray-700 mb-1">
-                Posting Date *
-              </label>
-              <input
-                type="date"
-                id="postingDate"
-                name="postingDate"
-                value={formData.postingDate}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Close Date */}
-            <div>
-              <label htmlFor="closeDate" className="block text-sm font-medium text-gray-700 mb-1">
-                Close Date *
-              </label>
-              <input
-                type="date"
-                id="closeDate"
-                name="closeDate"
-                value={formData.closeDate}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Status */}
-            <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
-                Status *
-              </label>
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value={RecruitmentStatus.Open}>Open</option>
-                <option value={RecruitmentStatus.InProgress}>In Progress</option>
-                <option value={RecruitmentStatus.Closed}>Closed</option>
-                <option value={RecruitmentStatus.Cancelled}>Cancelled</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Notes */}
-          <div className="mt-4">
-            <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
-              Notes *
-            </label>
-            <textarea
-              id="notes"
-              name="notes"
-              value={formData.notes}
-              onChange={handleInputChange}
+      <Stack spacing={2}>
+        <Controller
+          name="positionTitle"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Position Title"
+              fullWidth
               required
+              placeholder="e.g., Software Engineer"
+            />
+          )}
+        />
+
+        <Controller
+          name="jobLevel"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <FormControl fullWidth required>
+              <InputLabel id="job-level-label">Job Level</InputLabel>
+              <Select {...field} labelId="job-level-label" label="Job Level">
+                <MenuItem value={JobLevel.Junior}>Junior</MenuItem>
+                <MenuItem value={JobLevel.Mid}>Mid</MenuItem>
+                <MenuItem value={JobLevel.Senior}>Senior</MenuItem>
+                <MenuItem value={JobLevel.Lead}>Lead</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+        />
+
+        <Controller
+          name="department"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Department"
+              fullWidth
+              required
+              placeholder="e.g., Engineering"
+            />
+          )}
+        />
+
+        <Controller
+          name="requestedBy"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Requested By"
+              fullWidth
+              required
+              placeholder="e.g., John Doe"
+            />
+          )}
+        />
+
+        <Controller
+          name="hiringManagerId"
+          control={control}
+          rules={{ required: true, min: 1 }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              type="number"
+              label="Hiring Manager ID"
+              fullWidth
+              inputProps={{ min: 1 }}
+              onChange={(e) =>
+                field.onChange((e.target as HTMLInputElement).valueAsNumber)
+              }
+              required
+            />
+          )}
+        />
+
+        <Controller
+          name="numberOfOpenings"
+          control={control}
+          rules={{ required: true, min: 1 }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              type="number"
+              label="Number of Openings"
+              fullWidth
+              inputProps={{ min: 1 }}
+              onChange={(e) =>
+                field.onChange((e.target as HTMLInputElement).valueAsNumber)
+              }
+              required
+            />
+          )}
+        />
+
+        <Controller
+          name="openDate"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              type="date"
+              label="Open Date"
+              fullWidth
+              required
+              InputLabelProps={{ shrink: true }}
+            />
+          )}
+        />
+
+        <Controller
+          name="postingDate"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              type="date"
+              label="Posting Date"
+              fullWidth
+              required
+              InputLabelProps={{ shrink: true }}
+            />
+          )}
+        />
+
+        <Controller
+          name="closeDate"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              type="date"
+              label="Close Date"
+              fullWidth
+              required
+              InputLabelProps={{ shrink: true }}
+            />
+          )}
+        />
+
+        <Controller
+          name="status"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <FormControl fullWidth required>
+              <InputLabel id="status-label">Status</InputLabel>
+              <Select {...field} labelId="status-label" label="Status">
+                <MenuItem value={RecruitmentStatus.Open}>Open</MenuItem>
+                <MenuItem value={RecruitmentStatus.InProgress}>
+                  In Progress
+                </MenuItem>
+                <MenuItem value={RecruitmentStatus.Closed}>Closed</MenuItem>
+                <MenuItem value={RecruitmentStatus.Cancelled}>
+                  Cancelled
+                </MenuItem>
+              </Select>
+            </FormControl>
+          )}
+        />
+
+        <Controller
+          name="notes"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Notes"
+              fullWidth
+              multiline
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
               placeholder="Additional notes about this recruitment..."
             />
-          </div>
+          )}
+        />
+      </Stack>
 
-          {/* Form Actions */}
-          <div className="flex justify-end space-x-3 mt-6 pt-4 border-t">
-            <button
-              type="button"
-              onClick={onCancel}
-              disabled={loading}
-              className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-            >
-              {loading ? 'Saving...' : (recruitmentRecord ? 'Update' : 'Create')}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+      <Stack
+        direction="row"
+        spacing={2}
+        justifyContent="flex-end"
+        sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: "divider" }}
+      >
+        <Button variant="outlined" onClick={onCancel} disabled={loading}>
+          Cancel
+        </Button>
+        <Button type="submit" variant="contained" disabled={loading}>
+          {loading ? "Saving..." : recruitmentRecord ? "Update" : "Create"}
+        </Button>
+      </Stack>
+    </Box>
   );
 };
 

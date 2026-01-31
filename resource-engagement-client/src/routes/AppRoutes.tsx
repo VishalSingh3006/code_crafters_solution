@@ -5,7 +5,8 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
-import Profile from "../pages/Profile";
+import ProfileEdit from "../pages/Profile";
+import ProfileDetail from "../pages/Profile/Detail";
 import TwoFactorSetup from "../pages/TwoFactorSetup";
 import RolesPage from "../pages/Roles";
 import ClientsPage from "../pages/Clients";
@@ -56,7 +57,15 @@ const AppRoutes: React.FC = () => {
         path="/profile"
         element={
           <ProtectedRoute>
-            <Profile />
+            <ProfileDetail />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile/edit"
+        element={
+          <ProtectedRoute>
+            <ProfileEdit />
           </ProtectedRoute>
         }
       />
@@ -94,7 +103,11 @@ const AppRoutes: React.FC = () => {
       />
       <Route
         path="/resource-tracking/billing"
-        element={<ProtectedRoute><BillingPage /></ProtectedRoute>}
+        element={
+          <ProtectedRoute>
+            <BillingPage />
+          </ProtectedRoute>
+        }
       />
       <Route
         path="/resource-tracking/recruitment"

@@ -1,4 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import {
+  Box,
+  Paper,
+  Stack,
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  Button,
+  Alert,
+  Link,
+  Divider,
+} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setUser } from "../../store/authSlice";
 import { UpdateProfileRequest } from "../../types";
@@ -8,33 +22,45 @@ import { twoFactorService } from "../../services/twoFactorService";
 const Profile: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((s) => s.auth.user);
-  const [formData, setFormData] = useState<UpdateProfileRequest>({
-    title: "",
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    address: "",
-    zipCode: "",
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<UpdateProfileRequest>({
+    defaultValues: {
+      title: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      address: "",
+      zipCode: "",
+    },
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [twoFactorCode, setTwoFactorCode] = useState("");
-  const [twoFactorLoading, setTwoFactorLoading] = useState(false);
+  const {
+    control: twoFactorControl,
+    handleSubmit: handleSubmit2FA,
+    reset: reset2FA,
+    formState: { isSubmitting: twoFactorLoading },
+  } = useForm<{ code: string }>({
+    defaultValues: { code: "" },
+  });
   const [showTwoFactorDisable, setShowTwoFactorDisable] = useState(false);
 
   useEffect(() => {
     if (user) {
-      setFormData({
-        title: user.title,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        phoneNumber: user.phoneNumber || "",
-        address: user.address,
-        zipCode: user.zipCode,
+      reset({
+        title: user.title ?? "",
+        firstName: user.firstName ?? "",
+        lastName: user.lastName ?? "",
+        phoneNumber: user.phoneNumber ?? "",
+        address: user.address ?? "",
+        zipCode: user.zipCode ?? "",
       });
     }
-  }, [user]);
+  }, [user, reset]);
 
   // Refresh profile only on component mount to get latest 2FA status
   useEffect(() => {
@@ -48,224 +74,224 @@ const Profile: React.FC = () => {
     })();
   }, [dispatch]);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: UpdateProfileRequest) => {
     setError("");
     setSuccess("");
-    setLoading(true);
-
     try {
-      const response = await profileService.updateProfile(formData);
+      const response = await profileService.updateProfile(data);
       if (response.profile) {
         dispatch(setUser(response.profile));
       }
       setSuccess("Profile updated successfully!");
     } catch (error: any) {
       setError(error.response?.data?.message || "Failed to update profile");
-    } finally {
-      setLoading(false);
     }
   };
 
-  const handleDisable2FA = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!twoFactorCode.trim()) {
+  const onDisable2FA = async ({ code }: { code: string }) => {
+    if (!code?.trim()) {
       setError("Please enter your 2FA code to disable");
       return;
     }
 
     setError("");
     setSuccess("");
-    setTwoFactorLoading(true);
-
     try {
-      await twoFactorService.disable(twoFactorCode);
+      await twoFactorService.disable(code);
       if (user) {
         dispatch(setUser({ ...user, twoFactorEnabled: false }));
       }
       setSuccess("Two-factor authentication disabled successfully!");
       setShowTwoFactorDisable(false);
-      setTwoFactorCode("");
+      reset2FA({ code: "" });
     } catch (error: any) {
       setError(error.response?.data?.message || "Failed to disable 2FA");
-    } finally {
-      setTwoFactorLoading(false);
     }
   };
 
   return (
-    <div className="profile-container">
-      <div className="profile-form">
-        <div className="profile-header">
-          <h2>Edit Profile</h2>
-          <a href="/dashboard" className="back-link">
-            ← Back to Dashboard
-          </a>
-        </div>
+    <Box sx={{ p: 3 }}>
+      <Paper sx={{ p: 3 }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={2}
+        >
+          <Typography variant="h5">Edit Profile</Typography>
+        </Stack>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Title:</label>
-              <select
+        <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={2}>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller
                 name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-              >
-                <option value="">Select Title</option>
-                <option value="Mr.">Mr.</option>
-                <option value="Mrs.">Mrs.</option>
-                <option value="Ms.">Ms.</option>
-                <option value="Dr.">Dr.</option>
-              </select>
-            </div>
+                control={control}
+                render={({ field }) => (
+                  <Select {...field} displayEmpty fullWidth>
+                    <MenuItem value="">Select Title</MenuItem>
+                    <MenuItem value="Mr.">Mr.</MenuItem>
+                    <MenuItem value="Mrs.">Mrs.</MenuItem>
+                    <MenuItem value="Ms.">Ms.</MenuItem>
+                    <MenuItem value="Dr.">Dr.</MenuItem>
+                  </Select>
+                )}
+              />
 
-            <div className="form-group">
-              <label>First Name:</label>
-              <input
-                type="text"
+              <Controller
                 name="firstName"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                required
+                control={control}
+                rules={{ required: "First name is required" }}
+                render={({ field, fieldState }) => (
+                  <TextField
+                    {...field}
+                    label="First Name"
+                    fullWidth
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                  />
+                )}
               />
-            </div>
 
-            <div className="form-group">
-              <label>Last Name:</label>
-              <input
-                type="text"
+              <Controller
                 name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                required
+                control={control}
+                rules={{ required: "Last name is required" }}
+                render={({ field, fieldState }) => (
+                  <TextField
+                    {...field}
+                    label="Last Name"
+                    fullWidth
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                  />
+                )}
               />
-            </div>
-          </div>
+            </Stack>
 
-          <div className="form-group">
-            <label>Phone Number:</label>
-            <input
-              type="tel"
+            <Controller
               name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} label="Phone Number" fullWidth />
+              )}
             />
-          </div>
 
-          <div className="form-group">
-            <label>Address:</label>
-            <input
-              type="text"
+            <Controller
               name="address"
-              value={formData.address}
-              onChange={handleInputChange}
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} label="Address" fullWidth />
+              )}
             />
-          </div>
 
-          <div className="form-group">
-            <label>Zip Code:</label>
-            <input
-              type="text"
+            <Controller
               name="zipCode"
-              value={formData.zipCode}
-              onChange={handleInputChange}
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} label="Zip Code" fullWidth />
+              )}
             />
-          </div>
 
-          {error && <div className="error">{error}</div>}
-          {success && <div className="success">{success}</div>}
+            {error && <Alert severity="error">{error}</Alert>}
+            {success && <Alert severity="success">{success}</Alert>}
 
-          <button type="submit" disabled={loading}>
-            {loading ? "Updating..." : "Update Profile"}
-          </button>
-        </form>
+            <Button type="submit" variant="contained" disabled={isSubmitting}>
+              {isSubmitting ? "Updating..." : "Update Profile"}
+            </Button>
+          </Stack>
+        </Box>
 
-        {/* Two-Factor Authentication Management */}
-        <div className="two-factor-section">
-          <h3>Two-Factor Authentication</h3>
-          <div className="two-factor-status">
-            <p>
-              Status:{" "}
-              <strong>{user?.twoFactorEnabled ? "Enabled" : "Disabled"}</strong>
-            </p>
+        <Divider sx={{ my: 3 }} />
 
-            {!user?.twoFactorEnabled ? (
-              <div className="two-factor-actions">
-                <p>
-                  Enhance your account security by enabling two-factor
-                  authentication.
-                </p>
-                <a href="/2fa-setup" className="btn btn-primary">
-                  Enable 2FA
-                </a>
-              </div>
-            ) : (
-              <div className="two-factor-actions">
-                {!showTwoFactorDisable ? (
-                  <button
-                    type="button"
-                    className="btn btn-warning"
-                    onClick={() => setShowTwoFactorDisable(true)}
-                  >
-                    Disable 2FA
-                  </button>
-                ) : (
-                  <form
-                    onSubmit={handleDisable2FA}
-                    className="disable-2fa-form"
-                  >
-                    <p>
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Two-Factor Authentication
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            Status:{" "}
+            <strong
+              className={
+                user?.twoFactorEnabled
+                  ? "text-status-enabled"
+                  : "text-status-disabled"
+              }
+            >
+              {user?.twoFactorEnabled ? "Enabled" : "Disabled"}
+            </strong>
+          </Typography>
+
+          {!user?.twoFactorEnabled ? (
+            <Stack spacing={1}>
+              <Typography variant="body2">
+                Enhance your account security by enabling two-factor
+                authentication.
+              </Typography>
+              <Button href="/2fa-setup" variant="contained">
+                Enable 2FA
+              </Button>
+            </Stack>
+          ) : (
+            <Stack spacing={2}>
+              {!showTwoFactorDisable ? (
+                <Button
+                  type="button"
+                  variant="outlined"
+                  color="warning"
+                  onClick={() => setShowTwoFactorDisable(true)}
+                >
+                  Disable 2FA
+                </Button>
+              ) : (
+                <Box component="form" onSubmit={handleSubmit2FA(onDisable2FA)}>
+                  <Stack spacing={2}>
+                    <Typography variant="body2">
                       Enter your 2FA code to disable two-factor authentication:
-                    </p>
-                    <div className="form-group">
-                      <input
-                        type="text"
-                        value={twoFactorCode}
-                        onChange={(e) => setTwoFactorCode(e.target.value)}
-                        placeholder="Enter 6-digit code"
-                        maxLength={6}
-                        required
-                      />
-                    </div>
-                    <div className="form-actions">
-                      <button
+                    </Typography>
+                    <Controller
+                      name="code"
+                      control={twoFactorControl}
+                      rules={{ required: "Code is required" }}
+                      render={({ field, fieldState }) => (
+                        <TextField
+                          {...field}
+                          label="6-digit code"
+                          inputProps={{ maxLength: 6 }}
+                          fullWidth
+                          error={!!fieldState.error}
+                          helperText={fieldState.error?.message}
+                        />
+                      )}
+                    />
+                    <Stack direction="row" spacing={2}>
+                      <Button
                         type="submit"
+                        variant="contained"
+                        color="warning"
                         disabled={twoFactorLoading}
-                        className="btn btn-warning"
                       >
                         {twoFactorLoading ? "Disabling..." : "Disable 2FA"}
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         type="button"
+                        variant="outlined"
                         onClick={() => {
                           setShowTwoFactorDisable(false);
-                          setTwoFactorCode("");
+                          reset2FA({ code: "" });
                           setError("");
                         }}
-                        className="btn btn-secondary"
                       >
                         Cancel
-                      </button>
-                    </div>
-                  </form>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
+                      </Button>
+                    </Stack>
+                  </Stack>
+                </Box>
+              )}
+            </Stack>
+          )}
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 

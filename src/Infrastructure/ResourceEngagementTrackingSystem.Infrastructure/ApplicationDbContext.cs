@@ -1,7 +1,7 @@
-using ResourceEngagementTrackingSystem.Infrastructure.Models;
-using ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ResourceEngagementTrackingSystem.Infrastructure.Models;
+using ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure;
 
@@ -9,6 +9,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
+
     public DbSet<Project> Projects { get; set; }
     public DbSet<Client> Clients { get; set; }
     public DbSet<Employee> Employees { get; set; }
@@ -30,35 +31,39 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Engagement> Engagements { get; set; }
     public DbSet<EngagementPosition> EngagementPositions { get; set; }
     public DbSet<ResourceAllocation> ResourceAllocations { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
         // Employee-Manager (self-referencing)
-        modelBuilder.Entity<Employee>()
+        modelBuilder
+            .Entity<Employee>()
             .HasOne(e => e.Manager)
             .WithMany(e => e.Subordinates)
             .HasForeignKey(e => e.ManagerId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // Employee-Department
-        modelBuilder.Entity<Employee>()
+        modelBuilder
+            .Entity<Employee>()
             .HasOne(e => e.Department)
             .WithMany(d => d.Employees)
             .HasForeignKey(e => e.DepartmentId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // Employee-Designation
-        modelBuilder.Entity<Employee>()
+        modelBuilder
+            .Entity<Employee>()
             .HasOne(e => e.Designation)
             .WithMany(d => d.Employees)
             .HasForeignKey(e => e.DesignationId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // EmployeeSkill (many-to-many)
-        modelBuilder.Entity<EmployeeSkill>()
-            .HasKey(es => new { es.EmployeeId, es.SkillId });
-        modelBuilder.Entity<EmployeeSkill>()
+        modelBuilder.Entity<EmployeeSkill>().HasKey(es => new { es.EmployeeId, es.SkillId });
+        modelBuilder
+            .Entity<EmployeeSkill>()
             .HasOne(es => es.Employee)
             .WithMany(e => e.EmployeeSkills)
             .HasForeignKey(es => es.EmployeeId);
@@ -66,7 +71,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // Logging tables
         modelBuilder.ApplyConfiguration(new Configurations.ExceptionLogConfiguration());
         modelBuilder.ApplyConfiguration(new Configurations.AuditLogConfiguration());
-        modelBuilder.Entity<EmployeeSkill>()
+        modelBuilder
+            .Entity<EmployeeSkill>()
             .HasOne(es => es.Skill)
             .WithMany(s => s.EmployeeSkills)
             .HasForeignKey(es => es.SkillId);

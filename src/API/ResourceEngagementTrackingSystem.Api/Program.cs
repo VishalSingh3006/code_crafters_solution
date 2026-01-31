@@ -1,30 +1,40 @@
 using System;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using ResourceEngagementTrackingSystem.Api.Middleware;
-using ResourceEngagementTrackingSystem.Infrastructure.Logging;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System.Collections.Generic;
-using ResourceEngagementTrackingSystem.Infrastructure;
-using ResourceEngagementTrackingSystem.Infrastructure.Services;
-using ResourceEngagementTrackingSystem.Infrastructure.Models;
-using ResourceEngagementTrackingSystem.Application.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using ResourceEngagementTrackingSystem.Api.Middleware;
+using ResourceEngagementTrackingSystem.Application.Interfaces;
+using ResourceEngagementTrackingSystem.Infrastructure;
+using ResourceEngagementTrackingSystem.Infrastructure.Logging;
+using ResourceEngagementTrackingSystem.Infrastructure.Models;
+using ResourceEngagementTrackingSystem.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Logging options from config (manual binding)
 var exceptionLoggingOptions = new ExceptionLoggingOptions();
-builder.Configuration.GetSection("CentralizedLogging:ExceptionLogging").Bind(exceptionLoggingOptions);
+builder
+    .Configuration.GetSection("CentralizedLogging:ExceptionLogging")
+    .Bind(exceptionLoggingOptions);
 builder.Services.AddSingleton(exceptionLoggingOptions);
-builder.Services.AddScoped(typeof(ResourceEngagementTrackingSystem.Infrastructure.Logging.IExceptionLogService), typeof(ResourceEngagementTrackingSystem.Infrastructure.Logging.ExceptionLogService));
-builder.Services.AddSingleton(typeof(Microsoft.AspNetCore.Http.IHttpContextAccessor), typeof(Microsoft.AspNetCore.Http.HttpContextAccessor));
-builder.Services.AddScoped(typeof(ResourceEngagementTrackingSystem.Infrastructure.Logging.AuditLogInterceptor));
+builder.Services.AddScoped(
+    typeof(ResourceEngagementTrackingSystem.Infrastructure.Logging.IExceptionLogService),
+    typeof(ResourceEngagementTrackingSystem.Infrastructure.Logging.ExceptionLogService)
+);
+builder.Services.AddSingleton(
+    typeof(Microsoft.AspNetCore.Http.IHttpContextAccessor),
+    typeof(Microsoft.AspNetCore.Http.HttpContextAccessor)
+);
+builder.Services.AddScoped(
+    typeof(ResourceEngagementTrackingSystem.Infrastructure.Logging.AuditLogInterceptor)
+);
 
 builder.Services.AddControllers();
 
@@ -42,7 +52,10 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Resource & Engagement Tracking System API", Version = "v1" });
+    c.SwaggerDoc(
+        "v1",
+        new OpenApiInfo { Title = "Resource & Engagement Tracking System API", Version = "v1" }
+    );
 
     // Add JWT Authentication to Swagger
     c.AddSecurityDefinition(
@@ -86,12 +99,16 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
+
 // Add AuditLogInterceptor to DbContext
-builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) => {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-    options.AddInterceptors(serviceProvider.GetRequiredService<AuditLogInterceptor>());
-});
+builder.Services.AddDbContext<ApplicationDbContext>(
+    (serviceProvider, options) =>
+    {
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        options.AddInterceptors(serviceProvider.GetRequiredService<AuditLogInterceptor>());
+    }
+);
 
 var app = builder.Build();
 
@@ -103,7 +120,7 @@ using (var scope = app.Services.CreateScope())
     {
         var roleSeeder = services.GetRequiredService<RoleSeederService>();
         await roleSeeder.SeedRolesAsync();
-        
+
         // Create default admin - you should change these credentials in production
         await roleSeeder.SeedDefaultAdminAsync("admin@company.com", "Admin123!");
 

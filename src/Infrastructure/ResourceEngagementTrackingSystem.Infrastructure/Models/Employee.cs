@@ -1,6 +1,6 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure.Models
 {
@@ -8,21 +8,26 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
     {
         Permanent = 0,
         Contract = 1,
-        Intern = 2
+        Intern = 2,
     }
 
     public class Employee : BaseEntity
     {
         [Key]
         public int Id { get; set; }
+
         [Required, MaxLength(50)]
         public string EmployeeCode { get; set; }
+
         [Required, MaxLength(100)]
         public string FirstName { get; set; }
+
         [Required]
         public string LastName { get; set; }
+
         [Required, MaxLength(100)]
         public string Email { get; set; }
+
         [MaxLength(20)]
         public string Phone { get; set; }
         public DateTime DateOfJoining { get; set; }

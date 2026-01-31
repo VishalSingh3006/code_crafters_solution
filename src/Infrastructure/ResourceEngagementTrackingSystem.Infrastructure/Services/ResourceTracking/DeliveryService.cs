@@ -38,17 +38,25 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
         public async Task<DeliveryDto> CreateDeliveryAsync(CreateDeliveryDto createDeliveryDto)
         {
             // Validate that Employee exists
-            var employeeExists = await _context.Employees.AnyAsync(e => e.Id == createDeliveryDto.EmployeeId);
+            var employeeExists = await _context.Employees.AnyAsync(e =>
+                e.Id == createDeliveryDto.EmployeeId
+            );
             if (!employeeExists)
             {
-                throw new ArgumentException($"Employee with ID {createDeliveryDto.EmployeeId} does not exist.");
+                throw new ArgumentException(
+                    $"Employee with ID {createDeliveryDto.EmployeeId} does not exist."
+                );
             }
 
             // Validate that Project exists
-            var projectExists = await _context.Projects.AnyAsync(p => p.Id == createDeliveryDto.ProjectId);
+            var projectExists = await _context.Projects.AnyAsync(p =>
+                p.Id == createDeliveryDto.ProjectId
+            );
             if (!projectExists)
             {
-                throw new ArgumentException($"Project with ID {createDeliveryDto.ProjectId} does not exist.");
+                throw new ArgumentException(
+                    $"Project with ID {createDeliveryDto.ProjectId} does not exist."
+                );
             }
 
             var delivery = new Delivery
@@ -62,7 +70,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 EstimatedEffort = createDeliveryDto.EstimatedEffort,
                 ActualEffort = createDeliveryDto.ActualEffort,
                 Priority = Enum.Parse<Priority>(createDeliveryDto.Priority),
-                Status = Enum.Parse<DeliveryStatus>(createDeliveryDto.Status)
+                Status = Enum.Parse<DeliveryStatus>(createDeliveryDto.Status),
             };
 
             var createdDelivery = await _deliveryRepository.AddAsync(delivery);
@@ -72,29 +80,30 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
         public async Task<bool> UpdateDeliveryAsync(int id, UpdateDeliveryDto updateDeliveryDto)
         {
             var delivery = await _deliveryRepository.GetByIdAsync(id);
-            if (delivery == null) return false;
+            if (delivery == null)
+                return false;
 
             if (!string.IsNullOrEmpty(updateDeliveryDto.DeliveryName))
                 delivery.DeliveryName = updateDeliveryDto.DeliveryName;
-            
+
             if (updateDeliveryDto.Description != null)
                 delivery.Description = updateDeliveryDto.Description;
-            
+
             if (updateDeliveryDto.PlannedDeliveryDate.HasValue)
                 delivery.PlannedDeliveryDate = updateDeliveryDto.PlannedDeliveryDate.Value;
-            
+
             if (updateDeliveryDto.ActualDeliveryDate.HasValue)
                 delivery.ActualDeliveryDate = updateDeliveryDto.ActualDeliveryDate;
-            
+
             if (updateDeliveryDto.EstimatedEffort.HasValue)
                 delivery.EstimatedEffort = updateDeliveryDto.EstimatedEffort.Value;
-            
+
             if (updateDeliveryDto.ActualEffort.HasValue)
                 delivery.ActualEffort = updateDeliveryDto.ActualEffort;
-            
+
             if (!string.IsNullOrEmpty(updateDeliveryDto.Priority))
                 delivery.Priority = Enum.Parse<Priority>(updateDeliveryDto.Priority);
-            
+
             if (!string.IsNullOrEmpty(updateDeliveryDto.Status))
                 delivery.Status = Enum.Parse<DeliveryStatus>(updateDeliveryDto.Status);
 
@@ -136,7 +145,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 ProjectId = delivery.ProjectId,
                 ProjectName = delivery.Project?.Name ?? string.Empty,
                 EmployeeId = delivery.EmployeeId,
-                EmployeeName = $"{delivery.Employee?.FirstName} {delivery.Employee?.LastName}".Trim(),
+                EmployeeName =
+                    $"{delivery.Employee?.FirstName} {delivery.Employee?.LastName}".Trim(),
                 PlannedDeliveryDate = delivery.PlannedDeliveryDate,
                 ActualDeliveryDate = delivery.ActualDeliveryDate,
                 EstimatedEffort = delivery.EstimatedEffort,
@@ -144,7 +154,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 Priority = delivery.Priority.ToString(),
                 Status = delivery.Status.ToString(),
                 CreatedAt = delivery.CreatedAt,
-                UpdatedAt = delivery.UpdatedAt
+                UpdatedAt = delivery.UpdatedAt,
             };
         }
     }

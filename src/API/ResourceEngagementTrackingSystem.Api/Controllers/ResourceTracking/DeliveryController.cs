@@ -36,7 +36,9 @@ namespace ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking.Deli
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDelivery([FromBody] CreateDeliveryDto createDeliveryDto)
+        public async Task<IActionResult> CreateDelivery(
+            [FromBody] CreateDeliveryDto createDeliveryDto
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -53,7 +55,10 @@ namespace ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking.Deli
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDelivery(int id, [FromBody] UpdateDeliveryDto updateDeliveryDto)
+        public async Task<IActionResult> UpdateDelivery(
+            int id,
+            [FromBody] UpdateDeliveryDto updateDeliveryDto
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

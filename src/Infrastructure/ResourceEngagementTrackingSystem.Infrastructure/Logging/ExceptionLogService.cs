@@ -11,10 +11,12 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Logging
     public class ExceptionLogService : IExceptionLogService
     {
         private readonly ApplicationDbContext _db;
+
         public ExceptionLogService(ApplicationDbContext db)
         {
             _db = db;
         }
+
         public async Task LogExceptionAsync(ExceptionLog log)
         {
             await _db.ExceptionLogs.AddAsync(log);

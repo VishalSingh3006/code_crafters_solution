@@ -32,7 +32,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_WhenDepartmentsExist_ReturnsOkWithDepartments()
         {
             // Arrange
-            _mockDepartmentService.Setup(x => x.GetAllAsync())
+            _mockDepartmentService
+                .Setup(x => x.GetAllAsync())
                 .ReturnsAsync(_fixture.SampleDepartments);
 
             // Act
@@ -49,7 +50,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_WhenNoDepartments_ReturnsOkWithEmptyList()
         {
             // Arrange
-            _mockDepartmentService.Setup(x => x.GetAllAsync())
+            _mockDepartmentService
+                .Setup(x => x.GetAllAsync())
                 .ReturnsAsync(new List<DepartmentDto>());
 
             // Act
@@ -65,7 +67,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_WhenServiceThrows_ShouldThrow()
         {
             // Arrange
-            _mockDepartmentService.Setup(x => x.GetAllAsync())
+            _mockDepartmentService
+                .Setup(x => x.GetAllAsync())
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -81,7 +84,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var departmentId = 1;
-            _mockDepartmentService.Setup(x => x.GetByIdAsync(departmentId))
+            _mockDepartmentService
+                .Setup(x => x.GetByIdAsync(departmentId))
                 .ReturnsAsync(_fixture.SampleDepartment);
 
             // Act
@@ -99,7 +103,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var departmentId = 999;
-            _mockDepartmentService.Setup(x => x.GetByIdAsync(departmentId))
+            _mockDepartmentService
+                .Setup(x => x.GetByIdAsync(departmentId))
                 .ReturnsAsync((DepartmentDto)null);
 
             // Act
@@ -114,7 +119,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var departmentId = 1;
-            _mockDepartmentService.Setup(x => x.GetByIdAsync(departmentId))
+            _mockDepartmentService
+                .Setup(x => x.GetByIdAsync(departmentId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -131,7 +137,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var createDto = _fixture.SampleCreateDepartmentDto;
             var createdDepartment = new DepartmentDto { Id = 4, Name = createDto.Name };
-            _mockDepartmentService.Setup(x => x.CreateAsync(createDto))
+            _mockDepartmentService
+                .Setup(x => x.CreateAsync(createDto))
                 .ReturnsAsync(createdDepartment);
 
             // Act
@@ -151,7 +158,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var createDto = _fixture.SampleCreateDepartmentDto;
-            _mockDepartmentService.Setup(x => x.CreateAsync(createDto))
+            _mockDepartmentService
+                .Setup(x => x.CreateAsync(createDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -168,7 +176,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var departmentId = 1;
             var updateDto = _fixture.SampleUpdateDepartmentDto;
-            _mockDepartmentService.Setup(x => x.UpdateAsync(departmentId, updateDto))
+            _mockDepartmentService
+                .Setup(x => x.UpdateAsync(departmentId, updateDto))
                 .ReturnsAsync(_fixture.SampleUpdatedDepartment);
 
             // Act
@@ -187,7 +196,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var departmentId = 999;
             var updateDto = _fixture.SampleUpdateDepartmentDto;
-            _mockDepartmentService.Setup(x => x.UpdateAsync(departmentId, updateDto))
+            _mockDepartmentService
+                .Setup(x => x.UpdateAsync(departmentId, updateDto))
                 .ReturnsAsync((DepartmentDto)null);
 
             // Act
@@ -203,7 +213,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var departmentId = 1;
             var updateDto = _fixture.SampleUpdateDepartmentDto;
-            _mockDepartmentService.Setup(x => x.UpdateAsync(departmentId, updateDto))
+            _mockDepartmentService
+                .Setup(x => x.UpdateAsync(departmentId, updateDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -219,8 +230,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var departmentId = 1;
-            _mockDepartmentService.Setup(x => x.DeleteAsync(departmentId))
-                .ReturnsAsync(true);
+            _mockDepartmentService.Setup(x => x.DeleteAsync(departmentId)).ReturnsAsync(true);
 
             // Act
             var result = await _controller.Delete(departmentId);
@@ -235,8 +245,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var departmentId = 999;
-            _mockDepartmentService.Setup(x => x.DeleteAsync(departmentId))
-                .ReturnsAsync(false);
+            _mockDepartmentService.Setup(x => x.DeleteAsync(departmentId)).ReturnsAsync(false);
 
             // Act
             var result = await _controller.Delete(departmentId);
@@ -250,7 +259,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var departmentId = 1;
-            _mockDepartmentService.Setup(x => x.DeleteAsync(departmentId))
+            _mockDepartmentService
+                .Setup(x => x.DeleteAsync(departmentId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert

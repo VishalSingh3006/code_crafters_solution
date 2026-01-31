@@ -1,13 +1,13 @@
+using System;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking.Delivery;
 using ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking;
 using ResourceEngagementTrackingSystem.Application.DTOs.ResourceTracking.Delivery;
 using ResourceEngagementTrackingSystem.Application.Interfaces.ResourceTracking;
-using System;
-using System.Threading.Tasks;
 using Xunit;
-using FluentAssertions;
 
 namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTracking
 {
@@ -30,7 +30,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetAllDeliveries_ReturnsOkWithDeliveries()
         {
             // Arrange
-            _mockDeliveryService.Setup(x => x.GetAllDeliveriesAsync())
+            _mockDeliveryService
+                .Setup(x => x.GetAllDeliveriesAsync())
                 .ReturnsAsync(_fixture.SampleDeliveries);
 
             // Act
@@ -46,7 +47,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         public async Task GetAllDeliveries_WhenServiceThrows_ShouldThrow()
         {
             // Arrange
-            _mockDeliveryService.Setup(x => x.GetAllDeliveriesAsync())
+            _mockDeliveryService
+                .Setup(x => x.GetAllDeliveriesAsync())
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -63,7 +65,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var deliveryId = 1;
             var expectedDelivery = _fixture.SampleDeliveries[0];
-            _mockDeliveryService.Setup(x => x.GetDeliveryByIdAsync(deliveryId))
+            _mockDeliveryService
+                .Setup(x => x.GetDeliveryByIdAsync(deliveryId))
                 .ReturnsAsync(expectedDelivery);
 
             // Act
@@ -80,7 +83,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var deliveryId = 999;
-            _mockDeliveryService.Setup(x => x.GetDeliveryByIdAsync(deliveryId))
+            _mockDeliveryService
+                .Setup(x => x.GetDeliveryByIdAsync(deliveryId))
                 .ReturnsAsync((DeliveryDto)null!);
 
             // Act
@@ -95,7 +99,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var deliveryId = 1;
-            _mockDeliveryService.Setup(x => x.GetDeliveryByIdAsync(deliveryId))
+            _mockDeliveryService
+                .Setup(x => x.GetDeliveryByIdAsync(deliveryId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -111,8 +116,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var createDto = _fixture.SampleCreateDeliveryDto;
-            var createdDelivery = new DeliveryDto 
-            { 
+            var createdDelivery = new DeliveryDto
+            {
                 Id = 3,
                 DeliveryName = createDto.DeliveryName,
                 Description = createDto.Description,
@@ -127,10 +132,11 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
                 Priority = createDto.Priority,
                 Status = createDto.Status,
                 CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
+                UpdatedAt = DateTime.Now,
             };
-            
-            _mockDeliveryService.Setup(x => x.CreateDeliveryAsync(createDto))
+
+            _mockDeliveryService
+                .Setup(x => x.CreateDeliveryAsync(createDto))
                 .ReturnsAsync(createdDelivery);
 
             // Act
@@ -159,8 +165,11 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<BadRequestObjectResult>();
             var badRequestResult = result as BadRequestObjectResult;
             badRequestResult!.Value.Should().BeOfType<SerializableError>();
-            
-            _mockDeliveryService.Verify(x => x.CreateDeliveryAsync(It.IsAny<CreateDeliveryDto>()), Times.Never);
+
+            _mockDeliveryService.Verify(
+                x => x.CreateDeliveryAsync(It.IsAny<CreateDeliveryDto>()),
+                Times.Never
+            );
         }
 
         [Fact]
@@ -168,7 +177,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var createDto = _fixture.SampleCreateDeliveryDto;
-            _mockDeliveryService.Setup(x => x.CreateDeliveryAsync(createDto))
+            _mockDeliveryService
+                .Setup(x => x.CreateDeliveryAsync(createDto))
                 .ThrowsAsync(new ArgumentException("Invalid project ID"));
 
             // Act
@@ -185,7 +195,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var createDto = _fixture.SampleCreateDeliveryDto;
-            _mockDeliveryService.Setup(x => x.CreateDeliveryAsync(createDto))
+            _mockDeliveryService
+                .Setup(x => x.CreateDeliveryAsync(createDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -202,7 +213,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var deliveryId = 1;
             var updateDto = _fixture.SampleUpdateDeliveryDto;
-            _mockDeliveryService.Setup(x => x.UpdateDeliveryAsync(deliveryId, updateDto))
+            _mockDeliveryService
+                .Setup(x => x.UpdateDeliveryAsync(deliveryId, updateDto))
                 .ReturnsAsync(true);
 
             // Act
@@ -210,7 +222,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
 
             // Assert
             result.Should().BeOfType<NoContentResult>();
-            _mockDeliveryService.Verify(x => x.UpdateDeliveryAsync(deliveryId, updateDto), Times.Once);
+            _mockDeliveryService.Verify(
+                x => x.UpdateDeliveryAsync(deliveryId, updateDto),
+                Times.Once
+            );
         }
 
         [Fact]
@@ -219,7 +234,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var deliveryId = 999;
             var updateDto = _fixture.SampleUpdateDeliveryDto;
-            _mockDeliveryService.Setup(x => x.UpdateDeliveryAsync(deliveryId, updateDto))
+            _mockDeliveryService
+                .Setup(x => x.UpdateDeliveryAsync(deliveryId, updateDto))
                 .ReturnsAsync(false);
 
             // Act
@@ -244,8 +260,11 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             result.Should().BeOfType<BadRequestObjectResult>();
             var badRequestResult = result as BadRequestObjectResult;
             badRequestResult!.Value.Should().BeOfType<SerializableError>();
-            
-            _mockDeliveryService.Verify(x => x.UpdateDeliveryAsync(It.IsAny<int>(), It.IsAny<UpdateDeliveryDto>()), Times.Never);
+
+            _mockDeliveryService.Verify(
+                x => x.UpdateDeliveryAsync(It.IsAny<int>(), It.IsAny<UpdateDeliveryDto>()),
+                Times.Never
+            );
         }
 
         [Fact]
@@ -254,11 +273,14 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
             // Arrange
             var deliveryId = 1;
             var updateDto = _fixture.SampleUpdateDeliveryDto;
-            _mockDeliveryService.Setup(x => x.UpdateDeliveryAsync(deliveryId, updateDto))
+            _mockDeliveryService
+                .Setup(x => x.UpdateDeliveryAsync(deliveryId, updateDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.UpdateDelivery(deliveryId, updateDto));
+            await Assert.ThrowsAsync<Exception>(() =>
+                _controller.UpdateDelivery(deliveryId, updateDto)
+            );
         }
 
         #endregion
@@ -270,8 +292,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var deliveryId = 1;
-            _mockDeliveryService.Setup(x => x.DeleteDeliveryAsync(deliveryId))
-                .ReturnsAsync(true);
+            _mockDeliveryService.Setup(x => x.DeleteDeliveryAsync(deliveryId)).ReturnsAsync(true);
 
             // Act
             var result = await _controller.DeleteDelivery(deliveryId);
@@ -285,8 +306,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var deliveryId = 999;
-            _mockDeliveryService.Setup(x => x.DeleteDeliveryAsync(deliveryId))
-                .ReturnsAsync(false);
+            _mockDeliveryService.Setup(x => x.DeleteDeliveryAsync(deliveryId)).ReturnsAsync(false);
 
             // Act
             var result = await _controller.DeleteDelivery(deliveryId);
@@ -300,7 +320,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers.ResourceTrackin
         {
             // Arrange
             var deliveryId = 1;
-            _mockDeliveryService.Setup(x => x.DeleteDeliveryAsync(deliveryId))
+            _mockDeliveryService
+                .Setup(x => x.DeleteDeliveryAsync(deliveryId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert

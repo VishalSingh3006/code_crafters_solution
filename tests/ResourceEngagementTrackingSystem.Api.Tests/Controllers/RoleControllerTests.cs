@@ -1,3 +1,6 @@
+using System;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -5,10 +8,7 @@ using ResourceEngagementTrackingSystem.Api.Controllers;
 using ResourceEngagementTrackingSystem.Api.Tests.Fixtures;
 using ResourceEngagementTrackingSystem.Application.DTOs;
 using ResourceEngagementTrackingSystem.Infrastructure.Models;
-using System;
-using System.Threading.Tasks;
 using Xunit;
-using FluentAssertions;
 
 namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
 {
@@ -22,16 +22,30 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public RoleControllerTests(RoleControllerTestFixture fixture)
         {
             _fixture = fixture;
-            
+
             // Mock UserManager
             var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
             _mockUserManager = new Mock<UserManager<ApplicationUser>>(
-                userStoreMock.Object, null!, null!, null!, null!, null!, null!, null!, null!);
-            
+                userStoreMock.Object,
+                null!,
+                null!,
+                null!,
+                null!,
+                null!,
+                null!,
+                null!,
+                null!
+            );
+
             // Mock RoleManager
             var roleStoreMock = new Mock<IRoleStore<IdentityRole>>();
             _mockRoleManager = new Mock<RoleManager<IdentityRole>>(
-                roleStoreMock.Object, null!, null!, null!, null!);
+                roleStoreMock.Object,
+                null!,
+                null!,
+                null!,
+                null!
+            );
 
             _controller = new RoleController(_mockUserManager.Object, _mockRoleManager.Object);
         }
@@ -59,18 +73,19 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var assignRoleDto = _fixture.SampleAssignRoleDto;
-            var user = new ApplicationUser 
-            { 
-                Id = "user-1", 
+            var user = new ApplicationUser
+            {
+                Id = "user-1",
                 Email = assignRoleDto.Email,
-                UserName = assignRoleDto.Email
+                UserName = assignRoleDto.Email,
             };
 
-            _mockUserManager.Setup(x => x.FindByEmailAsync(assignRoleDto.Email))
-                .ReturnsAsync(user);
-            _mockUserManager.Setup(x => x.IsInRoleAsync(user, assignRoleDto.Role))
+            _mockUserManager.Setup(x => x.FindByEmailAsync(assignRoleDto.Email)).ReturnsAsync(user);
+            _mockUserManager
+                .Setup(x => x.IsInRoleAsync(user, assignRoleDto.Role))
                 .ReturnsAsync(false);
-            _mockUserManager.Setup(x => x.AddToRoleAsync(user, assignRoleDto.Role))
+            _mockUserManager
+                .Setup(x => x.AddToRoleAsync(user, assignRoleDto.Role))
                 .ReturnsAsync(IdentityResult.Success);
 
             // Act
@@ -84,10 +99,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task AssignRole_WithInvalidRole_ReturnsBadRequest()
         {
             // Arrange
-            var assignRoleDto = new AssignRoleDto 
-            { 
-                Email = "test@example.com", 
-                Role = "InvalidRole" 
+            var assignRoleDto = new AssignRoleDto
+            {
+                Email = "test@example.com",
+                Role = "InvalidRole",
             };
 
             // Act
@@ -104,7 +119,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var assignRoleDto = _fixture.SampleAssignRoleDto;
-            _mockUserManager.Setup(x => x.FindByEmailAsync(assignRoleDto.Email))
+            _mockUserManager
+                .Setup(x => x.FindByEmailAsync(assignRoleDto.Email))
                 .ReturnsAsync((ApplicationUser)null!);
 
             // Act
@@ -119,16 +135,16 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var assignRoleDto = _fixture.SampleAssignRoleDto;
-            var user = new ApplicationUser 
-            { 
-                Id = "user-1", 
+            var user = new ApplicationUser
+            {
+                Id = "user-1",
                 Email = assignRoleDto.Email,
-                UserName = assignRoleDto.Email
+                UserName = assignRoleDto.Email,
             };
 
-            _mockUserManager.Setup(x => x.FindByEmailAsync(assignRoleDto.Email))
-                .ReturnsAsync(user);
-            _mockUserManager.Setup(x => x.IsInRoleAsync(user, assignRoleDto.Role))
+            _mockUserManager.Setup(x => x.FindByEmailAsync(assignRoleDto.Email)).ReturnsAsync(user);
+            _mockUserManager
+                .Setup(x => x.IsInRoleAsync(user, assignRoleDto.Role))
                 .ReturnsAsync(true);
 
             // Act
@@ -143,19 +159,24 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var assignRoleDto = _fixture.SampleAssignRoleDto;
-            var user = new ApplicationUser 
-            { 
-                Id = "user-1", 
+            var user = new ApplicationUser
+            {
+                Id = "user-1",
                 Email = assignRoleDto.Email,
-                UserName = assignRoleDto.Email
+                UserName = assignRoleDto.Email,
             };
 
-            _mockUserManager.Setup(x => x.FindByEmailAsync(assignRoleDto.Email))
-                .ReturnsAsync(user);
-            _mockUserManager.Setup(x => x.IsInRoleAsync(user, assignRoleDto.Role))
+            _mockUserManager.Setup(x => x.FindByEmailAsync(assignRoleDto.Email)).ReturnsAsync(user);
+            _mockUserManager
+                .Setup(x => x.IsInRoleAsync(user, assignRoleDto.Role))
                 .ReturnsAsync(false);
-            _mockUserManager.Setup(x => x.AddToRoleAsync(user, assignRoleDto.Role))
-                .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Failed to assign role" }));
+            _mockUserManager
+                .Setup(x => x.AddToRoleAsync(user, assignRoleDto.Role))
+                .ReturnsAsync(
+                    IdentityResult.Failed(
+                        new IdentityError { Description = "Failed to assign role" }
+                    )
+                );
 
             // Act
             var result = await _controller.AssignRole(assignRoleDto);
@@ -173,18 +194,19 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var removeRoleDto = _fixture.SampleRemoveRoleDto;
-            var user = new ApplicationUser 
-            { 
-                Id = "user-1", 
+            var user = new ApplicationUser
+            {
+                Id = "user-1",
                 Email = removeRoleDto.Email,
-                UserName = removeRoleDto.Email
+                UserName = removeRoleDto.Email,
             };
 
-            _mockUserManager.Setup(x => x.FindByEmailAsync(removeRoleDto.Email))
-                .ReturnsAsync(user);
-            _mockUserManager.Setup(x => x.IsInRoleAsync(user, removeRoleDto.Role))
+            _mockUserManager.Setup(x => x.FindByEmailAsync(removeRoleDto.Email)).ReturnsAsync(user);
+            _mockUserManager
+                .Setup(x => x.IsInRoleAsync(user, removeRoleDto.Role))
                 .ReturnsAsync(true);
-            _mockUserManager.Setup(x => x.RemoveFromRoleAsync(user, removeRoleDto.Role))
+            _mockUserManager
+                .Setup(x => x.RemoveFromRoleAsync(user, removeRoleDto.Role))
                 .ReturnsAsync(IdentityResult.Success);
 
             // Act
@@ -201,7 +223,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             var removeRoleDto = new RemoveRoleDto
             {
                 Email = "test@example.com",
-                Role = "InvalidRole"
+                Role = "InvalidRole",
             };
 
             // Act
@@ -216,7 +238,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var removeRoleDto = _fixture.SampleRemoveRoleDto;
-            _mockUserManager.Setup(x => x.FindByEmailAsync(removeRoleDto.Email))
+            _mockUserManager
+                .Setup(x => x.FindByEmailAsync(removeRoleDto.Email))
                 .ReturnsAsync((ApplicationUser)null!);
 
             // Act
@@ -231,16 +254,16 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var removeRoleDto = _fixture.SampleRemoveRoleDto;
-            var user = new ApplicationUser 
-            { 
-                Id = "user-1", 
+            var user = new ApplicationUser
+            {
+                Id = "user-1",
                 Email = removeRoleDto.Email,
-                UserName = removeRoleDto.Email
+                UserName = removeRoleDto.Email,
             };
 
-            _mockUserManager.Setup(x => x.FindByEmailAsync(removeRoleDto.Email))
-                .ReturnsAsync(user);
-            _mockUserManager.Setup(x => x.IsInRoleAsync(user, removeRoleDto.Role))
+            _mockUserManager.Setup(x => x.FindByEmailAsync(removeRoleDto.Email)).ReturnsAsync(user);
+            _mockUserManager
+                .Setup(x => x.IsInRoleAsync(user, removeRoleDto.Role))
                 .ReturnsAsync(false);
 
             // Act
@@ -259,18 +282,16 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var email = "test@example.com";
-            var user = new ApplicationUser 
-            { 
-                Id = "user-1", 
+            var user = new ApplicationUser
+            {
+                Id = "user-1",
                 Email = email,
-                UserName = email
+                UserName = email,
             };
             var roles = new[] { "Admin", "Manager" };
 
-            _mockUserManager.Setup(x => x.FindByEmailAsync(email))
-                .ReturnsAsync(user);
-            _mockUserManager.Setup(x => x.GetRolesAsync(user))
-                .ReturnsAsync(roles);
+            _mockUserManager.Setup(x => x.FindByEmailAsync(email)).ReturnsAsync(user);
+            _mockUserManager.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(roles);
 
             // Act
             var result = await _controller.GetUserRoles(email);
@@ -286,7 +307,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var email = "nonexistent@example.com";
-            _mockUserManager.Setup(x => x.FindByEmailAsync(email))
+            _mockUserManager
+                .Setup(x => x.FindByEmailAsync(email))
                 .ReturnsAsync((ApplicationUser)null!);
 
             // Act

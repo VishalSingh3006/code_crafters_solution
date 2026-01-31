@@ -1,7 +1,7 @@
 using System;
-using ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking.Enums;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking
 {

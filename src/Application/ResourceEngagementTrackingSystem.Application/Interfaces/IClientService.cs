@@ -1,6 +1,6 @@
-using ResourceEngagementTrackingSystem.Application.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ResourceEngagementTrackingSystem.Application.DTOs;
 
 namespace ResourceEngagementTrackingSystem.Application.Interfaces
 {

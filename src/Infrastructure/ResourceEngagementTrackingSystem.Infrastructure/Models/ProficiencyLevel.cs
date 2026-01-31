@@ -4,6 +4,6 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
     {
         Beginner = 0,
         Intermediate = 1,
-        Expert = 2
+        Expert = 2,
     }
 }

@@ -1,9 +1,8 @@
-
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using ResourceEngagementTrackingSystem.Application.DTOs;
 using ResourceEngagementTrackingSystem.Application.Interfaces;
 using ResourceEngagementTrackingSystem.Infrastructure.Models;
@@ -13,18 +12,19 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly ApplicationDbContext _context;
+
         public EmployeeService(ApplicationDbContext context)
         {
             _context = context;
         }
 
-
         public async Task<IEnumerable<EmployeeDto>> GetAllAsync()
         {
-            return await _context.Employees
-                .Include(e => e.Department)
+            return await _context
+                .Employees.Include(e => e.Department)
                 .Include(e => e.Designation)
-                .Include(e => e.EmployeeSkills).ThenInclude(es => es.Skill)
+                .Include(e => e.EmployeeSkills)
+                    .ThenInclude(es => es.Skill)
                 .Select(e => new EmployeeDto
                 {
                     Id = e.Id,
@@ -48,15 +48,16 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 }).ToListAsync();
         }
 
-
         public async Task<EmployeeDto> GetByIdAsync(int id)
         {
-            var e = await _context.Employees
-                .Include(x => x.Department)
+            var e = await _context
+                .Employees.Include(x => x.Department)
                 .Include(x => x.Designation)
-                .Include(x => x.EmployeeSkills).ThenInclude(es => es.Skill)
+                .Include(x => x.EmployeeSkills)
+                    .ThenInclude(es => es.Skill)
                 .FirstOrDefaultAsync(x => x.Id == id);
-            if (e == null) return null;
+            if (e == null)
+                return null;
             return new EmployeeDto
             {
                 Id = e.Id,
@@ -80,7 +81,6 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
             };
         }
 
-
         public async Task<EmployeeDto> CreateAsync(CreateEmployeeDto dto)
         {
             var e = new Employee
@@ -93,7 +93,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 DepartmentId = dto.DepartmentId,
                 DesignationId = dto.DesignationId,
                 EmploymentType = ParseEmploymentType(dto.EmploymentType),
-                ManagerId = dto.ManagerId
+                ManagerId = dto.ManagerId,
             };
             if (dto.Skills != null)
             {
@@ -110,11 +110,13 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
             return await GetByIdAsync(e.Id);
         }
 
-
         public async Task<EmployeeDto> UpdateAsync(int id, UpdateEmployeeDto dto)
         {
-            var e = await _context.Employees.Include(x => x.EmployeeSkills).FirstOrDefaultAsync(x => x.Id == id);
-            if (e == null) return null;
+            var e = await _context
+                .Employees.Include(x => x.EmployeeSkills)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (e == null)
+                return null;
             e.EmployeeCode = dto.EmployeeCode;
             e.FirstName = dto.FirstName;
             e.LastName = dto.LastName;
@@ -147,7 +149,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var e = await _context.Employees.FindAsync(id);
-            if (e == null) return false;
+            if (e == null)
+                return false;
             _context.Employees.Remove(e);
             await _context.SaveChangesAsync();
             return true;
@@ -167,9 +170,9 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 "contractor" => EmploymentType.Contract,
                 "intern" => EmploymentType.Intern,
                 "internship" => EmploymentType.Intern,
-                _ => Enum.TryParse<EmploymentType>(employmentType, true, out var result) 
-                     ? result 
-                     : EmploymentType.Permanent // Default fallback
+                _ => Enum.TryParse<EmploymentType>(employmentType, true, out var result)
+                    ? result
+                    : EmploymentType.Permanent, // Default fallback
             };
         }
 
@@ -177,14 +180,14 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
         {
             if (string.IsNullOrWhiteSpace(proficiencyLevel))
                 return ProficiencyLevel.Beginner;
-            
+
             return proficiencyLevel.ToLower().Replace(" ", "").Replace("-", "") switch
             {
                 "beginner" => ProficiencyLevel.Beginner,
                 "intermediate" => ProficiencyLevel.Intermediate,
                 "expert" => ProficiencyLevel.Expert,
                 "advanced" => ProficiencyLevel.Expert, // Map advanced to expert since it's not in enum
-                _ => ProficiencyLevel.Beginner // Default fallback
+                _ => ProficiencyLevel.Beginner, // Default fallback
             };
         }
     }

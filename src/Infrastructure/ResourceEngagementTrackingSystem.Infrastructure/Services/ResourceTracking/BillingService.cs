@@ -22,8 +22,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
 
         public async Task<IEnumerable<BillingRecordDto>> GetAllBillingRecordsAsync()
         {
-            var billingRecords = await _context.BillingRecords
-                .Include(b => b.Project)
+            var billingRecords = await _context
+                .BillingRecords.Include(b => b.Project)
                 .Include(b => b.Employee)
                 .ToListAsync();
 
@@ -32,15 +32,17 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
 
         public async Task<BillingRecordDto?> GetBillingRecordByIdAsync(int id)
         {
-            var billingRecord = await _context.BillingRecords
-                .Include(b => b.Project)
+            var billingRecord = await _context
+                .BillingRecords.Include(b => b.Project)
                 .Include(b => b.Employee)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
             return billingRecord != null ? MapToDto(billingRecord) : null;
         }
 
-        public async Task<BillingRecordDto> CreateBillingRecordAsync(CreateBillingRecordDto createBillingRecordDto)
+        public async Task<BillingRecordDto> CreateBillingRecordAsync(
+            CreateBillingRecordDto createBillingRecordDto
+        )
         {
             var billingRecord = new BillingRecord
             {
@@ -49,32 +51,45 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 BillingDate = createBillingRecordDto.BillingDate,
                 HoursWorked = createBillingRecordDto.HoursWorked,
                 HourlyRate = createBillingRecordDto.HourlyRate,
-                TotalAmount = createBillingRecordDto.HoursWorked * createBillingRecordDto.HourlyRate,
+                TotalAmount =
+                    createBillingRecordDto.HoursWorked * createBillingRecordDto.HourlyRate,
                 Description = createBillingRecordDto.Description,
                 BillingType = Enum.Parse<BillingType>(createBillingRecordDto.BillingType),
-                Status = BillingStatus.Draft
+                Status = BillingStatus.Draft,
             };
 
             _context.BillingRecords.Add(billingRecord);
             await _context.SaveChangesAsync();
 
-            return await GetBillingRecordByIdAsync(billingRecord.Id) ?? throw new InvalidOperationException("Failed to create billing record");
+            return await GetBillingRecordByIdAsync(billingRecord.Id)
+                ?? throw new InvalidOperationException("Failed to create billing record");
         }
 
-        public async Task<bool> UpdateBillingRecordAsync(int id, UpdateBillingRecordDto updateBillingRecordDto)
+        public async Task<bool> UpdateBillingRecordAsync(
+            int id,
+            UpdateBillingRecordDto updateBillingRecordDto
+        )
         {
             var billingRecord = await _context.BillingRecords.FindAsync(id);
-            if (billingRecord == null) return false;
+            if (billingRecord == null)
+                return false;
 
             if (updateBillingRecordDto.HoursWorked.HasValue)
                 billingRecord.HoursWorked = updateBillingRecordDto.HoursWorked.Value;
             if (updateBillingRecordDto.HourlyRate.HasValue)
                 billingRecord.HourlyRate = updateBillingRecordDto.HourlyRate.Value;
-            if (updateBillingRecordDto.HoursWorked.HasValue && updateBillingRecordDto.HourlyRate.HasValue)
-                billingRecord.TotalAmount = updateBillingRecordDto.HoursWorked.Value * updateBillingRecordDto.HourlyRate.Value;
+            if (
+                updateBillingRecordDto.HoursWorked.HasValue
+                && updateBillingRecordDto.HourlyRate.HasValue
+            )
+                billingRecord.TotalAmount =
+                    updateBillingRecordDto.HoursWorked.Value
+                    * updateBillingRecordDto.HourlyRate.Value;
             billingRecord.Description = updateBillingRecordDto.Description;
             if (!string.IsNullOrEmpty(updateBillingRecordDto.BillingType))
-                billingRecord.BillingType = Enum.Parse<BillingType>(updateBillingRecordDto.BillingType);
+                billingRecord.BillingType = Enum.Parse<BillingType>(
+                    updateBillingRecordDto.BillingType
+                );
             if (!string.IsNullOrEmpty(updateBillingRecordDto.Status))
                 billingRecord.Status = Enum.Parse<BillingStatus>(updateBillingRecordDto.Status);
 
@@ -85,17 +100,20 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
         public async Task<bool> DeleteBillingRecordAsync(int id)
         {
             var billingRecord = await _context.BillingRecords.FindAsync(id);
-            if (billingRecord == null) return false;
+            if (billingRecord == null)
+                return false;
 
             _context.BillingRecords.Remove(billingRecord);
             await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<IEnumerable<BillingRecordDto>> GetBillingRecordsByProjectIdAsync(int projectId)
+        public async Task<IEnumerable<BillingRecordDto>> GetBillingRecordsByProjectIdAsync(
+            int projectId
+        )
         {
-            var billingRecords = await _context.BillingRecords
-                .Include(b => b.Project)
+            var billingRecords = await _context
+                .BillingRecords.Include(b => b.Project)
                 .Include(b => b.Employee)
                 .Where(b => b.ProjectId == projectId)
                 .ToListAsync();
@@ -103,10 +121,12 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
             return billingRecords.Select(MapToDto);
         }
 
-        public async Task<IEnumerable<BillingRecordDto>> GetBillingRecordsByEmployeeIdAsync(int employeeId)
+        public async Task<IEnumerable<BillingRecordDto>> GetBillingRecordsByEmployeeIdAsync(
+            int employeeId
+        )
         {
-            var billingRecords = await _context.BillingRecords
-                .Include(b => b.Project)
+            var billingRecords = await _context
+                .BillingRecords.Include(b => b.Project)
                 .Include(b => b.Employee)
                 .Where(b => b.EmployeeId == employeeId)
                 .ToListAsync();
@@ -119,8 +139,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
             var startDate = new DateTime(year, month, 1);
             var endDate = startDate.AddMonths(1).AddDays(-1);
 
-            var billingRecords = await _context.BillingRecords
-                .Include(b => b.Project)
+            var billingRecords = await _context
+                .BillingRecords.Include(b => b.Project)
                 .Include(b => b.Employee)
                 .Where(b => b.BillingDate >= startDate && b.BillingDate <= endDate)
                 .ToListAsync();
@@ -134,14 +154,18 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 .ToDictionary(g => g.Key.ToString(), g => g.Sum(b => b.TotalAmount));
 
             var employeeBreakdown = billingRecords
-                .GroupBy(b => new { b.EmployeeId, EmployeeName = b.Employee.FirstName + " " + b.Employee.LastName })
+                .GroupBy(b => new
+                {
+                    b.EmployeeId,
+                    EmployeeName = b.Employee.FirstName + " " + b.Employee.LastName,
+                })
                 .Select(g => new
                 {
                     EmployeeId = g.Key.EmployeeId,
                     EmployeeName = g.Key.EmployeeName,
                     TotalHours = g.Sum(b => b.HoursWorked),
                     TotalAmount = g.Sum(b => b.TotalAmount),
-                    RecordCount = g.Count()
+                    RecordCount = g.Count(),
                 })
                 .ToList();
 
@@ -153,7 +177,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                     ProjectName = g.Key.ProjectName,
                     TotalHours = g.Sum(b => b.HoursWorked),
                     TotalAmount = g.Sum(b => b.TotalAmount),
-                    RecordCount = g.Count()
+                    RecordCount = g.Count(),
                 })
                 .ToList();
 
@@ -166,14 +190,14 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 RecordCount = recordCount,
                 StatusBreakdown = statusBreakdown,
                 EmployeeBreakdown = employeeBreakdown,
-                ProjectBreakdown = projectBreakdown
+                ProjectBreakdown = projectBreakdown,
             };
         }
 
         public async Task<IEnumerable<BillingRecordDto>> GetUninvoicedBillingRecordsAsync()
         {
-            var billingRecords = await _context.BillingRecords
-                .Include(b => b.Project)
+            var billingRecords = await _context
+                .BillingRecords.Include(b => b.Project)
                 .Include(b => b.Employee)
                 .Where(b => b.Status == BillingStatus.Approved)
                 .ToListAsync();
@@ -184,7 +208,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
         public async Task<bool> MarkAsInvoicedAsync(int id, string invoiceNumber)
         {
             var billingRecord = await _context.BillingRecords.FindAsync(id);
-            if (billingRecord == null) return false;
+            if (billingRecord == null)
+                return false;
 
             billingRecord.Status = BillingStatus.Invoiced;
             billingRecord.InvoiceNumber = invoiceNumber;
@@ -201,7 +226,10 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 ProjectId = billingRecord.ProjectId,
                 ProjectName = billingRecord.Project?.Name ?? string.Empty,
                 EmployeeId = billingRecord.EmployeeId,
-                EmployeeName = billingRecord.Employee != null ? $"{billingRecord.Employee.FirstName} {billingRecord.Employee.LastName}" : string.Empty,
+                EmployeeName =
+                    billingRecord.Employee != null
+                        ? $"{billingRecord.Employee.FirstName} {billingRecord.Employee.LastName}"
+                        : string.Empty,
                 BillingDate = billingRecord.BillingDate,
                 HoursWorked = billingRecord.HoursWorked,
                 HourlyRate = billingRecord.HourlyRate,
@@ -209,7 +237,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 Description = billingRecord.Description,
                 BillingType = billingRecord.BillingType.ToString(),
                 Status = billingRecord.Status.ToString(),
-                InvoiceNumber = billingRecord.InvoiceNumber
+                InvoiceNumber = billingRecord.InvoiceNumber,
             };
         }
     }

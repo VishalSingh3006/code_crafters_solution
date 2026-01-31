@@ -15,6 +15,10 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceT
         Task<IEnumerable<StaffingRecord>> GetByEmployeeIdAsync(int employeeId);
         Task<IEnumerable<StaffingRecord>> GetByProjectIdAsync(int projectId);
         Task<IEnumerable<StaffingRecord>> GetActiveRecordsAsync();
-        Task<decimal> GetEmployeeUtilizationAsync(int employeeId, DateTime startDate, DateTime endDate);
+        Task<decimal> GetEmployeeUtilizationAsync(
+            int employeeId,
+            DateTime startDate,
+            DateTime endDate
+        );
     }
 }

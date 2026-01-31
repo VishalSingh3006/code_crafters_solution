@@ -1,6 +1,6 @@
-using ResourceEngagementTrackingSystem.Application.DTOs.ResourceTracking.Delivery;
 using System;
 using System.Collections.Generic;
+using ResourceEngagementTrackingSystem.Application.DTOs.ResourceTracking.Delivery;
 
 namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
 {
@@ -14,8 +14,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
         {
             SampleDeliveries = new List<DeliveryDto>
             {
-                new DeliveryDto 
-                { 
+                new DeliveryDto
+                {
                     Id = 1,
                     DeliveryName = "E-commerce Platform Phase 1",
                     Description = "First phase delivery including user auth and product catalog",
@@ -30,10 +30,10 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
                     Priority = "High",
                     Status = "InProgress",
                     CreatedAt = DateTime.Now.AddDays(-30),
-                    UpdatedAt = DateTime.Now.AddDays(-1)
+                    UpdatedAt = DateTime.Now.AddDays(-1),
                 },
-                new DeliveryDto 
-                { 
+                new DeliveryDto
+                {
                     Id = 2,
                     DeliveryName = "Mobile App Beta Release",
                     Description = "Beta version of mobile banking application",
@@ -48,8 +48,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
                     Priority = "Medium",
                     Status = "Delivered",
                     CreatedAt = DateTime.Now.AddDays(-60),
-                    UpdatedAt = DateTime.Now.AddDays(-3)
-                }
+                    UpdatedAt = DateTime.Now.AddDays(-3),
+                },
             };
 
             SampleCreateDeliveryDto = new CreateDeliveryDto
@@ -61,7 +61,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
                 PlannedDeliveryDate = DateTime.Now.AddDays(45),
                 EstimatedEffort = 40.0m,
                 Priority = "Medium",
-                Status = "Planned"
+                Status = "Planned",
             };
 
             SampleUpdateDeliveryDto = new UpdateDeliveryDto
@@ -73,7 +73,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Fixtures.ResourceTracking
                 EstimatedEffort = 45.0m,
                 ActualEffort = 20.0m,
                 Priority = "High",
-                Status = "InProgress"
+                Status = "InProgress",
             };
         }
     }

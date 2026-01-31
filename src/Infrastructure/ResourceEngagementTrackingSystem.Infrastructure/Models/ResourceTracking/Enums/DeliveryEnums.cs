@@ -6,7 +6,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTrackin
         InProgress = 2,
         Delivered = 3,
         Delayed = 4,
-        Cancelled = 5
+        Cancelled = 5,
     }
 
     public enum Priority
@@ -14,6 +14,6 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTrackin
         Low = 1,
         Medium = 2,
         High = 3,
-        Critical = 4
+        Critical = 4,
     }
 }

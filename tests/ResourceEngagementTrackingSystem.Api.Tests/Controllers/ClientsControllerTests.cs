@@ -30,8 +30,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_ReturnsOkResult_WithClientsList()
         {
             // Arrange
-            _mockClientService.Setup(x => x.GetAllAsync())
-                .ReturnsAsync(_fixture.SampleClients);
+            _mockClientService.Setup(x => x.GetAllAsync()).ReturnsAsync(_fixture.SampleClients);
 
             // Act
             var result = await _controller.GetAll();
@@ -40,7 +39,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleClients);
-            
+
             _mockClientService.Verify(x => x.GetAllAsync(), Times.Once);
         }
 
@@ -48,7 +47,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         public async Task GetAll_ServiceThrowsException_PropagatesException()
         {
             // Arrange
-            _mockClientService.Setup(x => x.GetAllAsync())
+            _mockClientService
+                .Setup(x => x.GetAllAsync())
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -65,7 +65,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var clientId = 1;
-            _mockClientService.Setup(x => x.GetByIdAsync(clientId))
+            _mockClientService
+                .Setup(x => x.GetByIdAsync(clientId))
                 .ReturnsAsync(_fixture.SampleClient);
 
             // Act
@@ -75,7 +76,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleClient);
-            
+
             _mockClientService.Verify(x => x.GetByIdAsync(clientId), Times.Once);
         }
 
@@ -84,8 +85,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var clientId = 999;
-            _mockClientService.Setup(x => x.GetByIdAsync(clientId))
-                .ReturnsAsync((ClientDto?)null);
+            _mockClientService.Setup(x => x.GetByIdAsync(clientId)).ReturnsAsync((ClientDto?)null);
 
             // Act
             var result = await _controller.Get(clientId);
@@ -100,7 +100,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var clientId = 1;
-            _mockClientService.Setup(x => x.GetByIdAsync(clientId))
+            _mockClientService
+                .Setup(x => x.GetByIdAsync(clientId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -117,7 +118,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var createDto = _fixture.SampleCreateClientDto;
-            _mockClientService.Setup(x => x.CreateAsync(createDto))
+            _mockClientService
+                .Setup(x => x.CreateAsync(createDto))
                 .ReturnsAsync(_fixture.SampleClient);
 
             // Act
@@ -129,7 +131,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             createdResult!.ActionName.Should().Be("Get");
             createdResult.RouteValues!["id"].Should().Be(_fixture.SampleClient.Id);
             createdResult.Value.Should().BeEquivalentTo(_fixture.SampleClient);
-            
+
             _mockClientService.Verify(x => x.CreateAsync(createDto), Times.Once);
         }
 
@@ -138,7 +140,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var createDto = _fixture.SampleCreateClientDto;
-            _mockClientService.Setup(x => x.CreateAsync(createDto))
+            _mockClientService
+                .Setup(x => x.CreateAsync(createDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -156,7 +159,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var clientId = 1;
             var updateDto = _fixture.SampleUpdateClientDto;
-            _mockClientService.Setup(x => x.UpdateAsync(clientId, updateDto))
+            _mockClientService
+                .Setup(x => x.UpdateAsync(clientId, updateDto))
                 .ReturnsAsync(_fixture.SampleUpdatedClient);
 
             // Act
@@ -166,7 +170,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
             okResult!.Value.Should().BeEquivalentTo(_fixture.SampleUpdatedClient);
-            
+
             _mockClientService.Verify(x => x.UpdateAsync(clientId, updateDto), Times.Once);
         }
 
@@ -176,7 +180,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var clientId = 999;
             var updateDto = _fixture.SampleUpdateClientDto;
-            _mockClientService.Setup(x => x.UpdateAsync(clientId, updateDto))
+            _mockClientService
+                .Setup(x => x.UpdateAsync(clientId, updateDto))
                 .ReturnsAsync((ClientDto?)null);
 
             // Act
@@ -193,7 +198,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
             // Arrange
             var clientId = 1;
             var updateDto = _fixture.SampleUpdateClientDto;
-            _mockClientService.Setup(x => x.UpdateAsync(clientId, updateDto))
+            _mockClientService
+                .Setup(x => x.UpdateAsync(clientId, updateDto))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
@@ -210,8 +216,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var clientId = 1;
-            _mockClientService.Setup(x => x.DeleteAsync(clientId))
-                .ReturnsAsync(true);
+            _mockClientService.Setup(x => x.DeleteAsync(clientId)).ReturnsAsync(true);
 
             // Act
             var result = await _controller.Delete(clientId);
@@ -226,8 +231,7 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var clientId = 999;
-            _mockClientService.Setup(x => x.DeleteAsync(clientId))
-                .ReturnsAsync(false);
+            _mockClientService.Setup(x => x.DeleteAsync(clientId)).ReturnsAsync(false);
 
             // Act
             var result = await _controller.Delete(clientId);
@@ -242,7 +246,8 @@ namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
         {
             // Arrange
             var clientId = 1;
-            _mockClientService.Setup(x => x.DeleteAsync(clientId))
+            _mockClientService
+                .Setup(x => x.DeleteAsync(clientId))
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert

@@ -8,7 +8,9 @@ namespace ResourceEngagementTrackingSystem.Application.Interfaces.ResourceTracki
     {
         Task<IEnumerable<BillingRecordDto>> GetAllBillingRecordsAsync();
         Task<BillingRecordDto?> GetBillingRecordByIdAsync(int id);
-        Task<BillingRecordDto> CreateBillingRecordAsync(CreateBillingRecordDto createBillingRecordDto);
+        Task<BillingRecordDto> CreateBillingRecordAsync(
+            CreateBillingRecordDto createBillingRecordDto
+        );
         Task<bool> UpdateBillingRecordAsync(int id, UpdateBillingRecordDto updateBillingRecordDto);
         Task<bool> DeleteBillingRecordAsync(int id);
         Task<IEnumerable<BillingRecordDto>> GetBillingRecordsByProjectIdAsync(int projectId);

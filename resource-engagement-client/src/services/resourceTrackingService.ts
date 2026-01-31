@@ -187,4 +187,32 @@ class ResourceTrackingService {
   }
 }
 
+
+// --- Recruitment Service Methods ---
+const RECRUITMENT_API = "/api/resource-tracking/recruitment";
+
+const resourceTrackingService = {
+  // ...other resource tracking methods...
+
+  async getAllRecruitmentRecords(): Promise<RecruitmentRecord[]> {
+    const res = await baseServices.get(RECRUITMENT_API) as unknown as AxiosResponse<RecruitmentRecord[]>;
+    return res.data;
+  },
+  async getRecruitmentRecord(id: number): Promise<RecruitmentRecord> {
+    const res = await baseServices.get(`${RECRUITMENT_API}/${id}`) as AxiosResponse<RecruitmentRecord>;
+    return res.data;
+  },
+  async createRecruitmentRecord(dto: CreateRecruitmentRecordDto): Promise<RecruitmentRecord> {
+    const res = await baseServices.post(`${RECRUITMENT_API}`, dto) as AxiosResponse<RecruitmentRecord>;
+    return res.data;
+  },
+  async updateRecruitmentRecord(id: number, dto: UpdateRecruitmentRecordDto): Promise<void> {
+    await baseServices.put(`${RECRUITMENT_API}/${id}`, dto);
+  },
+  async deleteRecruitmentRecord(id: number): Promise<void> {
+    await baseServices.delete(`${RECRUITMENT_API}/${id}`);
+  }
+};
+
+
 export default new ResourceTrackingService();

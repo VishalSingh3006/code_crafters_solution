@@ -27,9 +27,10 @@ public static class DependencyInjection
             )
         );
 
-        // Register Project and Client services
+        // Register Project, Client, and Employee services
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IClientService, ClientService>();
+        services.AddScoped<IEmployeeService, EmployeeService>();
 
         // JWT Authentication Configuration
         var jwtSettings = config.GetSection("Jwt");

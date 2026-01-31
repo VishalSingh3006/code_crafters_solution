@@ -36,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<IDepartmentService, DepartmentService>();
         services.AddScoped<IDesignationService, DesignationService>();
         services.AddScoped<ISkillService, SkillService>();
+        services.AddScoped<IPortfolioCompanyService, PortfolioCompanyService>();
 
         // Register ResourceTracking repositories
         services.AddScoped<IDeliveryRepository, DeliveryRepository>();

@@ -16,8 +16,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Department> Departments { get; set; }
     public DbSet<Designation> Designations { get; set; }
     public DbSet<Skill> Skills { get; set; }
-    public DbSet<ExceptionLog> ExceptionLogs { get; set; }
-    public DbSet<AuditLog> AuditLogs { get; set; }
+    public DbSet<PortfolioCompany> PortfolioCompanies { get; set; }
+        public DbSet<ExceptionLog> ExceptionLogs { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
     public DbSet<EmployeeSkill> EmployeeSkills { get; set; }
 
     // ResourceTracking DbSets

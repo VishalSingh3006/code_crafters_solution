@@ -21,6 +21,7 @@ import EmployeesPage from "../pages/Employees";
 import CreateEmployeePage from "../pages/Employees/Create";
 import EmployeeDetailPage from "../pages/Employees/Detail";
 import DesignationsPage from "../pages/Designations";
+import BillingPage from "../components/ResourceTracking/BillingPage";
 
 const AppRoutes: React.FC = () => {
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
@@ -86,6 +87,10 @@ const AppRoutes: React.FC = () => {
             <ResourceTrackingDashboard />
           </ProtectedRoute>
         }
+      />
+      <Route
+        path="/resource-tracking/billing"
+        element={<ProtectedRoute><BillingPage /></ProtectedRoute>}
       />
       <Route
         path="/designations"

@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { apiService } from "./baseService";
 import {
   Delivery,
   CreateDeliveryDto,
@@ -19,7 +20,7 @@ import {
   RecruitmentAnalytics,
 } from "../types/resourceTracking";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000/api";
 
 class ResourceTrackingService {
   private api = axios.create({
@@ -30,9 +31,9 @@ class ResourceTrackingService {
   });
 
   constructor() {
-    // Add request interceptor to include auth token
+    // Add request interceptor to include auth token using the same method as baseService
     this.api.interceptors.request.use((config) => {
-      const token = localStorage.getItem("authToken");
+      const token = apiService.getAuthToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -79,26 +80,26 @@ class ResourceTrackingService {
 
   // Staffing Methods
   async getAllStaffingRecords(): Promise<StaffingRecord[]> {
-    const response: AxiosResponse<StaffingRecord[]> = await this.api.get("/staffing");
+    const response: AxiosResponse<StaffingRecord[]> = await this.api.get("/Staffing");
     return response.data;
   }
 
   async getStaffingRecordById(id: number): Promise<StaffingRecord> {
-    const response: AxiosResponse<StaffingRecord> = await this.api.get(`/staffing/${id}`);
+    const response: AxiosResponse<StaffingRecord> = await this.api.get(`/Staffing/${id}`);
     return response.data;
   }
 
   async createStaffingRecord(staffingRecord: CreateStaffingRecordDto): Promise<StaffingRecord> {
-    const response: AxiosResponse<StaffingRecord> = await this.api.post("/staffing", staffingRecord);
+    const response: AxiosResponse<StaffingRecord> = await this.api.post("/Staffing", staffingRecord);
     return response.data;
   }
 
   async updateStaffingRecord(id: number, staffingRecord: UpdateStaffingRecordDto): Promise<void> {
-    await this.api.put(`/staffing/${id}`, staffingRecord);
+    await this.api.put(`/Staffing/${id}`, staffingRecord);
   }
 
   async deleteStaffingRecord(id: number): Promise<void> {
-    await this.api.delete(`/staffing/${id}`);
+    await this.api.delete(`/Staffing/${id}`);
   }
 
   // Recruitment Methods

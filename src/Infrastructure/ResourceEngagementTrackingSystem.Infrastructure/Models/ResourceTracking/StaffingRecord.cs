@@ -28,6 +28,11 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTrackin
         [MaxLength(100)]
         public string Role { get; set; } = string.Empty;
 
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? HourlyRate { get; set; }
+
+        public int? TotalHours { get; set; }
+
         [MaxLength(500)]
         public string? Notes { get; set; }
 

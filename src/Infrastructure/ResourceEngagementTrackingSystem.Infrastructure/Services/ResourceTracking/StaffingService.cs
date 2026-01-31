@@ -50,6 +50,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 EndDate = createStaffingRecordDto.EndDate,
                 AllocationPercentage = createStaffingRecordDto.AllocationPercentage,
                 Role = createStaffingRecordDto.Role,
+                HourlyRate = createStaffingRecordDto.HourlyRate,
+                TotalHours = createStaffingRecordDto.TotalHours,
                 Notes = createStaffingRecordDto.Notes,
                 Status = StaffingStatus.Active
             };
@@ -72,6 +74,10 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 staffingRecord.AllocationPercentage = updateStaffingRecordDto.AllocationPercentage.Value;
             if (!string.IsNullOrEmpty(updateStaffingRecordDto.Role))
                 staffingRecord.Role = updateStaffingRecordDto.Role;
+            if (updateStaffingRecordDto.HourlyRate.HasValue)
+                staffingRecord.HourlyRate = updateStaffingRecordDto.HourlyRate;
+            if (updateStaffingRecordDto.TotalHours.HasValue)
+                staffingRecord.TotalHours = updateStaffingRecordDto.TotalHours;
             staffingRecord.Notes = updateStaffingRecordDto.Notes;
             if (!string.IsNullOrEmpty(updateStaffingRecordDto.Status))
                 staffingRecord.Status = Enum.Parse<StaffingStatus>(updateStaffingRecordDto.Status);
@@ -152,6 +158,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTrack
                 EndDate = staffingRecord.EndDate,
                 AllocationPercentage = staffingRecord.AllocationPercentage,
                 Role = staffingRecord.Role,
+                HourlyRate = staffingRecord.HourlyRate,
+                TotalHours = staffingRecord.TotalHours,
                 Notes = staffingRecord.Notes,
                 Status = staffingRecord.Status.ToString()
             };

@@ -15,6 +15,10 @@ namespace ResourceEngagementTrackingSystem.Application.DTOs.ResourceTracking.Sta
         [MaxLength(100)]
         public string? Role { get; set; }
 
+        public decimal? HourlyRate { get; set; }
+
+        public int? TotalHours { get; set; }
+
         [MaxLength(500)]
         public string? Notes { get; set; }
 

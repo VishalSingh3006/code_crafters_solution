@@ -34,9 +34,15 @@ public static class DependencyInjection
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IClientService, ClientService>();
         services.AddScoped<IEmployeeService, EmployeeService>();
+        services.AddScoped<IDepartmentService, DepartmentService>();
+        services.AddScoped<IDesignationService, DesignationService>();
+        services.AddScoped<ISkillService, SkillService>();
 
         // Register ResourceTracking repositories
         services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+        services.AddScoped<IBillingRecordRepository, BillingRecordRepository>();
+        services.AddScoped<IStaffingRecordRepository, StaffingRecordRepository>();
+        services.AddScoped<IRecruitmentRecordRepository, RecruitmentRecordRepository>();
 
         // Register ResourceTracking services
         services.AddScoped<IDeliveryService, DeliveryService>();

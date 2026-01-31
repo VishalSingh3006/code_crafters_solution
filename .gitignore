@@ -80,3 +80,7 @@ packages/
 Thumbs.db
 *.trace
 *.out
+
+./bin
+bin/
+*./bin

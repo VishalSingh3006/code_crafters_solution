@@ -103,6 +103,7 @@ const EmployeesPage: React.FC = () => {
                       >
                         <Button
                           size="small"
+                          variant="contained"
                           onClick={(ev) => {
                             ev.stopPropagation();
                             startEdit(e);
@@ -113,6 +114,7 @@ const EmployeesPage: React.FC = () => {
                         <Button
                           size="small"
                           color="error"
+                          variant="contained"
                           onClick={(ev) => {
                             ev.stopPropagation();
                             remove(e.id);

@@ -4,6 +4,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import { Brightness7, Brightness4 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useAuthLogout, useAuthState } from "../hooks/authHooks";
 import { ThemeModeContext } from "../context/ThemeContext";
@@ -43,7 +44,7 @@ const Header: React.FC = () => {
             onClick={toggleTheme}
             aria-label="Toggle theme"
           >
-            {mode === "dark" ? "☀️" : "🌙"}
+            {mode === "dark" ? <Brightness7 /> : <Brightness4 />}
           </Button>
 
           {isAuthenticated && (

@@ -163,6 +163,7 @@ const ClientsPage: React.FC = () => {
                             e.stopPropagation();
                             startEdit(c);
                           }}
+                          variant="contained"
                         >
                           Edit
                         </Button>
@@ -173,6 +174,7 @@ const ClientsPage: React.FC = () => {
                             e.stopPropagation();
                             remove(c.id);
                           }}
+                          variant="contained"
                         >
                           Delete
                         </Button>

@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -95,7 +96,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 e.EmployeeSkills = dto.Skills.Select(s => new EmployeeSkill
                 {
                     SkillId = s.SkillId,
-                    ProficiencyLevel = Enum.Parse<ProficiencyLevel>(s.ProficiencyLevel)
+                    ProficiencyLevel = Enum.Parse<ProficiencyLevel>(s.ProficiencyLevel),
                 }).ToList();
             }
             _context.Employees.Add(e);

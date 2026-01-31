@@ -12,4 +12,7 @@
     <PackageReference Include="QRCoder" Version="1.4.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Application\ResourceEngagementTrackingSystem.Application\ResourceEngagementTrackingSystem.Application.csproj" />
+  </ItemGroup>
 </Project>

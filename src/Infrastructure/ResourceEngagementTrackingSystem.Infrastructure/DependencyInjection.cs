@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using ResourceEngagementTrackingSystem.Application.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure;
@@ -24,6 +26,10 @@ public static class DependencyInjection
                 ServerVersion.AutoDetect(config.GetConnectionString("DefaultConnection"))
             )
         );
+
+        // Register Project and Client services
+        services.AddScoped<IProjectService, ProjectService>();
+        services.AddScoped<IClientService, ClientService>();
 
         // JWT Authentication Configuration
         var jwtSettings = config.GetSection("Jwt");

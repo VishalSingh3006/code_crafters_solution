@@ -8,4 +8,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<Client> Clients { get; set; }
 }

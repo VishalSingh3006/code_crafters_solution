@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { StaffingRecord } from '../../types/resourceTracking';
 import StaffingList from '../../components/ResourceTracking/StaffingList';
+import StaffingForm from '../../components/ResourceTracking/StaffingForm';
 
 const StaffingPage: React.FC = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [showForm, setShowForm] = useState(false);
+  const [editingStaffingRecord, setEditingStaffingRecord] = useState<StaffingRecord | undefined>(undefined);
 
   const handleEditStaffingRecord = (staffingRecord: StaffingRecord) => {
-    // TODO: Implement staffing form similar to DeliveryForm
-    console.log('Edit staffing record:', staffingRecord);
+    setEditingStaffingRecord(staffingRecord);
+    setShowForm(true);
   };
 
   const handleDeleteStaffingRecord = (staffingRecordId: number) => {
@@ -16,8 +19,19 @@ const StaffingPage: React.FC = () => {
   };
 
   const handleCreateNew = () => {
-    // TODO: Implement create new staffing record
-    console.log('Create new staffing record');
+    setEditingStaffingRecord(undefined);
+    setShowForm(true);
+  };
+
+  const handleFormSubmit = () => {
+    setShowForm(false);
+    setEditingStaffingRecord(undefined);
+    setRefreshTrigger(prev => prev + 1);
+  };
+
+  const handleFormCancel = () => {
+    setShowForm(false);
+    setEditingStaffingRecord(undefined);
   };
 
   return (
@@ -51,6 +65,15 @@ const StaffingPage: React.FC = () => {
           />
         </div>
       </div>
+
+      {/* Staffing Form Modal */}
+      {showForm && (
+        <StaffingForm
+          staffingRecord={editingStaffingRecord}
+          onSubmit={handleFormSubmit}
+          onCancel={handleFormCancel}
+        />
+      )}
     </div>
   );
 };

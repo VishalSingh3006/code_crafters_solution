@@ -14,6 +14,8 @@ namespace ResourceEngagementTrackingSystem.Application.DTOs.ResourceTracking.Sta
         public DateTime? EndDate { get; set; }
         public decimal AllocationPercentage { get; set; }
         public string Role { get; set; } = string.Empty;
+        public decimal? HourlyRate { get; set; }
+        public int? TotalHours { get; set; }
         public string? Notes { get; set; }
         public string Status { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }

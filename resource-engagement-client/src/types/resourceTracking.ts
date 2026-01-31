@@ -78,12 +78,13 @@ export interface CreateStaffingRecordDto {
   employeeId: number;
   projectId: number;
   startDate: string;
-  endDate?: string;
+  endDate: string;
   allocationPercentage: number;
   role: string;
   hourlyRate: number;
-  totalHours?: number;
-  notes?: string;
+  totalHours: number;
+  notes: string;
+  status: string;
 }
 
 export interface UpdateStaffingRecordDto {

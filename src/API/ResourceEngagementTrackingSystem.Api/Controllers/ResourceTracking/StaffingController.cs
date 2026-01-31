@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ResourceEngagementTrackingSystem.Application.DTOs.ResourceTracking.Staffing;
 using ResourceEngagementTrackingSystem.Application.Interfaces.ResourceTracking;
 
-namespace ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking.Staffing
+namespace ResourceEngagementTrackingSystem.Api.Controllers.ResourceTracking
 {
     [ApiController]
     [Route("api/resource-tracking/[controller]")]

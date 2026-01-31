@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure.Models
 {
-    public class EmployeeSkill
+    public class EmployeeSkill:BaseEntity
     {
         [Key, Column(Order = 0)]
         public int EmployeeId { get; set; }

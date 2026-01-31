@@ -23,14 +23,31 @@ export const authSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = !!action.payload.token;
+      
+      // Persist to localStorage
+      if (action.payload.token) {
+        localStorage.setItem("authToken", action.payload.token);
+      }
+      if (action.payload.user) {
+        localStorage.setItem("user", JSON.stringify(action.payload.user));
+      }
     },
     clearCredentials: (state) => {
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
+      
+      // Clear from localStorage
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
     },
     setUser: (state, action: PayloadAction<any | null>) => {
       state.user = action.payload;
+      
+      // Persist user data to localStorage
+      if (action.payload) {
+        localStorage.setItem("user", JSON.stringify(action.payload));
+      }
     },
   },
 });

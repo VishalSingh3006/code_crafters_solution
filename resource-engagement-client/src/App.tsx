@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 // AuthContext removed; use Redux-based auth state
 import "./App.css";
@@ -22,6 +22,7 @@ const AppLayout: React.FC = () => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
   const sideNavOpen = useAppSelector((s) => s.ui.sideNavOpen);
+  const [authInitialized, setAuthInitialized] = useState(false);
 
   // Initialize auth state from localStorage on app startup
   useEffect(() => {
@@ -33,18 +34,34 @@ const AppLayout: React.FC = () => {
         if (token && userStr) {
           const user = JSON.parse(userStr);
           dispatch(setCredentials({ token, user }));
-        } else {
         }
       } catch (error) {
         console.error("Failed to initialize auth from localStorage:", error);
         // Clear corrupted data
         localStorage.removeItem("authToken");
         localStorage.removeItem("user");
+      } finally {
+        setAuthInitialized(true);
       }
     };
 
     initializeAuth();
   }, [dispatch]);
+
+  // Don't render anything until auth is initialized
+  if (!authInitialized) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        fontSize: '18px'
+      }}>
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <Router>

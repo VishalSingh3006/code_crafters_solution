@@ -47,11 +47,17 @@ const Dashboard: React.FC = () => {
           spacing={2}
           sx={{ mt: 2 }}
         >
-          <Button variant="contained" href="/profile">
+          <Button 
+            variant="contained" 
+            onClick={() => navigate("/profile")}
+          >
             Edit Profile
           </Button>
           {!user.twoFactorEnabled && (
-            <Button variant="outlined" href="/2fa-setup">
+            <Button 
+              variant="outlined" 
+              onClick={() => navigate("/2fa-setup")}
+            >
               Setup 2FA
             </Button>
           )}

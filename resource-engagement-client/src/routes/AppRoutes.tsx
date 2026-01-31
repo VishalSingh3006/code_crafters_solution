@@ -5,15 +5,6 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
-import Designations from "../pages/Designations";
-      <Route
-        path="/designations"
-        element={
-          <ProtectedRoute>
-            <Designations />
-          </ProtectedRoute>
-        }
-      />
 import Profile from "../pages/Profile";
 import TwoFactorSetup from "../pages/TwoFactorSetup";
 import RolesPage from "../pages/Roles";
@@ -66,14 +57,6 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/resource-tracking"
-        element={
-          <ProtectedRoute>
-            <ResourceTrackingDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
         path="/resource-tracking/deliveries"
         element={
           <ProtectedRoute>
@@ -86,6 +69,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <StaffingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/resource-tracking"
+        element={
+          <ProtectedRoute>
+            <ResourceTrackingDashboard />
           </ProtectedRoute>
         }
       />

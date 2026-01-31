@@ -21,8 +21,11 @@ import RecruitmentPage from "../pages/ResourceTracking/RecruitmentPage";
 import EmployeesPage from "../pages/Employees";
 import CreateEmployeePage from "../pages/Employees/Create";
 import EmployeeDetailPage from "../pages/Employees/Detail";
+import DepartmentsPage from "../pages/Departments";
+import CreateDepartmentPage from "../pages/Departments/Create";
 import DesignationsPage from "../pages/Designations";
 import BillingPage from "../components/ResourceTracking/BillingPage";
+import SkillsManagement from "../components/SkillsManagement";
 
 const AppRoutes: React.FC = () => {
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
@@ -110,6 +113,14 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
+        path="/skills"
+        element={
+          <ProtectedRoute>
+            <SkillsManagement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/roles"
         element={
           <ProtectedRoute>
@@ -186,6 +197,22 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <EmployeeDetailPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/departments"
+        element={
+          <ProtectedRoute>
+            <DepartmentsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/departments/create"
+        element={
+          <ProtectedRoute>
+            <CreateDepartmentPage />
           </ProtectedRoute>
         }
       />

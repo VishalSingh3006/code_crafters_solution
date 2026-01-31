@@ -118,10 +118,26 @@ const SideNav: React.FC = () => {
               <ListItemButton
                 sx={{ pl: 4 }}
                 component={RouterLink}
+                to="/departments"
+                selected={location.pathname === "/departments"}
+              >
+                <ListItemText primary="Departments" />
+              </ListItemButton>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                component={RouterLink}
                 to="/designations"
                 selected={location.pathname === "/designations"}
               >
                 <ListItemText primary="Designations" />
+              </ListItemButton>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                component={RouterLink}
+                to="/skills"
+                selected={location.pathname === "/skills"}
+              >
+                <ListItemText primary="Skills" />
               </ListItemButton>
             </List>
           </Collapse>

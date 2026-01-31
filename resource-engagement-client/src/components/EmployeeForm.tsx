@@ -22,12 +22,7 @@ import { useEmployeeActions } from "../hooks/employeesHooks";
 import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { baseServices } from "../services/baseService";
-
-interface Skill {
-  id: number;
-  name: string;
-}
+import { skillsService, type Skill } from "../services/skillsService";
 
 type Mode = "create" | "edit";
 
@@ -125,7 +120,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   useEffect(() => {
     const loadSkills = async () => {
       try {
-        const response = await baseServices.get("skills");
+        const response = await skillsService.getAll();
         setSkills(response || []);
       } catch (error) {
         console.error("Failed to load skills:", error);

@@ -15,6 +15,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Department> Departments { get; set; }
     public DbSet<Designation> Designations { get; set; }
     public DbSet<Skill> Skills { get; set; }
+        public DbSet<ExceptionLog> ExceptionLogs { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
     public DbSet<EmployeeSkill> EmployeeSkills { get; set; }
 
     // ResourceTracking DbSets
@@ -54,6 +56,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(es => es.Employee)
             .WithMany(e => e.EmployeeSkills)
             .HasForeignKey(es => es.EmployeeId);
+
+        // Logging tables
+        modelBuilder.ApplyConfiguration(new Configurations.ExceptionLogConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.AuditLogConfiguration());
         modelBuilder.Entity<EmployeeSkill>()
             .HasOne(es => es.Skill)
             .WithMany(s => s.EmployeeSkills)

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure.Models
 {
-    public class Project
+    public class Project : BaseEntity
     {
         [Key]
         public int Id { get; set; }

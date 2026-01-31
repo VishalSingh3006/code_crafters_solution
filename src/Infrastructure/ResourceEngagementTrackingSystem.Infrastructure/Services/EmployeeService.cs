@@ -41,7 +41,9 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                     {
                         SkillId = es.SkillId,
                         SkillName = es.Skill.Name,
-                        ProficiencyLevel = es.ProficiencyLevel.ToString()
+                        ProficiencyLevel = es.ProficiencyLevel.ToString(),
+                        YearsOfExperience = es.YearsOfExperience,
+                        LastUsedDate = es.LastUsedDate
                     }).ToList()
                 }).ToListAsync();
         }
@@ -71,7 +73,9 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 {
                     SkillId = es.SkillId,
                     SkillName = es.Skill.Name,
-                    ProficiencyLevel = es.ProficiencyLevel.ToString()
+                    ProficiencyLevel = es.ProficiencyLevel.ToString(),
+                    YearsOfExperience = es.YearsOfExperience,
+                    LastUsedDate = es.LastUsedDate
                 }).ToList()
             };
         }
@@ -97,6 +101,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 {
                     SkillId = s.SkillId,
                     ProficiencyLevel = ParseProficiencyLevel(s.ProficiencyLevel),
+                    YearsOfExperience = s.YearsOfExperience,
+                    LastUsedDate = s.LastUsedDate
                 }).ToList();
             }
             _context.Employees.Add(e);
@@ -128,7 +134,9 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                     {
                         EmployeeId = e.Id,
                         SkillId = s.SkillId,
-                        ProficiencyLevel = ParseProficiencyLevel(s.ProficiencyLevel)
+                        ProficiencyLevel = ParseProficiencyLevel(s.ProficiencyLevel),
+                        YearsOfExperience = s.YearsOfExperience,
+                        LastUsedDate = s.LastUsedDate
                     });
                 }
             }

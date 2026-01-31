@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace ResourceEngagementTrackingSystem.Application.DTOs
@@ -7,6 +8,8 @@ namespace ResourceEngagementTrackingSystem.Application.DTOs
         public int SkillId { get; set; }
         public string SkillName { get; set; }
         public string ProficiencyLevel { get; set; }
+        public decimal? YearsOfExperience { get; set; }
+        public DateTime? LastUsedDate { get; set; }
     }
 
     public class EmployeeDto
@@ -44,5 +47,7 @@ namespace ResourceEngagementTrackingSystem.Application.DTOs
     {
         public int SkillId { get; set; }
         public string ProficiencyLevel { get; set; }
+        public decimal? YearsOfExperience { get; set; }
+        public DateTime? LastUsedDate { get; set; }
     }
 }

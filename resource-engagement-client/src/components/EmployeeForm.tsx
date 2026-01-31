@@ -77,6 +77,15 @@ const schema: yup.ObjectSchema<CreateEmployeeRequest> = yup
             .string()
             .trim()
             .required("Proficiency is required"),
+          yearsOfExperience: yup
+            .number()
+            .transform((v, orig) => (orig === "" || orig === null || orig === undefined ? undefined : v))
+            .min(0, "Years of experience must be positive")
+            .max(50, "Years of experience must be less than 50")
+            .optional(),
+          lastUsedDate: yup
+            .string()
+            .optional(),
         }),
       )
       .default([]),
@@ -411,6 +420,27 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
                   </FormHelperText>
                 )}
               </FormControl>
+              <TextField
+                label="Years of Experience"
+                type="number"
+                {...register(`skills.${idx}.yearsOfExperience` as const, {
+                  setValueAs: (v) => (v === "" || v === null ? undefined : Number(v)),
+                })}
+                error={!!errors.skills?.[idx]?.yearsOfExperience}
+                helperText={errors.skills?.[idx]?.yearsOfExperience?.message as string | undefined || "Optional"}
+                fullWidth
+                placeholder="e.g., 2.5"
+                inputProps={{ min: 0, max: 50, step: 0.5 }}
+              />
+              <TextField
+                label="Last Used Date"
+                type="date"
+                {...register(`skills.${idx}.lastUsedDate` as const)}
+                error={!!errors.skills?.[idx]?.lastUsedDate}
+                helperText={errors.skills?.[idx]?.lastUsedDate?.message as string | undefined || "Optional"}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+              />
               <Button 
                 color="error" 
                 onClick={() => remove(idx)}
@@ -425,7 +455,9 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
             variant="outlined"
             onClick={() => append({ 
               skillId: skills.length > 0 ? skills[0].id : 1, 
-              proficiencyLevel: "Beginner" 
+              proficiencyLevel: "Beginner",
+              yearsOfExperience: undefined,
+              lastUsedDate: undefined
             })}
             sx={{ alignSelf: "flex-start" }}
             disabled={skillsLoading || skills.length === 0}

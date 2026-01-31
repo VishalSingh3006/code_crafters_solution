@@ -2,6 +2,8 @@ export interface EmployeeSkill {
   skillId: number;
   skillName: string;
   proficiencyLevel: string;
+  yearsOfExperience?: number;
+  lastUsedDate?: string;
 }
 
 export interface Employee {
@@ -21,6 +23,8 @@ export interface Employee {
 export interface EmployeeSkillInput {
   skillId: number;
   proficiencyLevel: string;
+  yearsOfExperience?: number;
+  lastUsedDate?: string;
 }
 
 export interface CreateEmployeeRequest {

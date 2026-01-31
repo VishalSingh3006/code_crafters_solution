@@ -7,11 +7,11 @@ import type {
 
 class TwoFactorService {
   async getSetup(): Promise<TwoFactorSetup> {
-    return await baseServices.get("/2fa/setup");
+    return await baseServices.get("auth/2fa/setup");
   }
 
   async getStatus(): Promise<{ twoFactorEnabled: boolean }> {
-    return await baseServices.get("/2fa/status");
+    return await baseServices.get("auth/2fa/status");
   }
 
   async enable(
@@ -20,7 +20,7 @@ class TwoFactorService {
     return await baseServices.post<{
       message?: string;
       twoFactorEnabled: boolean;
-    }>("/2fa/enable", { enable: true, code });
+    }>("auth/2fa/enable", { enable: true, code });
   }
 
   async disable(
@@ -29,11 +29,11 @@ class TwoFactorService {
     return await baseServices.post<{
       message?: string;
       twoFactorEnabled: boolean;
-    }>("/2fa/enable", { enable: false, code });
+    }>("auth/2fa/enable", { enable: false, code });
   }
 
   async verify(payload: TwoFactorVerifyRequest): Promise<LoginResponse> {
-    return await baseServices.post<LoginResponse>("/2fa/verify", payload);
+    return await baseServices.post<LoginResponse>("auth/2fa/verify", payload);
   }
 }
 

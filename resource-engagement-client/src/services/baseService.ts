@@ -45,8 +45,9 @@ class BaseServices {
   private instance: AxiosInstance;
 
   constructor() {
-    const baseURL = import.meta.env.VITE_API_BASE_URL ?? "/api/auth";
-
+    // const baseURL = import.meta.env.VITE_API_BASE_URL ?? "/api/auth";
+    const baseURL = "http://localhost:3000/api/";
+    console.log("API Base URL:", baseURL);
     this.instance = axios.create({
       baseURL,
       withCredentials: true,
@@ -205,33 +206,40 @@ export function normalizeAxiosError(
 // Backward-compatible helpers and API facade to preserve existing imports
 export const apiService = {
   register: (data: unknown): Promise<{ message?: string; userId?: string }> =>
-    baseServices.post<{ message?: string; userId?: string }>("/register", data),
+    baseServices.post<{ message?: string; userId?: string }>(
+      "/auth/register",
+      data,
+    ),
   login: (data: unknown): Promise<LoginResponse> =>
-    baseServices.post<LoginResponse>("/login", data),
+    baseServices.post<LoginResponse>("/auth/login", data),
   logout: (): Promise<{ message?: string }> =>
-    baseServices.post<{ message?: string }>("/logout"),
-  getProfile: (): Promise<User> => baseServices.get("/profile"),
+    baseServices.post<{ message?: string }>("/auth/logout"),
+  getProfile: (): Promise<User> => baseServices.get("/auth/profile"),
   updateProfile: (
     data: UpdateProfileRequest,
   ): Promise<{ message?: string; profile?: User }> =>
-    baseServices.put<{ message?: string; profile?: User }>("/profile", data),
-  get2FASetup: (): Promise<TwoFactorSetup> => baseServices.get("/2fa/setup"),
+    baseServices.put<{ message?: string; profile?: User }>(
+      "/auth/profile",
+      data,
+    ),
+  get2FASetup: (): Promise<TwoFactorSetup> =>
+    baseServices.get("/auth/2fa/setup"),
   enable2FA: (data: {
     code: string;
   }): Promise<{ message?: string; twoFactorEnabled: boolean }> =>
     baseServices.post<{ message?: string; twoFactorEnabled: boolean }>(
-      "/2fa/enable",
+      "/auth/2fa/enable",
       { enable: true, code: data.code },
     ),
   verify2FA: (data: TwoFactorVerifyRequest): Promise<LoginResponse> =>
-    baseServices.post<LoginResponse>("/2fa/verify", data),
+    baseServices.post<LoginResponse>("/auth/2fa/verify", data),
   get2FAStatus: (): Promise<{ twoFactorEnabled: boolean }> =>
-    baseServices.get("/2fa/status"),
+    baseServices.get("/auth/2fa/status"),
   disable2FA: (data: {
     code: string;
   }): Promise<{ message?: string; twoFactorEnabled: boolean }> =>
     baseServices.post<{ message?: string; twoFactorEnabled: boolean }>(
-      "/2fa/enable",
+      "/auth/2fa/enable",
       { enable: false, code: data.code },
     ),
   setAuthToken: (token: string) => {

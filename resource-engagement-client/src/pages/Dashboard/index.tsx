@@ -1,11 +1,15 @@
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
+import { Box, Paper, Typography, Button, Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
+    navigate("/login", { replace: true });
   };
 
   if (!user) {
@@ -13,57 +17,46 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h1>
-          Welcome, {user.firstName} {user.lastName}!
-        </h1>
-        <button onClick={handleLogout} className="logout-btn">
-          Logout
-        </button>
-      </div>
-
-      <div className="dashboard-content">
-        <div className="user-info-card">
-          <h2>Your Profile</h2>
-          <div className="user-details">
-            <p>
-              <strong>Title:</strong> {user.title}
-            </p>
-            <p>
-              <strong>Name:</strong> {user.firstName} {user.lastName}
-            </p>
-            <p>
-              <strong>Email:</strong> {user.email}
-            </p>
-            <p>
-              <strong>Phone:</strong> {user.phoneNumber || "Not provided"}
-            </p>
-            <p>
-              <strong>Address:</strong> {user.address || "Not provided"}
-            </p>
-            <p>
-              <strong>Zip Code:</strong> {user.zipCode || "Not provided"}
-            </p>
-            <p>
-              <strong>2FA Enabled:</strong>{" "}
-              {user.twoFactorEnabled ? "Yes" : "No"}
-            </p>
-          </div>
-
-          <div className="action-buttons">
-            <a href="/profile" className="btn">
-              Edit Profile
-            </a>
-            {!user.twoFactorEnabled && (
-              <a href="/2fa-setup" className="btn btn-secondary">
-                Setup 2FA
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        Welcome, {user.firstName} {user.lastName}!
+      </Typography>
+      <Button variant="outlined" onClick={handleLogout} sx={{ mb: 2 }}>
+        Logout
+      </Button>
+      <Paper sx={{ p: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          Your Profile
+        </Typography>
+        <Stack spacing={1}>
+          <Typography>Title: {user.title}</Typography>
+          <Typography>
+            Name: {user.firstName} {user.lastName}
+          </Typography>
+          <Typography>Email: {user.email}</Typography>
+          <Typography>Phone: {user.phoneNumber || "Not provided"}</Typography>
+          <Typography>Address: {user.address || "Not provided"}</Typography>
+          <Typography>Zip Code: {user.zipCode || "Not provided"}</Typography>
+          <Typography>
+            2FA Enabled: {user.twoFactorEnabled ? "Yes" : "No"}
+          </Typography>
+        </Stack>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={2}
+          sx={{ mt: 2 }}
+        >
+          <Button variant="contained" href="/profile">
+            Edit Profile
+          </Button>
+          {!user.twoFactorEnabled && (
+            <Button variant="outlined" href="/2fa-setup">
+              Setup 2FA
+            </Button>
+          )}
+        </Stack>
+      </Paper>
+    </Box>
   );
 };
 

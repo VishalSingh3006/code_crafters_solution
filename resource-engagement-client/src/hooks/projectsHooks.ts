@@ -1,26 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
-  fetchClients,
-  createClient,
-  updateClient,
-  deleteClient,
-} from "../store/clientsSlice";
-import { clientsService } from "../services/clientsService";
+  fetchProjects,
+  createProject,
+  updateProject,
+  deleteProject,
+} from "../store/projectsSlice";
+import { projectsService } from "../services/projectsService";
 import type {
-  CreateClientRequest,
-  UpdateClientRequest,
-  Client,
+  CreateProjectRequest,
+  UpdateProjectRequest,
+  Project,
 } from "../types";
 
-export function useClients() {
+export function useProjects() {
   const dispatch = useAppDispatch();
-  const items = useAppSelector((s) => s.clients.items);
-  const loading = useAppSelector((s) => s.clients.loading);
-  const error = useAppSelector((s) => s.clients.error);
+  const items = useAppSelector((s) => s.projects.items);
+  const loading = useAppSelector((s) => s.projects.loading);
+  const error = useAppSelector((s) => s.projects.error);
 
   const load = useCallback(() => {
-    dispatch(fetchClients());
+    dispatch(fetchProjects());
   }, [dispatch]);
 
   useEffect(() => {
@@ -30,8 +30,8 @@ export function useClients() {
   return { items, loading, error, reload: load };
 }
 
-export function useClient(id: number | null) {
-  const [item, setItem] = useState<Client | null>(null);
+export function useProject(id: number | null) {
+  const [item, setItem] = useState<Project | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,10 +40,10 @@ export function useClient(id: number | null) {
     setLoading(true);
     setError(null);
     try {
-      const res = await clientsService.getById(id);
+      const res = await projectsService.getById(id);
       setItem(res);
     } catch (e: any) {
-      setError(e?.message ?? "Failed to load client");
+      setError(e?.message ?? "Failed to load project");
     } finally {
       setLoading(false);
     }
@@ -56,19 +56,19 @@ export function useClient(id: number | null) {
   return { item, loading, error, reload: load };
 }
 
-export function useClientActions() {
+export function useProjectActions() {
   const dispatch = useAppDispatch();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const create = useCallback(
-    async (payload: CreateClientRequest) => {
+    async (payload: CreateProjectRequest) => {
       setPending(true);
       setError(null);
       try {
-        await dispatch(createClient(payload)).unwrap();
+        await dispatch(createProject(payload)).unwrap();
       } catch (e: any) {
-        setError(e?.message ?? "Failed to create client");
+        setError(e?.message ?? "Failed to create project");
       } finally {
         setPending(false);
       }
@@ -77,13 +77,13 @@ export function useClientActions() {
   );
 
   const update = useCallback(
-    async (id: number, payload: UpdateClientRequest) => {
+    async (id: number, payload: UpdateProjectRequest) => {
       setPending(true);
       setError(null);
       try {
-        await dispatch(updateClient({ id, payload })).unwrap();
+        await dispatch(updateProject({ id, payload })).unwrap();
       } catch (e: any) {
-        setError(e?.message ?? "Failed to update client");
+        setError(e?.message ?? "Failed to update project");
       } finally {
         setPending(false);
       }
@@ -96,9 +96,9 @@ export function useClientActions() {
       setPending(true);
       setError(null);
       try {
-        await dispatch(deleteClient(id)).unwrap();
+        await dispatch(deleteProject(id)).unwrap();
       } catch (e: any) {
-        setError(e?.message ?? "Failed to delete client");
+        setError(e?.message ?? "Failed to delete project");
       } finally {
         setPending(false);
       }

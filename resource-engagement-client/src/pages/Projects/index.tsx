@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEmployees, useEmployeeActions } from "../../hooks/employeesHooks";
-import type { Employee } from "../../types";
+import { useProjects } from "../../hooks/projectsHooks";
+import { useProjectActions } from "../../hooks/projectsHooks";
+import type { Project } from "../../types";
 import {
   Container,
   Paper,
@@ -9,7 +10,6 @@ import {
   Box,
   Stack,
   Alert,
-  TextField,
   Button,
   Table,
   TableHead,
@@ -17,23 +17,19 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
-import EmployeeForm from "../../components/EmployeeForm";
+import ProjectForm from "../../components/forms/ProjectForm";
 
-const EmployeesPage: React.FC = () => {
+const ProjectsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { items, loading, error, reload } = useEmployees();
-  const { remove, error: actionError } = useEmployeeActions(() => reload());
-  const [editing, setEditing] = useState<Employee | null>(null);
-
-  const startEdit = (emp: Employee) => {
-    setEditing(emp);
-  };
+  const { items, loading, error, reload } = useProjects();
+  const { remove, error: actionError } = useProjectActions();
+  const [editing, setEditing] = useState<Project | null>(null);
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Paper sx={{ p: 3 }}>
         <Typography variant="h5" gutterBottom>
-          Employees
+          Projects
         </Typography>
         {error && <Alert severity="error">{error}</Alert>}
         {actionError && <Alert severity="error">{actionError}</Alert>}
@@ -42,20 +38,20 @@ const EmployeesPage: React.FC = () => {
           <Box />
           <Button
             variant="contained"
-            onClick={() => navigate("/employees/create")}
+            onClick={() => navigate("/projects/create")}
           >
-            Create Employee
+            Create Project
           </Button>
         </Box>
 
         {editing && (
           <Box sx={{ mb: 3 }}>
             <Typography variant="h6" gutterBottom>
-              Edit Employee
+              Edit Project
             </Typography>
-            <EmployeeForm
+            <ProjectForm
               mode="edit"
-              employee={editing}
+              project={editing}
               onCancel={() => setEditing(null)}
               onSuccess={async () => {
                 setEditing(null);
@@ -72,29 +68,23 @@ const EmployeesPage: React.FC = () => {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Code</TableCell>
                   <TableCell>Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Phone</TableCell>
-                  <TableCell>Employment</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell>Client ID</TableCell>
                   <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {items.map((e) => (
+                {items.map((p) => (
                   <TableRow
-                    key={e.id}
+                    key={p.id}
                     hover
+                    onClick={() => navigate(`/projects/${p.id}`)}
                     sx={{ cursor: "pointer" }}
-                    onClick={() => navigate(`/employees/${e.id}`)}
                   >
-                    <TableCell>{e.employeeCode}</TableCell>
-                    <TableCell>
-                      {e.firstName} {e.lastName}
-                    </TableCell>
-                    <TableCell>{e.email}</TableCell>
-                    <TableCell>{e.phone}</TableCell>
-                    <TableCell>{e.employmentType}</TableCell>
+                    <TableCell>{p.name}</TableCell>
+                    <TableCell>{p.description}</TableCell>
+                    <TableCell>{p.clientId}</TableCell>
                     <TableCell align="right">
                       <Stack
                         direction="row"
@@ -103,9 +93,9 @@ const EmployeesPage: React.FC = () => {
                       >
                         <Button
                           size="small"
-                          onClick={(ev) => {
-                            ev.stopPropagation();
-                            startEdit(e);
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditing(p);
                           }}
                         >
                           Edit
@@ -113,9 +103,9 @@ const EmployeesPage: React.FC = () => {
                         <Button
                           size="small"
                           color="error"
-                          onClick={(ev) => {
-                            ev.stopPropagation();
-                            remove(e.id);
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            remove(p.id);
                           }}
                         >
                           Delete
@@ -133,4 +123,4 @@ const EmployeesPage: React.FC = () => {
   );
 };
 
-export default EmployeesPage;
+export default ProjectsPage;

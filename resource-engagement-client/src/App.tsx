@@ -6,7 +6,8 @@ import { ThemeModeProvider } from "./context/ThemeContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import AppRoutes from "./routes/AppRoutes";
 import { Provider as ReduxProvider } from "react-redux";
-import { store } from "./store/store";
+import { store, persistor } from "./store/store";
+import { PersistGate } from "redux-persist/integration/react";
 import Header from "./components/Header";
 import { setStoreReference } from "./services/baseService";
 import SideNav from "./components/SideNav";
@@ -94,9 +95,11 @@ const AppLayout: React.FC = () => {
 const App: React.FC = () => {
   return (
     <ReduxProvider store={store}>
-      <ThemeModeProvider>
-        <AppLayout />
-      </ThemeModeProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <ThemeModeProvider>
+          <AppLayout />
+        </ThemeModeProvider>
+      </PersistGate>
     </ReduxProvider>
   );
 };

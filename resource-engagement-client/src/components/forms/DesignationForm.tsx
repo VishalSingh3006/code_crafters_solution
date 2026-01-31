@@ -1,5 +1,13 @@
 import React from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  Box,
+} from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { baseServices } from "../../services/baseService";
 
@@ -15,7 +23,12 @@ type FormValues = {
   description?: string;
 };
 
-const DesignationForm: React.FC<DesignationFormProps> = ({ open, onClose, onSuccess, editing }) => {
+const DesignationForm: React.FC<DesignationFormProps> = ({
+  open,
+  onClose,
+  onSuccess,
+  editing,
+}) => {
   const { control, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: editing || { name: "", description: "" },
   });
@@ -26,9 +39,9 @@ const DesignationForm: React.FC<DesignationFormProps> = ({ open, onClose, onSucc
 
   const onSubmit = async (data: FormValues) => {
     if (editing) {
-      await baseServices.put(`/api/designations/${editing.id}`, data);
+      await baseServices.put<void>(`designations/${editing.id}`, data);
     } else {
-      await baseServices.post("/api/designations", data);
+      await baseServices.post<void>("designations", data);
     }
     onSuccess();
     onClose();
@@ -36,7 +49,9 @@ const DesignationForm: React.FC<DesignationFormProps> = ({ open, onClose, onSucc
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitle>{editing ? "Edit Designation" : "Add Designation"}</DialogTitle>
+      <DialogTitle>
+        {editing ? "Edit Designation" : "Add Designation"}
+      </DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={2}>
@@ -71,7 +86,9 @@ const DesignationForm: React.FC<DesignationFormProps> = ({ open, onClose, onSucc
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>
-          <Button type="submit" variant="contained">{editing ? "Update" : "Create"}</Button>
+          <Button type="submit" variant="contained">
+            {editing ? "Update" : "Create"}
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

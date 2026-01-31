@@ -64,7 +64,7 @@ const StaffingPage: React.FC = () => {
               Manage employee assignments, roles, and resource allocation
             </Typography>
           </Box>
-          <Button variant="contained" onClick={handleCreateNew}>
+          <Button id="new-staffing-record-btn" variant="contained" onClick={handleCreateNew}>
             New Staffing Record
           </Button>
         </Stack>
@@ -88,7 +88,7 @@ const StaffingPage: React.FC = () => {
             />
           </DialogContent>
           <DialogActions>
-            <Button variant="outlined" onClick={handleFormCancel}>
+            <Button id="cancel-staffing-dialog-btn" variant="outlined" onClick={handleFormCancel}>
               Cancel
             </Button>
           </DialogActions>

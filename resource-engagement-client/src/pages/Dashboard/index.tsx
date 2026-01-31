@@ -63,6 +63,7 @@ const Dashboard: React.FC = () => {
                   </Typography>
                 )}
                 <Button
+                  id={`view-${card.title.toLowerCase()}-btn`}
                   variant="contained"
                   onClick={card.onClick}
                   disabled={card.loading}
@@ -81,18 +82,21 @@ const Dashboard: React.FC = () => {
             </Typography>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
               <Button
+                id="new-project-btn"
                 variant="outlined"
                 onClick={() => navigate("/projects/create")}
               >
                 New Project
               </Button>
               <Button
+                id="new-employee-btn"
                 variant="outlined"
                 onClick={() => navigate("/employees/create")}
               >
                 New Employee
               </Button>
               <Button
+                id="new-client-btn"
                 variant="outlined"
                 onClick={() => navigate("/clients/create")}
               >

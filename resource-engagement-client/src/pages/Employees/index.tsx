@@ -41,6 +41,7 @@ const EmployeesPage: React.FC = () => {
         <Box sx={{ mb: 3, display: "flex", justifyContent: "space-between" }}>
           <Box />
           <Button
+            id="create-employee-btn"
             variant="contained"
             onClick={() => navigate("/employees/create")}
           >
@@ -102,6 +103,7 @@ const EmployeesPage: React.FC = () => {
                         justifyContent="flex-end"
                       >
                         <Button
+                          id={`edit-employee-${e.id}-btn`}
                           size="small"
                           variant="contained"
                           onClick={(ev) => {
@@ -112,6 +114,7 @@ const EmployeesPage: React.FC = () => {
                           Edit
                         </Button>
                         <Button
+                          id={`delete-employee-${e.id}-btn`}
                           size="small"
                           color="error"
                           variant="contained"

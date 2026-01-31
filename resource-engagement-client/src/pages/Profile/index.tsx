@@ -198,7 +198,7 @@ const Profile: React.FC = () => {
             {error && <Alert severity="error">{error}</Alert>}
             {success && <Alert severity="success">{success}</Alert>}
 
-            <Button type="submit" variant="contained" disabled={isSubmitting}>
+            <Button id="update-profile-btn" type="submit" variant="contained" disabled={isSubmitting}>
               {isSubmitting ? "Updating..." : "Update Profile"}
             </Button>
           </Stack>
@@ -215,6 +215,7 @@ const Profile: React.FC = () => {
           </Typography>
 
           <Button
+            id="change-password-btn"
             type="button"
             variant="contained"
             onClick={() => navigate("/change-password")}
@@ -248,7 +249,7 @@ const Profile: React.FC = () => {
                 Enhance your account security by enabling two-factor
                 authentication.
               </Typography>
-              <Button href="/2fa-setup" variant="contained">
+              <Button id="enable-2fa-btn" href="/2fa-setup" variant="contained">
                 Enable 2FA
               </Button>
             </Stack>
@@ -256,6 +257,7 @@ const Profile: React.FC = () => {
             <Stack spacing={2}>
               {!showTwoFactorDisable ? (
                 <Button
+                  id="disable-2fa-btn"
                   type="button"
                   variant="outlined"
                   color="warning"
@@ -286,6 +288,7 @@ const Profile: React.FC = () => {
                     />
                     <Stack direction="row" spacing={2}>
                       <Button
+                        id="confirm-disable-2fa-btn"
                         type="submit"
                         variant="contained"
                         color="warning"
@@ -294,6 +297,7 @@ const Profile: React.FC = () => {
                         {twoFactorLoading ? "Disabling..." : "Disable 2FA"}
                       </Button>
                       <Button
+                        id="cancel-disable-2fa-btn"
                         type="button"
                         variant="outlined"
                         onClick={() => {

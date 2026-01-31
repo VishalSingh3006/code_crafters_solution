@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRolesData, useRolesAdmin } from "../../hooks/rolesHooks";
 import type { Role } from "../../types";
+import { DEFAULT_ROLES } from "../../types/roles";
 import {
   Container,
   Paper,
@@ -76,11 +77,13 @@ const RolesPage: React.FC = () => {
               value={role}
               onChange={(e) => setRole(e.target.value as Role)}
             >
-              {availableRoles.map((r) => (
-                <MenuItem key={r} value={r}>
-                  {r}
-                </MenuItem>
-              ))}
+              {(availableRoles?.length ? availableRoles : DEFAULT_ROLES).map(
+                (r) => (
+                  <MenuItem key={r} value={r}>
+                    {r}
+                  </MenuItem>
+                ),
+              )}
             </Select>
           </FormControl>
           <Stack direction={{ xs: "column", md: "row" }} spacing={2}>

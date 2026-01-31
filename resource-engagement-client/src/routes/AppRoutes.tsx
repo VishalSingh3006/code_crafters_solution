@@ -9,15 +9,22 @@ import Profile from "../pages/Profile";
 import TwoFactorSetup from "../pages/TwoFactorSetup";
 import RolesPage from "../pages/Roles";
 import ClientsPage from "../pages/Clients";
+import CreateClientPage from "../pages/Clients/Create";
+import ClientDetailPage from "../pages/Clients/Detail";
+import ProjectsPage from "../pages/Projects";
+import CreateProjectPage from "../pages/Projects/Create";
+import ProjectDetailPage from "../pages/Projects/Detail";
 import ResourceTrackingDashboard from "../pages/ResourceTracking";
 import DeliveryPage from "../pages/ResourceTracking/DeliveryPage";
 import StaffingPage from "../pages/ResourceTracking/StaffingPage";
 import EmployeesPage from "../pages/Employees";
 import CreateEmployeePage from "../pages/Employees/Create";
+import EmployeeDetailPage from "../pages/Employees/Detail";
+import DesignationsPage from "../pages/Designations";
 
 const AppRoutes: React.FC = () => {
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
-  
+
   return (
     <Routes>
       <Route
@@ -81,6 +88,14 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
+        path="/designations"
+        element={
+          <ProtectedRoute>
+            <DesignationsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/roles"
         element={
           <ProtectedRoute>
@@ -97,6 +112,46 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
+        path="/clients/create"
+        element={
+          <ProtectedRoute>
+            <CreateClientPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/clients/:id"
+        element={
+          <ProtectedRoute>
+            <ClientDetailPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/projects"
+        element={
+          <ProtectedRoute>
+            <ProjectsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/projects/create"
+        element={
+          <ProtectedRoute>
+            <CreateProjectPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/projects/:id"
+        element={
+          <ProtectedRoute>
+            <ProjectDetailPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/employees"
         element={
           <ProtectedRoute>
@@ -109,6 +164,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <CreateEmployeePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/employees/:id"
+        element={
+          <ProtectedRoute>
+            <EmployeeDetailPage />
           </ProtectedRoute>
         }
       />

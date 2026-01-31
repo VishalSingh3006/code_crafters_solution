@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,5 +14,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
         public int SkillId { get; set; }
         public Skill Skill { get; set; }
         public ProficiencyLevel ProficiencyLevel { get; set; }
+        [Column(TypeName = "decimal(3,1)")]
+        public decimal? YearsOfExperience { get; set; }
+        public DateTime? LastUsedDate { get; set; }
     }
 }

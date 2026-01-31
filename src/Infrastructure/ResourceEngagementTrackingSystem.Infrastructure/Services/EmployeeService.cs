@@ -37,16 +37,15 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                     Designation = e.Designation.Name,
                     EmploymentType = e.EmploymentType.ToString(),
                     ManagerId = e.ManagerId,
-                    Skills = e
-                        .EmployeeSkills.Select(es => new EmployeeSkillDto
-                        {
-                            SkillId = es.SkillId,
-                            SkillName = es.Skill.Name,
-                            ProficiencyLevel = es.ProficiencyLevel.ToString(),
-                        })
-                        .ToList(),
-                })
-                .ToListAsync();
+                    Skills = e.EmployeeSkills.Select(es => new EmployeeSkillDto
+                    {
+                        SkillId = es.SkillId,
+                        SkillName = es.Skill.Name,
+                        ProficiencyLevel = es.ProficiencyLevel.ToString(),
+                        YearsOfExperience = es.YearsOfExperience,
+                        LastUsedDate = es.LastUsedDate
+                    }).ToList()
+                }).ToListAsync();
         }
 
         public async Task<EmployeeDto> GetByIdAsync(int id)
@@ -71,14 +70,14 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 Designation = e.Designation.Name,
                 EmploymentType = e.EmploymentType.ToString(),
                 ManagerId = e.ManagerId,
-                Skills = e
-                    .EmployeeSkills.Select(es => new EmployeeSkillDto
-                    {
-                        SkillId = es.SkillId,
-                        SkillName = es.Skill.Name,
-                        ProficiencyLevel = es.ProficiencyLevel.ToString(),
-                    })
-                    .ToList(),
+                Skills = e.EmployeeSkills.Select(es => new EmployeeSkillDto
+                {
+                    SkillId = es.SkillId,
+                    SkillName = es.Skill.Name,
+                    ProficiencyLevel = es.ProficiencyLevel.ToString(),
+                    YearsOfExperience = es.YearsOfExperience,
+                    LastUsedDate = es.LastUsedDate
+                }).ToList()
             };
         }
 
@@ -98,13 +97,13 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
             };
             if (dto.Skills != null)
             {
-                e.EmployeeSkills = dto
-                    .Skills.Select(s => new EmployeeSkill
-                    {
-                        SkillId = s.SkillId,
-                        ProficiencyLevel = ParseProficiencyLevel(s.ProficiencyLevel),
-                    })
-                    .ToList();
+                e.EmployeeSkills = dto.Skills.Select(s => new EmployeeSkill
+                {
+                    SkillId = s.SkillId,
+                    ProficiencyLevel = ParseProficiencyLevel(s.ProficiencyLevel),
+                    YearsOfExperience = s.YearsOfExperience,
+                    LastUsedDate = s.LastUsedDate
+                }).ToList();
             }
             _context.Employees.Add(e);
             await _context.SaveChangesAsync();
@@ -133,14 +132,14 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
             {
                 foreach (var s in dto.Skills)
                 {
-                    e.EmployeeSkills.Add(
-                        new EmployeeSkill
-                        {
-                            EmployeeId = e.Id,
-                            SkillId = s.SkillId,
-                            ProficiencyLevel = ParseProficiencyLevel(s.ProficiencyLevel),
-                        }
-                    );
+                    e.EmployeeSkills.Add(new EmployeeSkill
+                    {
+                        EmployeeId = e.Id,
+                        SkillId = s.SkillId,
+                        ProficiencyLevel = ParseProficiencyLevel(s.ProficiencyLevel),
+                        YearsOfExperience = s.YearsOfExperience,
+                        LastUsedDate = s.LastUsedDate
+                    });
                 }
             }
             await _context.SaveChangesAsync();

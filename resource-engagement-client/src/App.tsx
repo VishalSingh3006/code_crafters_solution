@@ -8,8 +8,12 @@ import AppRoutes from "./routes/AppRoutes";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./store/store";
 import Header from "./components/Header";
+import { setStoreReference } from "./services/baseService";
 
 // Routes moved to src/routes/AppRoutes.tsx
+
+// Wire Redux store for API token access
+setStoreReference(store);
 
 const App: React.FC = () => {
   return (

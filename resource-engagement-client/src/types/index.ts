@@ -12,6 +12,7 @@ export interface User {
 
 // Export resource tracking types
 export * from "./resourceTracking";
+export * from "./billingRates";
 // Export portfolio companies types  
 export * from "./portfolioCompanies";
 

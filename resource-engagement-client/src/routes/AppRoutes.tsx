@@ -28,6 +28,7 @@ import DepartmentsPage from "../pages/Departments";
 import CreateDepartmentPage from "../pages/Departments/Create";
 import DesignationsPage from "../pages/Designations";
 import BillingPage from "../components/ResourceTracking/BillingPage";
+import BillingRates from "../pages/BillingRates";
 import SkillsManagement from "../components/SkillsManagement";
 import PortfolioCompanyManagement from "../components/PortfolioCompanyManagement";
 
@@ -127,6 +128,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <BillingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/billing/rates"
+        element={
+          <ProtectedRoute>
+            <BillingRates />
           </ProtectedRoute>
         }
       />

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResourceEngagementTrackingSystem.Infrastructure;
 
@@ -10,9 +11,11 @@ using ResourceEngagementTrackingSystem.Infrastructure;
 namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260131214224_CreateBillingRatesTable")]
+    partial class CreateBillingRatesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -500,9 +503,6 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("LastUsedDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<int>("ProficiencyLevel")
                         .HasColumnType("int");
 
@@ -511,9 +511,6 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.Property<int>("UpdatedBy")
                         .HasColumnType("int");
-
-                    b.Property<decimal?>("YearsOfExperience")
-                        .HasColumnType("decimal(3,1)");
 
                     b.HasKey("EmployeeId", "SkillId");
 

@@ -100,16 +100,16 @@ const DepartmentsPage: React.FC = () => {
                       <Stack direction="row" spacing={1}>
                         <Button
                           size="small"
+                          variant="contained"
                           onClick={() => startEdit(dept)}
-                          variant="outlined"
                         >
                           Edit
                         </Button>
                         <Button
                           size="small"
+                          variant="contained"
                           onClick={() => handleDelete(dept.id)}
                           color="error"
-                          variant="outlined"
                         >
                           Delete
                         </Button>

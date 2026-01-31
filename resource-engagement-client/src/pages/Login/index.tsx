@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { LoginRequest, TwoFactorVerifyRequest } from "../../types";
-import { apiService } from "../../services/api";
 import {
   Container,
   Paper,
@@ -14,9 +13,11 @@ import {
   Stack,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
+import { useTwoFactorVerification } from "../../hooks/twoFactorHooks";
 
 const Login: React.FC = () => {
-  const { login, refreshProfile } = useAuth();
+  const { login } = useAuth();
+  const { verify, loading: twoFactorLoading } = useTwoFactorVerification();
   const [formData, setFormData] = useState<LoginRequest>({
     email: "",
     password: "",
@@ -75,13 +76,7 @@ const Login: React.FC = () => {
         code: twoFactorData.code,
       };
 
-      const response = await apiService.verify2FA(verifyRequest);
-      // Properly handle the token and update AuthContext state
-      if (response.token) {
-        apiService.setAuthToken(response.token);
-        await refreshProfile(); // This will update the user state in AuthContext
-        // The AuthProvider will automatically redirect authenticated users
-      }
+      await verify(verifyRequest.email, verifyRequest.code);
     } catch (error: any) {
       // Stay on 2FA page and show error - don't reset twoFactorData
       setError(
@@ -122,8 +117,12 @@ const Login: React.FC = () => {
               />
               {error && <Alert severity="error">{error}</Alert>}
               <Box sx={{ display: "flex", gap: 2 }}>
-                <Button type="submit" variant="contained" disabled={loading}>
-                  {loading ? "Verifying..." : "Verify"}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={loading || twoFactorLoading}
+                >
+                  {loading || twoFactorLoading ? "Verifying..." : "Verify"}
                 </Button>
                 <Button
                   type="button"

@@ -4,7 +4,7 @@ import {
   type TwoFactorSetup as TwoFactorSetupData,
   EnableTwoFactorRequest,
 } from "../../types";
-import { apiService } from "../../services/api";
+import { apiService } from "../../services/baseService";
 
 const TwoFactorSetup: React.FC = () => {
   const { user, refreshProfile } = useAuth();

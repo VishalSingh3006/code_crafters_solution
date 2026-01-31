@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResourceEngagementTrackingSystem.Infrastructure;
 
@@ -10,9 +11,11 @@ using ResourceEngagementTrackingSystem.Infrastructure;
 namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260131201203_PortfolioCompanyEntity")]
+    partial class PortfolioCompanyEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -509,7 +512,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Engagement");
+                    b.ToTable("Engagements");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.EngagementPosition", b =>
@@ -550,7 +553,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasIndex("EngagementId");
 
-                    b.ToTable("EngagementPosition");
+                    b.ToTable("EngagementPositions");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.ExceptionLog", b =>
@@ -719,7 +722,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasIndex("EngagementPositionId");
 
-                    b.ToTable("ResourceAllocation");
+                    b.ToTable("ResourceAllocations");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking.BillingRecord", b =>

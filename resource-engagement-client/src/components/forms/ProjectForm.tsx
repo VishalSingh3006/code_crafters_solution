@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Stack, TextField, Box, Button, Alert } from "@mui/material";
+import { Stack, TextField, Box, Button, Alert, MenuItem } from "@mui/material";
 import type {
   CreateProjectRequest,
   UpdateProjectRequest,
   Project,
 } from "../../types";
 import { useProjectActions } from "../../hooks/projectsHooks";
+import { useClients } from "../../hooks/clientsHooks";
 
 interface ProjectFormProps {
   mode?: "create" | "edit";
@@ -21,6 +22,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   onCancel,
 }) => {
   const { create, update, pending, error } = useProjectActions();
+  const { items: clients, loading: clientsLoading, error: clientsError } = useClients();
   const [form, setForm] = useState<CreateProjectRequest | UpdateProjectRequest>(
     {
       name: project?.name ?? "",
@@ -80,19 +82,29 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
         multiline
         minRows={2}
       />
+      {clientsError && <Alert severity="error">{clientsError}</Alert>}
       <TextField
-        label="Client ID"
-        type="number"
+        select
+        label="Client Name"
         value={form.clientId}
         onChange={(e) =>
           setForm((f) => ({ ...f, clientId: Number(e.target.value) }))
         }
         fullWidth
         required
-        inputProps={{ min: 1 }}
         error={!form.clientId || form.clientId === 0}
-        helperText={!form.clientId || form.clientId === 0 ? "Please enter a valid client ID" : ""}
-      />
+        helperText={!form.clientId || form.clientId === 0 ? "Please select a client" : ""}
+        disabled={clientsLoading}
+      >
+        <MenuItem value={0} disabled>
+          {clientsLoading ? "Loading clients..." : "Select a client"}
+        </MenuItem>
+        {clients.map((c) => (
+          <MenuItem key={c.id} value={c.id}>
+            {c.name}
+          </MenuItem>
+        ))}
+      </TextField>
       <Box>
         <Button 
           variant="contained" 

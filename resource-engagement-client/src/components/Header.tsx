@@ -40,6 +40,7 @@ const Header: React.FC = () => {
 
         <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
           <Button
+            id="theme-toggle-btn"
             color="inherit"
             onClick={toggleTheme}
             aria-label="Toggle theme"
@@ -49,7 +50,7 @@ const Header: React.FC = () => {
 
           {isAuthenticated && (
             <Box sx={{ display: "flex", gap: 1 }}>
-              <Button color="inherit" onClick={handleLogout}>
+              <Button id="logout-btn" color="inherit" onClick={handleLogout}>
                 Logout
               </Button>
             </Box>

@@ -58,7 +58,7 @@ const ClientsPage: React.FC = () => {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Paper sx={{ p: 3 }}>
         <Typography variant="h5" gutterBottom>
-          Clients
+          Portfolio Companies
         </Typography>
         {error && <Alert severity="error">{error}</Alert>}
         {actionError && <Alert severity="error">{actionError}</Alert>}
@@ -66,10 +66,11 @@ const ClientsPage: React.FC = () => {
         {!editing ? (
           <Box sx={{ mb: 3, display: "flex", justifyContent: "flex-end" }}>
             <Button
+              id="create-client-btn"
               variant="contained"
               onClick={() => navigate("/clients/create")}
             >
-              Create Client
+              Create Portfolio Company
             </Button>
           </Box>
         ) : (
@@ -108,6 +109,7 @@ const ClientsPage: React.FC = () => {
             </Stack>
             <Box>
               <Button
+                id="update-client-btn"
                 variant="contained"
                 onClick={handleUpdate}
                 disabled={pending}
@@ -115,6 +117,7 @@ const ClientsPage: React.FC = () => {
                 Update
               </Button>
               <Button
+                id="cancel-edit-client-btn"
                 sx={{ ml: 2 }}
                 variant="outlined"
                 onClick={() => setEditing(null)}
@@ -158,6 +161,7 @@ const ClientsPage: React.FC = () => {
                         justifyContent="flex-end"
                       >
                         <Button
+                          id={`edit-client-${c.id}-btn`}
                           size="small"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -168,6 +172,7 @@ const ClientsPage: React.FC = () => {
                           Edit
                         </Button>
                         <Button
+                          id={`delete-client-${c.id}-btn`}
                           size="small"
                           color="error"
                           onClick={(e) => {

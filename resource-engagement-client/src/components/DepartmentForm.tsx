@@ -123,6 +123,7 @@ export const DepartmentForm: React.FC<DepartmentFormProps> = ({
 
       <Box>
         <Button
+          id="submit-department-form-btn"
           variant="contained"
           onClick={handleSubmit(onSubmit)}
           disabled={pending}
@@ -130,7 +131,7 @@ export const DepartmentForm: React.FC<DepartmentFormProps> = ({
           {pending ? "Saving..." : (mode === "edit" ? "Update" : "Create")}
         </Button>
         {onCancel && (
-          <Button sx={{ ml: 2 }} variant="outlined" onClick={onCancel}>
+          <Button id="cancel-department-form-btn" sx={{ ml: 2 }} variant="outlined" onClick={onCancel}>
             Cancel
           </Button>
         )}

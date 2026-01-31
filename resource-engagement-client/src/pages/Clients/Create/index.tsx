@@ -10,7 +10,7 @@ const CreateClientPage: React.FC = () => {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Paper sx={{ p: 3 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-          <Typography variant="h5">Create Client</Typography>
+          <Typography variant="h5">Create Portfolio Company</Typography>
           <Button variant="outlined" onClick={() => navigate("/clients")}>
             Back
           </Button>

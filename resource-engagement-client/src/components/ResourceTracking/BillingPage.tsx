@@ -19,6 +19,7 @@ export default function BillingPage() {
           Billing Management
         </Typography>
         <Button
+          id="nav-billing-rates-btn"
           variant="contained"
           startIcon={<SettingsIcon />}
           onClick={() => navigate("/billing/rates")}

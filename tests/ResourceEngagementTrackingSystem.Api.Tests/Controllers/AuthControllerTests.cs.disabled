@@ -1,0 +1,315 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using ResourceEngagementTrackingSystem.Application.DTOs;
+using ResourceEngagementTrackingSystem.Infrastructure.Models;
+using ResourceEngagementTrackingSystem.Infrastructure.Services;
+using Xunit;
+
+namespace ResourceEngagementTrackingSystem.Api.Tests.Controllers
+{
+    public class AuthControllerTests : IClassFixture<AuthControllerTestFixture>
+    {
+        private readonly Mock<UserManager<ApplicationUser>> _mockUserManager;
+        private readonly Mock<RoleManager<IdentityRole>> _mockRoleManager;
+        private readonly Mock<TokenService> _mockTokenService;
+        private readonly Mock<TwoFactorService> _mockTwoFactorService;
+        private readonly AuthController _controller;
+        private readonly AuthControllerTestFixture _fixture;
+
+        public AuthControllerTests(AuthControllerTestFixture fixture)
+        {
+            _fixture = fixture;
+            
+            // Create mocks for dependencies
+            _mockUserManager = MockUserManager();
+            _mockRoleManager = MockRoleManager();
+            _mockTokenService = new Mock<TokenService>();
+            _mockTwoFactorService = new Mock<TwoFactorService>();
+            
+            _controller = new AuthController(
+                _mockUserManager.Object,
+                _mockRoleManager.Object,
+                _mockTokenService.Object,
+                _mockTwoFactorService.Object
+            );
+        }
+
+        #region Register Tests
+
+        [Fact]
+        public async Task Register_WithValidDto_ReturnsOkResult()
+        {
+            // Arrange
+            var registerDto = _fixture.SampleRegisterDto;
+            var user = _fixture.SampleApplicationUser;
+            
+            _mockUserManager.Setup(x => x.FindByEmailAsync(registerDto.Email))
+                .ReturnsAsync((ApplicationUser?)null); // User doesn't exist
+                
+            _mockUserManager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), registerDto.Password))
+                .ReturnsAsync(IdentityResult.Success);
+                
+            _mockUserManager.Setup(x => x.AddToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            // Act
+            var result = await _controller.Register(registerDto);
+
+            // Assert
+            result.Should().BeOfType<OkObjectResult>();
+            var okResult = result as OkObjectResult;
+            
+            _mockUserManager.Verify(x => x.FindByEmailAsync(registerDto.Email), Times.Once);
+            _mockUserManager.Verify(x => x.CreateAsync(It.IsAny<ApplicationUser>(), registerDto.Password), Times.Once);
+            _mockUserManager.Verify(x => x.AddToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Register_WithExistingEmail_ReturnsBadRequest()
+        {
+            // Arrange
+            var registerDto = _fixture.SampleRegisterDto;
+            var existingUser = _fixture.SampleApplicationUser;
+            
+            _mockUserManager.Setup(x => x.FindByEmailAsync(registerDto.Email))
+                .ReturnsAsync(existingUser); // User already exists
+
+            // Act
+            var result = await _controller.Register(registerDto);
+
+            // Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+            var badRequestResult = result as BadRequestObjectResult;
+            badRequestResult!.Value.Should().NotBeNull();
+            
+            _mockUserManager.Verify(x => x.FindByEmailAsync(registerDto.Email), Times.Once);
+            _mockUserManager.Verify(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Register_CreateUserFails_ReturnsBadRequest()
+        {
+            // Arrange
+            var registerDto = _fixture.SampleRegisterDto;
+            var identityErrors = new List<IdentityError>
+            {
+                new IdentityError { Code = "PasswordTooShort", Description = "Password too short" }
+            };
+            
+            _mockUserManager.Setup(x => x.FindByEmailAsync(registerDto.Email))
+                .ReturnsAsync((ApplicationUser?)null);
+                
+            _mockUserManager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), registerDto.Password))
+                .ReturnsAsync(IdentityResult.Failed(identityErrors.ToArray()));
+
+            // Act
+            var result = await _controller.Register(registerDto);
+
+            // Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+            var badRequestResult = result as BadRequestObjectResult;
+            badRequestResult!.Value.Should().NotBeNull();
+            
+            _mockUserManager.Verify(x => x.CreateAsync(It.IsAny<ApplicationUser>(), registerDto.Password), Times.Once);
+            _mockUserManager.Verify(x => x.AddToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()), Times.Never);
+        }
+
+        #endregion
+
+        #region Login Tests
+
+        [Fact]
+        public async Task Login_WithValidCredentialsAndNo2FA_ReturnsOkResult()
+        {
+            // Arrange
+            var loginDto = _fixture.SampleLoginDto;
+            var user = _fixture.SampleApplicationUser;
+            var token = "sample-jwt-token";
+            var expiresAt = DateTime.UtcNow.AddHours(1);
+            var userRoles = new List<string> { "User" };
+            
+            _mockUserManager.Setup(x => x.FindByEmailAsync(loginDto.Email))
+                .ReturnsAsync(user);
+                
+            _mockUserManager.Setup(x => x.CheckPasswordAsync(user, loginDto.Password))
+                .ReturnsAsync(true);
+                
+            _mockUserManager.Setup(x => x.IsLockedOutAsync(user))
+                .ReturnsAsync(false);
+                
+            _mockUserManager.Setup(x => x.GetTwoFactorEnabledAsync(user))
+                .ReturnsAsync(false);
+                
+            _mockUserManager.Setup(x => x.GetRolesAsync(user))
+                .ReturnsAsync(userRoles);
+                
+            _mockTokenService.Setup(x => x.GenerateTokenAsync(user))
+                .ReturnsAsync(token);
+                
+            _mockTokenService.Setup(x => x.GetTokenExpiration())
+                .Returns(expiresAt);
+
+            // Act
+            var result = await _controller.Login(loginDto);
+
+            // Assert
+            result.Should().BeOfType<OkObjectResult>();
+            var okResult = result as OkObjectResult;
+            okResult!.Value.Should().NotBeNull();
+            
+            _mockUserManager.Verify(x => x.FindByEmailAsync(loginDto.Email), Times.Once);
+            _mockUserManager.Verify(x => x.CheckPasswordAsync(user, loginDto.Password), Times.Once);
+            _mockTokenService.Verify(x => x.GenerateTokenAsync(user), Times.Once);
+        }
+
+        [Fact]
+        public async Task Login_WithInvalidEmail_ReturnsUnauthorized()
+        {
+            // Arrange
+            var loginDto = _fixture.SampleLoginDto;
+            
+            _mockUserManager.Setup(x => x.FindByEmailAsync(loginDto.Email))
+                .ReturnsAsync((ApplicationUser?)null);
+
+            // Act
+            var result = await _controller.Login(loginDto);
+
+            // Assert
+            result.Should().BeOfType<UnauthorizedObjectResult>();
+            var unauthorizedResult = result as UnauthorizedObjectResult;
+            unauthorizedResult!.Value.Should().NotBeNull();
+            
+            _mockUserManager.Verify(x => x.FindByEmailAsync(loginDto.Email), Times.Once);
+            _mockUserManager.Verify(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Login_WithInvalidPassword_ReturnsUnauthorized()
+        {
+            // Arrange
+            var loginDto = _fixture.SampleLoginDto;
+            var user = _fixture.SampleApplicationUser;
+            
+            _mockUserManager.Setup(x => x.FindByEmailAsync(loginDto.Email))
+                .ReturnsAsync(user);
+                
+            _mockUserManager.Setup(x => x.CheckPasswordAsync(user, loginDto.Password))
+                .ReturnsAsync(false);
+
+            // Act
+            var result = await _controller.Login(loginDto);
+
+            // Assert
+            result.Should().BeOfType<UnauthorizedObjectResult>();
+            var unauthorizedResult = result as UnauthorizedObjectResult;
+            unauthorizedResult!.Value.Should().NotBeNull();
+            
+            _mockUserManager.Verify(x => x.CheckPasswordAsync(user, loginDto.Password), Times.Once);
+            _mockTokenService.Verify(x => x.GenerateTokenAsync(It.IsAny<ApplicationUser>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Login_WithLockedOutUser_ReturnsBadRequest()
+        {
+            // Arrange
+            var loginDto = _fixture.SampleLoginDto;
+            var user = _fixture.SampleApplicationUser;
+            
+            _mockUserManager.Setup(x => x.FindByEmailAsync(loginDto.Email))
+                .ReturnsAsync(user);
+                
+            _mockUserManager.Setup(x => x.CheckPasswordAsync(user, loginDto.Password))
+                .ReturnsAsync(true);
+                
+            _mockUserManager.Setup(x => x.IsLockedOutAsync(user))
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _controller.Login(loginDto);
+
+            // Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+            var badRequestResult = result as BadRequestObjectResult;
+            badRequestResult!.Value.Should().NotBeNull();
+            
+            _mockTokenService.Verify(x => x.GenerateTokenAsync(It.IsAny<ApplicationUser>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Login_With2FAEnabled_ReturnsOkWith2FARequired()
+        {
+            // Arrange
+            var loginDto = _fixture.SampleLoginDto;
+            var user = _fixture.SampleApplicationUser;
+            
+            _mockUserManager.Setup(x => x.FindByEmailAsync(loginDto.Email))
+                .ReturnsAsync(user);
+                
+            _mockUserManager.Setup(x => x.CheckPasswordAsync(user, loginDto.Password))
+                .ReturnsAsync(true);
+                
+            _mockUserManager.Setup(x => x.IsLockedOutAsync(user))
+                .ReturnsAsync(false);
+                
+            _mockUserManager.Setup(x => x.GetTwoFactorEnabledAsync(user))
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _controller.Login(loginDto);
+
+            // Assert
+            result.Should().BeOfType<OkObjectResult>();
+            var okResult = result as OkObjectResult;
+            okResult!.Value.Should().NotBeNull();
+            
+            // Should not generate token when 2FA is required
+            _mockTokenService.Verify(x => x.GenerateTokenAsync(It.IsAny<ApplicationUser>()), Times.Never);
+        }
+
+        #endregion
+
+        #region Constructor Tests
+
+        [Fact]
+        public void Constructor_WithValidDependencies_CreatesInstance()
+        {
+            // Arrange & Act
+            var controller = new AuthController(
+                _mockUserManager.Object,
+                _mockRoleManager.Object,
+                _mockTokenService.Object,
+                _mockTwoFactorService.Object
+            );
+
+            // Assert
+            controller.Should().NotBeNull();
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        private static Mock<UserManager<ApplicationUser>> MockUserManager()
+        {
+            var store = new Mock<IUserStore<ApplicationUser>>();
+            var mgr = new Mock<UserManager<ApplicationUser>>(store.Object, null, null, null, null, null, null, null, null);
+            mgr.Object.UserValidators.Add(new UserValidator<ApplicationUser>());
+            mgr.Object.PasswordValidators.Add(new PasswordValidator<ApplicationUser>());
+            return mgr;
+        }
+
+        private static Mock<RoleManager<IdentityRole>> MockRoleManager()
+        {
+            var store = new Mock<IRoleStore<IdentityRole>>();
+            var mgr = new Mock<RoleManager<IdentityRole>>(store.Object, null, null, null, null);
+            return mgr;
+        }
+
+        #endregion
+    }
+}

@@ -4,7 +4,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuthLogout, useAuthState } from "../hooks/authHooks";
 import { ThemeModeContext } from "../context/ThemeContext";
 
@@ -46,15 +46,6 @@ const Header: React.FC = () => {
 
           {isAuthenticated && (
             <Box sx={{ display: "flex", gap: 1 }}>
-              <Button color="inherit" component={RouterLink} to="/dashboard">
-                Dashboard
-              </Button>
-              <Button color="inherit" component={RouterLink} to="/resource-tracking">
-                Resource Tracking
-              </Button>
-              <Button color="inherit" component={RouterLink} to="/profile">
-                Profile
-              </Button>
               <Button color="inherit" onClick={handleLogout}>
                 Logout
               </Button>

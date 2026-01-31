@@ -22,9 +22,6 @@ const Dashboard: React.FC = () => {
       <Typography variant="h4" gutterBottom>
         Welcome, {user.firstName} {user.lastName}!
       </Typography>
-      <Button variant="outlined" onClick={handleLogout} sx={{ mb: 2 }}>
-        Logout
-      </Button>
       <Paper sx={{ p: 3 }}>
         <Typography variant="h6" gutterBottom>
           Your Profile

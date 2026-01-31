@@ -11,7 +11,7 @@ export interface User {
 }
 
 // Export resource tracking types
-export * from './resourceTracking';
+export * from "./resourceTracking";
 
 export interface RegisterRequest {
   email: string;
@@ -73,3 +73,4 @@ export interface ApiError {
 export * from "./roles";
 export * from "./clients";
 export * from "./employees";
+export * from "./projects";

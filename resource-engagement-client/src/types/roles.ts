@@ -1,4 +1,19 @@
-export type Role = "Admin" | "Manager" | "Employee" | "User";
+export enum UserRole {
+  Admin = "Admin",
+  Manager = "Manager",
+  Employee = "Employee",
+  User = "User",
+}
+
+export type Role =
+  | keyof typeof UserRole
+  | UserRole
+  | "Admin"
+  | "Manager"
+  | "Employee"
+  | "User";
+
+export const DEFAULT_ROLES: Role[] = Object.values(UserRole) as Role[];
 
 export interface AssignRoleRequest {
   email: string;

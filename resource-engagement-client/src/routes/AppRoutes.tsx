@@ -8,6 +8,7 @@ import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import TwoFactorSetup from "../pages/TwoFactorSetup";
 import RolesPage from "../pages/Roles";
+import ClientsPage from "../pages/Clients";
 
 const AppRoutes: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -55,6 +56,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <RolesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/clients"
+        element={
+          <ProtectedRoute>
+            <ClientsPage />
           </ProtectedRoute>
         }
       />

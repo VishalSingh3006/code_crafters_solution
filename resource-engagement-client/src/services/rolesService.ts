@@ -9,35 +9,35 @@ import type {
 
 class RolesService {
   async getAvailableRoles(): Promise<Role[]> {
-    return await baseServices.get("/api/roles/available");
+    return await baseServices.get("roles/available");
   }
 
   async assignRole(payload: AssignRoleRequest): Promise<{ message: string }> {
     return await baseServices.post<{ message: string }>(
-      "/api/roles/assign",
+      "roles/assign",
       payload,
     );
   }
 
   async removeRole(payload: RemoveRoleRequest): Promise<{ message: string }> {
     return await baseServices.post<{ message: string }>(
-      "/api/roles/remove",
+      "roles/remove",
       payload,
     );
   }
 
   async getUserRoles(email: string): Promise<UserRolesResponseDto> {
     return await baseServices.get(
-      `/api/roles/user/${encodeURIComponent(email)}`,
+      `roles/user/${encodeURIComponent(email)}`,
     );
   }
 
   async getAllUsersWithRoles(): Promise<UserRolesResponseDto[]> {
-    return await baseServices.get("/api/roles/users");
+    return await baseServices.get("roles/users");
   }
 
   async getMyRoles(): Promise<MyRolesResponse> {
-    return await baseServices.get("/api/roles/my-roles");
+    return await baseServices.get("roles/my-roles");
   }
 }
 

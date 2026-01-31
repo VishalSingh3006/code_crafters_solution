@@ -3,24 +3,24 @@ import type { User, UpdateProfileRequest, TwoFactorSetup } from "../types";
 
 class ProfileService {
   async getProfile(): Promise<User> {
-    return await baseServices.get("/profile");
+    return await baseServices.get("/auth/profile");
   }
 
   async updateProfile(
     data: UpdateProfileRequest,
   ): Promise<{ message?: string; profile?: User }> {
     return await baseServices.put<{ message?: string; profile?: User }>(
-      "/profile",
+      "/auth/profile",
       data,
     );
   }
 
   async getTwoFactorSetup(): Promise<TwoFactorSetup> {
-    return await baseServices.get("/2fa/setup");
+    return await baseServices.get("/auth/2fa/setup");
   }
 
   async getTwoFactorStatus(): Promise<{ twoFactorEnabled: boolean }> {
-    return await baseServices.get("/2fa/status");
+    return await baseServices.get("/auth/2fa/status");
   }
 
   async enableTwoFactor(
@@ -29,7 +29,7 @@ class ProfileService {
     return await baseServices.post<{
       message?: string;
       twoFactorEnabled: boolean;
-    }>("/2fa/enable", { enable: true, code });
+    }>("/auth/2fa/enable", { enable: true, code });
   }
 
   async disableTwoFactor(
@@ -38,7 +38,7 @@ class ProfileService {
     return await baseServices.post<{
       message?: string;
       twoFactorEnabled: boolean;
-    }>("/2fa/enable", { enable: false, code });
+    }>("/auth/2fa/enable", { enable: false, code });
   }
 }
 

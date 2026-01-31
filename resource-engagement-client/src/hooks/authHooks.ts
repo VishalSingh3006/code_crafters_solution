@@ -27,7 +27,7 @@ export function useAuthLogin() {
         if (resp.token) {
           dispatch(setCredentials({ user: null, token: resp.token }));
           try {
-            const profile = await baseServices.get("/profile");
+            const profile = await baseServices.get("auth/profile");
             dispatch(setUser(profile));
           } catch (e) {
             // Profile fetch failure shouldn't block login; surface minimal error
@@ -67,7 +67,7 @@ export function useAuthSignup() {
         if (resp.token) {
           dispatch(setCredentials({ user: null, token: resp.token }));
           try {
-            const profile = await baseServices.get("/profile");
+            const profile = await baseServices.get("auth/profile");
             dispatch(setUser(profile));
           } catch (e) {
             console.warn("Failed to fetch profile after signup", e);
@@ -97,7 +97,7 @@ export function useAuthLogout() {
     setLoading(true);
     setError(null);
     try {
-      await baseServices.post("/logout");
+      await baseServices.post("auth/logout");
       dispatch(clearCredentials());
     } catch (e: any) {
       const msg = e?.message ?? "Logout failed";

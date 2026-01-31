@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuthLogin } from "../../hooks/authHooks";
 import { LoginRequest, TwoFactorVerifyRequest } from "../../types";
 import {
   Container,
@@ -29,7 +29,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { useTwoFactorVerification } from "../../hooks/twoFactorHooks";
 
 const Login: React.FC = () => {
-  const { login } = useAuth();
+  const { login } = useAuthLogin();
   const { verify, loading: twoFactorLoading } = useTwoFactorVerification();
   const theme = useTheme();
   const [formData, setFormData] = useState<LoginRequest>({
@@ -63,7 +63,7 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await login(formData);
+      const response = await login(formData.email, formData.password);
 
       if (response.requiresTwoFactor) {
         setTwoFactorData({
@@ -72,7 +72,7 @@ const Login: React.FC = () => {
           code: "",
         });
       }
-      // If no two-factor required, AuthContext handles navigation
+      // If no two-factor required, Redux auth state triggers navigation via ProtectedRoute
     } catch (error: any) {
       setError(error.message || "Login failed");
     } finally {
@@ -155,59 +155,71 @@ const Login: React.FC = () => {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: theme.palette.mode === 'dark' 
-          ? `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.2)} 0%, ${alpha(theme.palette.secondary.main, 0.2)} 100%)`
-          : `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.secondary.main, 0.1)} 100%)`,
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background:
+          theme.palette.mode === "dark"
+            ? `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.2)} 0%, ${alpha(theme.palette.secondary.main, 0.2)} 100%)`
+            : `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.secondary.main, 0.1)} 100%)`,
         py: { xs: 2, sm: 4 },
       }}
     >
       <Container maxWidth="sm">
-        <Paper 
-          elevation={12} 
-          sx={{ 
-            p: { xs: 3, sm: 4, md: 5 }, 
+        <Paper
+          elevation={12}
+          sx={{
+            p: { xs: 3, sm: 4, md: 5 },
             borderRadius: { xs: 2, sm: 3 },
-            background: theme.palette.mode === 'dark' 
-              ? alpha(theme.palette.background.paper, 0.95)
-              : 'rgba(255, 255, 255, 0.95)',
-            backdropFilter: 'blur(10px)',
-            boxShadow: theme.palette.mode === 'dark'
-              ? '0 8px 32px rgba(0, 0, 0, 0.3)'
-              : '0 8px 32px rgba(0, 0, 0, 0.1)',
+            background:
+              theme.palette.mode === "dark"
+                ? alpha(theme.palette.background.paper, 0.95)
+                : "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(10px)",
+            boxShadow:
+              theme.palette.mode === "dark"
+                ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+                : "0 8px 32px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
-            <Avatar sx={{ 
-              m: 1, 
-              bgcolor: 'primary.main',
-              width: { xs: 48, sm: 56 },
-              height: { xs: 48, sm: 56 },
-            }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              mb: 3,
+            }}
+          >
+            <Avatar
+              sx={{
+                m: 1,
+                bgcolor: "primary.main",
+                width: { xs: 48, sm: 56 },
+                height: { xs: 48, sm: 56 },
+              }}
+            >
               <LockIcon sx={{ fontSize: { xs: 24, sm: 28 } }} />
             </Avatar>
-            <Typography 
-              variant="h4" 
-              component="h1" 
-              sx={{ 
+            <Typography
+              variant="h4"
+              component="h1"
+              sx={{
                 fontWeight: 700,
                 background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontSize: { xs: '1.75rem', sm: '2.125rem' },
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                fontSize: { xs: "1.75rem", sm: "2.125rem" },
               }}
             >
               Welcome Back
             </Typography>
-            <Typography 
-              variant="body1" 
-              color="text.secondary" 
+            <Typography
+              variant="body1"
+              color="text.secondary"
               textAlign="center"
-              sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+              sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}
             >
               Sign in to your account to continue
             </Typography>
@@ -234,23 +246,24 @@ const Login: React.FC = () => {
                   ),
                 }}
                 sx={{
-                  '& .MuiOutlinedInput-root': {
+                  "& .MuiOutlinedInput-root": {
                     borderRadius: 2,
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      boxShadow: theme.palette.mode === 'dark'
-                        ? '0 4px 20px rgba(255, 255, 255, 0.1)'
-                        : '0 4px 20px rgba(0, 0, 0, 0.1)',
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      boxShadow:
+                        theme.palette.mode === "dark"
+                          ? "0 4px 20px rgba(255, 255, 255, 0.1)"
+                          : "0 4px 20px rgba(0, 0, 0, 0.1)",
                     },
-                    '&.Mui-focused': {
+                    "&.Mui-focused": {
                       boxShadow: `0 4px 20px ${alpha(theme.palette.primary.main, 0.2)}`,
                     },
                   },
                 }}
               />
-              
+
               <TextField
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 label="Password"
                 name="password"
                 value={formData.password}
@@ -278,35 +291,36 @@ const Login: React.FC = () => {
                   ),
                 }}
                 sx={{
-                  '& .MuiOutlinedInput-root': {
+                  "& .MuiOutlinedInput-root": {
                     borderRadius: 2,
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      boxShadow: theme.palette.mode === 'dark'
-                        ? '0 4px 20px rgba(255, 255, 255, 0.1)'
-                        : '0 4px 20px rgba(0, 0, 0, 0.1)',
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      boxShadow:
+                        theme.palette.mode === "dark"
+                          ? "0 4px 20px rgba(255, 255, 255, 0.1)"
+                          : "0 4px 20px rgba(0, 0, 0, 0.1)",
                     },
-                    '&.Mui-focused': {
+                    "&.Mui-focused": {
                       boxShadow: `0 4px 20px ${alpha(theme.palette.primary.main, 0.2)}`,
                     },
                   },
                 }}
               />
-              
+
               {error && (
-                <Alert 
+                <Alert
                   severity="error"
-                  sx={{ 
+                  sx={{
                     borderRadius: 2,
-                    '& .MuiAlert-message': {
-                      fontSize: { xs: '0.85rem', sm: '0.9rem' },
+                    "& .MuiAlert-message": {
+                      fontSize: { xs: "0.85rem", sm: "0.9rem" },
                     },
                   }}
                 >
                   {error}
                 </Alert>
               )}
-              
+
               <Button
                 type="submit"
                 variant="contained"
@@ -315,20 +329,20 @@ const Login: React.FC = () => {
                 sx={{
                   py: 1.5,
                   borderRadius: 2,
-                  textTransform: 'none',
-                  fontSize: '1.1rem',
+                  textTransform: "none",
+                  fontSize: "1.1rem",
                   fontWeight: 600,
                   background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
                   boxShadow: `0 4px 15px ${alpha(theme.palette.primary.main, 0.3)}`,
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
+                  transition: "all 0.3s ease",
+                  "&:hover": {
                     background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
                     boxShadow: `0 6px 20px ${alpha(theme.palette.primary.main, 0.4)}`,
-                    transform: 'translateY(-2px)',
+                    transform: "translateY(-2px)",
                   },
-                  '&:disabled': {
+                  "&:disabled": {
                     background: theme.palette.action.disabledBackground,
-                    boxShadow: 'none',
+                    boxShadow: "none",
                   },
                 }}
               >
@@ -336,27 +350,27 @@ const Login: React.FC = () => {
               </Button>
             </Stack>
           </Box>
-          
+
           <Divider sx={{ my: 3 }}>
             <Typography variant="body2" color="text.secondary">
               or
             </Typography>
           </Divider>
-          
-          <Box sx={{ textAlign: 'center' }}>
+
+          <Box sx={{ textAlign: "center" }}>
             <Typography variant="body2" color="text.secondary">
               Don't have an account?{" "}
-              <MUILink 
-                component={RouterLink} 
+              <MUILink
+                component={RouterLink}
                 to="/register"
                 sx={{
                   fontWeight: 600,
-                  textDecoration: 'none',
+                  textDecoration: "none",
                   color: theme.palette.primary.main,
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
+                  transition: "all 0.3s ease",
+                  "&:hover": {
                     color: theme.palette.primary.dark,
-                    textDecoration: 'underline',
+                    textDecoration: "underline",
                   },
                 }}
               >

@@ -1,15 +1,8 @@
 import React from "react";
-import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useAuthState } from "../hooks/authHooks";
 
 const Dashboard: React.FC = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login", { replace: true });
-  };
+  const { user } = useAuthState();
 
   if (!user) {
     return <div>Loading...</div>;
@@ -21,9 +14,6 @@ const Dashboard: React.FC = () => {
         <h1>
           Welcome, {user.firstName} {user.lastName}!
         </h1>
-        <button onClick={handleLogout} className="logout-btn">
-          Logout
-        </button>
       </div>
 
       <div className="dashboard-content">

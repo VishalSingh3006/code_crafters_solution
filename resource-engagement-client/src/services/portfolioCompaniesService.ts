@@ -1,29 +1,9 @@
 import { baseServices } from "./baseService";
-
-export interface PortfolioCompany {
-  id: number;
-  name: string;
-  currencyCode: string;
-  status: string;
-  startDate: string;
-  endDate?: string;
-}
-
-export interface CreatePortfolioCompanyRequest {
-  name: string;
-  currencyCode: string;
-  status: string;
-  startDate: string;
-  endDate?: string;
-}
-
-export interface UpdatePortfolioCompanyRequest {
-  name: string;
-  currencyCode: string;
-  status: string;
-  startDate: string;
-  endDate?: string;
-}
+import type { 
+  PortfolioCompany, 
+  CreatePortfolioCompanyRequest, 
+  UpdatePortfolioCompanyRequest 
+} from "../types/portfolioCompanies";
 
 class PortfolioCompaniesService {
   async getAll(): Promise<PortfolioCompany[]> {

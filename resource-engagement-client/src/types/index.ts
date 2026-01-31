@@ -12,6 +12,8 @@ export interface User {
 
 // Export resource tracking types
 export * from "./resourceTracking";
+// Export portfolio companies types  
+export * from "./portfolioCompanies";
 
 export interface RegisterRequest {
   email: string;

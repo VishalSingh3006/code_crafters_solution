@@ -32,16 +32,22 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
 } from "@mui/icons-material";
-import { 
-  portfolioCompanyService, 
-  type PortfolioCompany, 
-  type CreatePortfolioCompanyRequest, 
-  type UpdatePortfolioCompanyRequest 
-} from "../services/portfolioCompanyService";
+import { usePortfolioCompanies, usePortfolioCompanyActions } from "../hooks/portfolioCompaniesHooks";
+import type { 
+  PortfolioCompany, 
+  CreatePortfolioCompanyRequest, 
+  UpdatePortfolioCompanyRequest 
+} from "../types/portfolioCompanies";
 
 const PortfolioCompanyManagement: React.FC = () => {
-  const [companies, setCompanies] = useState<PortfolioCompany[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { companies, loading, error: loadError, loadCompanies } = usePortfolioCompanies();
+  const { create, update, remove, pending, error: actionError } = usePortfolioCompanyActions(() => {
+    loadCompanies();
+    setDialogOpen(false);
+    setDeleteDialogOpen(false);
+    setSnackbar({ open: true, message: "Operation completed successfully!", severity: "success" });
+  });
+  
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editingCompany, setEditingCompany] = useState<PortfolioCompany | null>(null);
@@ -69,20 +75,7 @@ const PortfolioCompanyManagement: React.FC = () => {
   // Load companies on component mount
   useEffect(() => {
     loadCompanies();
-  }, []);
-
-  const loadCompanies = async () => {
-    try {
-      setLoading(true);
-      const data = await portfolioCompanyService.getAll();
-      setCompanies(data);
-    } catch (error) {
-      showSnackbar("Failed to load portfolio companies", "error");
-      console.error("Error loading portfolio companies:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [loadCompanies]);
 
   const showSnackbar = (message: string, severity: typeof snackbar.severity) => {
     setSnackbar({ open: true, message, severity });
@@ -143,20 +136,14 @@ const PortfolioCompanyManagement: React.FC = () => {
       };
 
       if (editingCompany) {
-        await portfolioCompanyService.update(editingCompany.id, payload as UpdatePortfolioCompanyRequest);
-        showSnackbar("Portfolio company updated successfully", "success");
+        await update(editingCompany.id, payload as UpdatePortfolioCompanyRequest);
       } else {
-        await portfolioCompanyService.create(payload as CreatePortfolioCompanyRequest);
-        showSnackbar("Portfolio company created successfully", "success");
+        await create(payload as CreatePortfolioCompanyRequest);
       }
 
       handleCloseDialog();
-      loadCompanies();
     } catch (error) {
-      showSnackbar(
-        `Failed to ${editingCompany ? "update" : "create"} portfolio company`,
-        "error"
-      );
+      // Error handling is done in the hook
       console.error("Error saving portfolio company:", error);
     }
   };
@@ -175,12 +162,10 @@ const PortfolioCompanyManagement: React.FC = () => {
     if (deletingCompanyId === null) return;
 
     try {
-      await portfolioCompanyService.delete(deletingCompanyId);
-      showSnackbar("Portfolio company deleted successfully", "success");
+      await remove(deletingCompanyId);
       handleCloseDeleteDialog();
-      loadCompanies();
     } catch (error) {
-      showSnackbar("Failed to delete portfolio company", "error");
+      // Error handling is done in the hook
       console.error("Error deleting portfolio company:", error);
     }
   };
@@ -209,6 +194,19 @@ const PortfolioCompanyManagement: React.FC = () => {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
         <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (loadError || actionError) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {loadError || actionError}
+        </Alert>
+        <Button variant="contained" onClick={loadCompanies}>
+          Retry
+        </Button>
       </Box>
     );
   }
@@ -360,9 +358,9 @@ const PortfolioCompanyManagement: React.FC = () => {
           <Button 
             onClick={handleSubmit} 
             variant="contained"
-            disabled={!formData.name.trim() || !formData.currencyCode || !formData.status || !formData.startDate}
+            disabled={pending || !formData.name.trim() || !formData.currencyCode || !formData.status || !formData.startDate}
           >
-            {editingCompany ? "Update" : "Create"}
+            {pending ? "Processing..." : (editingCompany ? "Update" : "Create")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -377,8 +375,8 @@ const PortfolioCompanyManagement: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
-          <Button onClick={handleDelete} color="error" variant="contained">
-            Delete
+          <Button onClick={handleDelete} color="error" variant="contained" disabled={pending}>
+            {pending ? "Deleting..." : "Delete"}
           </Button>
         </DialogActions>
       </Dialog>

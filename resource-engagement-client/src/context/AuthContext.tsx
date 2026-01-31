@@ -1,6 +1,13 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { User, LoginRequest, RegisterRequest } from '../types';
-import { apiService } from '../services/api';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  ReactNode,
+} from "react";
+import { User, LoginRequest, RegisterRequest } from "../types";
+import { apiService } from "../services/baseService";
 
 interface AuthContextType {
   user: User | null;
@@ -18,7 +25,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -36,7 +43,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       const token = apiService.getAuthToken();
-      const savedUser = localStorage.getItem('user');
+      const savedUser = localStorage.getItem("user");
 
       if (token && savedUser) {
         try {
@@ -45,7 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           // Optionally refresh profile data
           await refreshProfile();
         } catch (error) {
-          console.error('Failed to parse saved user:', error);
+          console.error("Failed to parse saved user:", error);
           apiService.removeAuthToken();
         }
       }
@@ -53,13 +60,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     initAuth();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount
 
   const login = async (data: LoginRequest) => {
     try {
       const response = await apiService.login(data);
-      
+
       if (response.requiresTwoFactor) {
         return response; // Return 2FA required response
       }
@@ -71,7 +78,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       return response;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Login failed');
+      throw new Error(error.response?.data?.message || "Login failed");
     }
   };
 
@@ -80,7 +87,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await apiService.register(data);
       return response;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Registration failed');
+      throw new Error(error.response?.data?.message || "Registration failed");
     }
   };
 
@@ -91,16 +98,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const updateUser = (updatedUser: User) => {
     setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    localStorage.setItem("user", JSON.stringify(updatedUser));
   };
 
   const refreshProfile = useCallback(async () => {
     try {
       const profile = await apiService.getProfile();
       setUser(profile);
-      localStorage.setItem('user', JSON.stringify(profile));
+      localStorage.setItem("user", JSON.stringify(profile));
     } catch (error) {
-      console.error('Failed to refresh profile:', error);
+      console.error("Failed to refresh profile:", error);
     }
   }, []); // Empty dependency array since it doesn't depend on any variables
 

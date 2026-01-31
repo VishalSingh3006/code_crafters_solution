@@ -31,7 +31,7 @@ const Header: React.FC = () => {
             onClick={toggleTheme}
             aria-label="Toggle theme"
           >
-            {mode === "dark" ? "☀️ Light" : "🌙 Dark"}
+            {mode === "dark" ? "☀️" : "🌙"}
           </Button>
 
           {isAuthenticated && (

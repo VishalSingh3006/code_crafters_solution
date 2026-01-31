@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { UpdateProfileRequest } from "../../types";
-import { apiService } from "../../services/api";
+import { profileService } from "../../services/profileService";
+import { twoFactorService } from "../../services/twoFactorService";
 
 const Profile: React.FC = () => {
   const { user, updateUser, refreshProfile } = useAuth();
@@ -56,8 +57,10 @@ const Profile: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await apiService.updateProfile(formData);
-      updateUser(response.profile);
+      const response = await profileService.updateProfile(formData);
+      if (response.profile) {
+        updateUser(response.profile);
+      }
       setSuccess("Profile updated successfully!");
     } catch (error: any) {
       setError(error.response?.data?.message || "Failed to update profile");
@@ -78,7 +81,7 @@ const Profile: React.FC = () => {
     setTwoFactorLoading(true);
 
     try {
-      await apiService.disable2FA({ code: twoFactorCode });
+      await twoFactorService.disable(twoFactorCode);
       // Update user in context to reflect 2FA disabled
       if (user) {
         updateUser({ ...user, twoFactorEnabled: false });

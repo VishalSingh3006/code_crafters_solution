@@ -7,6 +7,8 @@ import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import TwoFactorSetup from "../pages/TwoFactorSetup";
+import RolesPage from "../pages/Roles";
+import ClientsPage from "../pages/Clients";
 import ResourceTrackingDashboard from "../pages/ResourceTracking";
 import DeliveryPage from "../pages/ResourceTracking/DeliveryPage";
 import StaffingPage from "../pages/ResourceTracking/StaffingPage";

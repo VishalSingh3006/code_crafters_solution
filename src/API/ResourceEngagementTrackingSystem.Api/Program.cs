@@ -1,4 +1,9 @@
 using System;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using ResourceEngagementTrackingSystem.Api.Middleware;
+using ResourceEngagementTrackingSystem.Infrastructure.Logging;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System.Collections.Generic;
 using ResourceEngagementTrackingSystem.Infrastructure;
 using ResourceEngagementTrackingSystem.Infrastructure.Services;
@@ -9,9 +14,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
+
+// Logging options from config (manual binding)
+var exceptionLoggingOptions = new ExceptionLoggingOptions();
+builder.Configuration.GetSection("CentralizedLogging:ExceptionLogging").Bind(exceptionLoggingOptions);
+builder.Services.AddSingleton(exceptionLoggingOptions);
+builder.Services.AddScoped(typeof(ResourceEngagementTrackingSystem.Infrastructure.Logging.IExceptionLogService), typeof(ResourceEngagementTrackingSystem.Infrastructure.Logging.ExceptionLogService));
+builder.Services.AddSingleton(typeof(Microsoft.AspNetCore.Http.IHttpContextAccessor), typeof(Microsoft.AspNetCore.Http.HttpContextAccessor));
+builder.Services.AddScoped(typeof(ResourceEngagementTrackingSystem.Infrastructure.Logging.AuditLogInterceptor));
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -65,6 +78,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddInfrastructure(builder.Configuration);
+// Add AuditLogInterceptor to DbContext
+builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) => {
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    options.AddInterceptors(serviceProvider.GetRequiredService<AuditLogInterceptor>());
+});
 
 var app = builder.Build();
 
@@ -93,6 +112,9 @@ using (var scope = app.Services.CreateScope())
 
 // Use CORS
 app.UseCors("AllowAll");
+
+// Exception logging middleware
+app.UseMiddleware<ResourceEngagementTrackingSystem.Api.Middleware.ExceptionLoggingMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>

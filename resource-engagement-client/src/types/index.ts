@@ -68,3 +68,7 @@ export interface ApiError {
   message: string;
   errors?: string[];
 }
+
+// Re-export role-related types
+export * from "./roles";
+export * from "./clients";

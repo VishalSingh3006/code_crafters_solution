@@ -74,3 +74,4 @@ export * from "./roles";
 export * from "./clients";
 export * from "./employees";
 export * from "./projects";
+export * from "./departments";

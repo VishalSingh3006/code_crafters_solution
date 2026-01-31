@@ -24,6 +24,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<StaffingRecord> StaffingRecords { get; set; }
     public DbSet<RecruitmentRecord> RecruitmentRecords { get; set; }
     public DbSet<BillingRecord> BillingRecords { get; set; }
+
+    // Engagement/ResourceAllocation DbSets
+    public DbSet<Engagement> Engagements { get; set; }
+    public DbSet<EngagementPosition> EngagementPositions { get; set; }
+    public DbSet<ResourceAllocation> ResourceAllocations { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -64,5 +69,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(es => es.Skill)
             .WithMany(s => s.EmployeeSkills)
             .HasForeignKey(es => es.SkillId);
+
+        // Engagement/ResourceAllocation configurations
+        modelBuilder.ApplyConfiguration(new Configurations.EngagementConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.EngagementPositionConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.ResourceAllocationConfiguration());
     }
 }

@@ -198,7 +198,12 @@ const Profile: React.FC = () => {
             {error && <Alert severity="error">{error}</Alert>}
             {success && <Alert severity="success">{success}</Alert>}
 
-            <Button id="update-profile-btn" type="submit" variant="contained" disabled={isSubmitting}>
+            <Button
+              id="update-profile-btn"
+              type="submit"
+              variant="contained"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Updating..." : "Update Profile"}
             </Button>
           </Stack>

@@ -1473,11 +1473,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj",
       "projectName": "ResourceEngagementTrackingSystem.Infrastructure",
-      "projectPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj",
+      "projectPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\piyushsinghjc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\piyushsinghjc\\AppData\\Roaming\\NuGet\\NuGet.Config"

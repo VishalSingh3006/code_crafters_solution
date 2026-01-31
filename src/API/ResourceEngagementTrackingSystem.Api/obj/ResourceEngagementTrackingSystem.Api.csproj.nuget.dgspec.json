@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\API\\ResourceEngagementTrackingSystem.Api\\ResourceEngagementTrackingSystem.Api.csproj": {}
+    "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\API\\ResourceEngagementTrackingSystem.Api\\ResourceEngagementTrackingSystem.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\API\\ResourceEngagementTrackingSystem.Api\\ResourceEngagementTrackingSystem.Api.csproj": {
+    "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\API\\ResourceEngagementTrackingSystem.Api\\ResourceEngagementTrackingSystem.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\API\\ResourceEngagementTrackingSystem.Api\\ResourceEngagementTrackingSystem.Api.csproj",
+        "projectUniqueName": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\API\\ResourceEngagementTrackingSystem.Api\\ResourceEngagementTrackingSystem.Api.csproj",
         "projectName": "ResourceEngagementTrackingSystem.Api",
-        "projectPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\API\\ResourceEngagementTrackingSystem.Api\\ResourceEngagementTrackingSystem.Api.csproj",
+        "projectPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\API\\ResourceEngagementTrackingSystem.Api\\ResourceEngagementTrackingSystem.Api.csproj",
         "packagesPath": "C:\\Users\\piyushsinghjc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\API\\ResourceEngagementTrackingSystem.Api\\obj\\",
+        "outputPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\API\\ResourceEngagementTrackingSystem.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\piyushsinghjc\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -26,11 +26,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj": {
-                "projectPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj"
+              "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj": {
+                "projectPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj"
               },
-              "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj"
+              "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj"
               }
             }
           }
@@ -93,14 +93,14 @@
         }
       }
     },
-    "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj": {
+    "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj",
+        "projectUniqueName": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj",
         "projectName": "ResourceEngagementTrackingSystem.Application",
-        "projectPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj",
+        "projectPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj",
         "packagesPath": "C:\\Users\\piyushsinghjc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Application\\ResourceEngagementTrackingSystem.Application\\obj\\",
+        "outputPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Application\\ResourceEngagementTrackingSystem.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\piyushsinghjc\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -146,14 +146,14 @@
         }
       }
     },
-    "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj": {
+    "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj",
         "projectName": "ResourceEngagementTrackingSystem.Infrastructure",
-        "projectPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\piyushsinghjc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Infrastructure\\ResourceEngagementTrackingSystem.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\piyushsinghjc\\AppData\\Roaming\\NuGet\\NuGet.Config"

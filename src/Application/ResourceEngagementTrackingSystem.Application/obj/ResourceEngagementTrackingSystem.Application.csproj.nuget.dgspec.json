@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj": {}
+    "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj": {}
   },
   "projects": {
-    "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj": {
+    "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj",
+        "projectUniqueName": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj",
         "projectName": "ResourceEngagementTrackingSystem.Application",
-        "projectPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj",
+        "projectPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Application\\ResourceEngagementTrackingSystem.Application\\ResourceEngagementTrackingSystem.Application.csproj",
         "packagesPath": "C:\\Users\\piyushsinghjc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\Application\\ResourceEngagementTrackingSystem.Application\\obj\\",
+        "outputPath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\Application\\ResourceEngagementTrackingSystem.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\piyushsinghjc\\AppData\\Roaming\\NuGet\\NuGet.Config"

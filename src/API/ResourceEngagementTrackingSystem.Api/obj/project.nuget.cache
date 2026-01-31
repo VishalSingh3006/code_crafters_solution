@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "5XtjrDnBJrZ9d8nT4eb68tJiDerNwxlgKlU7MkFx7LlYtVD+rgAGzzPEI16oWCC+zsFhxZdtOgd1VngxWmYe5w==",
+  "dgSpecHash": "q0FGYBBygUrBDN0DSIWUcx5t8oAwhPwGh6CDtHOoFbFVRMwNvCMTm99zh9p8Zv+xD9CqyMnG2CSnKoMIOYPiJQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\piyushsinghjc\\Downloads\\ResourceEngagementTrackingSystem\\src\\API\\ResourceEngagementTrackingSystem.Api\\ResourceEngagementTrackingSystem.Api.csproj",
+  "projectFilePath": "C:\\Users\\piyushsinghjc\\Documents\\New folder\\code_crafters_solution\\src\\API\\ResourceEngagementTrackingSystem.Api\\ResourceEngagementTrackingSystem.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\piyushsinghjc\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\piyushsinghjc\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",

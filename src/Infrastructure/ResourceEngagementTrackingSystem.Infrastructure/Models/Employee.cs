@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure.Models
 {
-    public class Employee
+    public class Employee: BaseEntity
     {
         [Key]
         public int Id { get; set; }

@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import { useAuthLogout, useAuthState } from "../hooks/authHooks";
 import { ThemeModeContext } from "../context/ThemeContext";
+import { persistor } from "../store/store";
 
 const Header: React.FC = () => {
   const { isAuthenticated } = useAuthState();
@@ -16,6 +17,7 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     await logout();
+    await persistor.purge();
     navigate("/login", { replace: true });
   };
 

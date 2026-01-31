@@ -2,14 +2,6 @@ import axios, { AxiosError } from "axios";
 import type { AxiosInstance, AxiosResponse } from "axios";
 import type { NavigateFunction } from "react-router-dom";
 import type { Store } from "@reduxjs/toolkit";
-import type {
-  LoginResponse,
-  User,
-  TwoFactorSetup,
-  UpdateProfileRequest,
-  EnableTwoFactorRequest,
-  TwoFactorVerifyRequest,
-} from "../types";
 
 // Interface for API error response
 interface ApiErrorResponse {
@@ -46,7 +38,7 @@ class BaseServices {
 
   constructor() {
     // const baseURL = import.meta.env.VITE_API_BASE_URL ?? "/api/auth";
-    const baseURL = "http://localhost:5000/api/";
+    const baseURL = "http://localhost:3000/api/";
     console.log("API Base URL:", baseURL);
     this.instance = axios.create({
       baseURL,

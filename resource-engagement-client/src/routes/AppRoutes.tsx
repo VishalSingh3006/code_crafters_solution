@@ -5,15 +5,6 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
-import Designations from "../pages/Designations";
-      <Route
-        path="/designations"
-        element={
-          <ProtectedRoute>
-            <Designations />
-          </ProtectedRoute>
-        }
-      />
 import Profile from "../pages/Profile";
 import TwoFactorSetup from "../pages/TwoFactorSetup";
 import RolesPage from "../pages/Roles";
@@ -29,6 +20,7 @@ import StaffingPage from "../pages/ResourceTracking/StaffingPage";
 import EmployeesPage from "../pages/Employees";
 import CreateEmployeePage from "../pages/Employees/Create";
 import EmployeeDetailPage from "../pages/Employees/Detail";
+import DesignationsPage from "../pages/Designations";
 
 const AppRoutes: React.FC = () => {
   const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
@@ -92,6 +84,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <StaffingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/designations"
+        element={
+          <ProtectedRoute>
+            <DesignationsPage />
           </ProtectedRoute>
         }
       />

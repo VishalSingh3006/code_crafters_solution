@@ -20,8 +20,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTrackin
         public DateTime? EndDate { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(5,4)")]
-        [Range(0.1, 1.0)]
+        [Column(TypeName = "decimal(5,2)")]
+        [Range(1, 100)]
         public decimal AllocationPercentage { get; set; }
 
         [Required]

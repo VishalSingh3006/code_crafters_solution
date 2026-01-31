@@ -58,14 +58,14 @@ const StaffingForm: React.FC<StaffingFormProps> = ({ staffingRecord, onSubmit, o
       if (staffingRecord) {
         // Update existing staffing record
         const updateDto: UpdateStaffingRecordDto = {
-          employeeId: formData.employeeId,
           projectId: formData.projectId,
-          startDate: formData.startDate,
-          endDate: formData.endDate,
-          allocationPercentage: formData.allocationPercentage,
+          employeeId: formData.employeeId,
           role: formData.role,
+          allocationPercentage: formData.allocationPercentage,
           hourlyRate: formData.hourlyRate,
           totalHours: formData.totalHours,
+          startDate: formData.startDate ? `${formData.startDate}T00:00:00` : undefined,
+          endDate: formData.endDate ? `${formData.endDate}T23:59:59` : undefined,
           status: formData.status,
           notes: formData.notes
         };
@@ -73,16 +73,16 @@ const StaffingForm: React.FC<StaffingFormProps> = ({ staffingRecord, onSubmit, o
       } else {
         // Create new staffing record
         const createDto: CreateStaffingRecordDto = {
-          employeeId: formData.employeeId,
           projectId: formData.projectId,
-          startDate: formData.startDate,
-          endDate: formData.endDate,
-          allocationPercentage: formData.allocationPercentage,
+          employeeId: formData.employeeId,
           role: formData.role,
+          allocationPercentage: formData.allocationPercentage,
           hourlyRate: formData.hourlyRate,
           totalHours: formData.totalHours,
-          notes: formData.notes,
-          status: formData.status
+          startDate: formData.startDate ? `${formData.startDate}T00:00:00` : '',
+          endDate: formData.endDate ? `${formData.endDate}T23:59:59` : '',
+          status: formData.status,
+          notes: formData.notes
         };
         await resourceTrackingService.createStaffingRecord(createDto);
       }

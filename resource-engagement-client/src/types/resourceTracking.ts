@@ -75,27 +75,27 @@ export interface StaffingRecord {
 }
 
 export interface CreateStaffingRecordDto {
-  employeeId: number;
   projectId: number;
-  startDate: string;
-  endDate: string;
-  allocationPercentage: number;
+  employeeId: number;
   role: string;
+  allocationPercentage: number;
   hourlyRate: number;
   totalHours: number;
-  notes: string;
+  startDate: string;
+  endDate: string;
   status: string;
+  notes?: string;
 }
 
 export interface UpdateStaffingRecordDto {
-  employeeId?: number;
   projectId?: number;
-  startDate?: string;
-  endDate?: string;
-  allocationPercentage?: number;
+  employeeId?: number;
   role?: string;
+  allocationPercentage?: number;
   hourlyRate?: number;
   totalHours?: number;
+  startDate?: string;
+  endDate?: string;
   status?: StaffingStatus;
   notes?: string;
 }

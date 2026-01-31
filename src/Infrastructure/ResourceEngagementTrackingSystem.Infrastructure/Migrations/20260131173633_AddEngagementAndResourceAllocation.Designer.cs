@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResourceEngagementTrackingSystem.Infrastructure;
 
@@ -10,9 +11,11 @@ using ResourceEngagementTrackingSystem.Infrastructure;
 namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260131173633_AddEngagementAndResourceAllocation")]
+    partial class AddEngagementAndResourceAllocation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -307,7 +310,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clients", (string)null);
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Department", b =>
@@ -335,7 +338,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departments", (string)null);
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Designation", b =>
@@ -363,7 +366,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Designations", (string)null);
+                    b.ToTable("Designations");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Employee", b =>
@@ -433,7 +436,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.EmployeeSkill", b =>
@@ -468,7 +471,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("EmployeeSkills", (string)null);
+                    b.ToTable("EmployeeSkills");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Engagement", b =>
@@ -509,7 +512,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Engagements", (string)null);
+                    b.ToTable("Engagements");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.EngagementPosition", b =>
@@ -550,7 +553,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasIndex("EngagementId");
 
-                    b.ToTable("EngagementPositions", (string)null);
+                    b.ToTable("EngagementPositions");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.ExceptionLog", b =>
@@ -635,7 +638,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceAllocation", b =>
@@ -677,7 +680,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasIndex("EngagementPositionId");
 
-                    b.ToTable("ResourceAllocations", (string)null);
+                    b.ToTable("ResourceAllocations");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking.BillingRecord", b =>
@@ -742,7 +745,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("BillingRecords", (string)null);
+                    b.ToTable("BillingRecords");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking.Delivery", b =>
@@ -802,7 +805,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Deliveries", (string)null);
+                    b.ToTable("Deliveries");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking.RecruitmentRecord", b =>
@@ -861,7 +864,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RecruitmentRecords", (string)null);
+                    b.ToTable("RecruitmentRecords");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.ResourceTracking.StaffingRecord", b =>
@@ -921,7 +924,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("StaffingRecords", (string)null);
+                    b.ToTable("StaffingRecords");
                 });
 
             modelBuilder.Entity("ResourceEngagementTrackingSystem.Infrastructure.Models.Skill", b =>
@@ -949,7 +952,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Skills", (string)null);
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

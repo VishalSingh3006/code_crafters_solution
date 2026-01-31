@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceEngagementTrackingSystem.Infrastructure", "src\Infrastructure\ResourceEngagementTrackingSystem.Infrastructure\ResourceEngagementTrackingSystem.Infrastructure.csproj", "{536B9E8E-F073-4446-19EE-7630E70581BE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{85E0C528-F1A7-4B2A-B8E3-9F456789ABCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceEngagementTrackingSystem.Api.Tests", "tests\ResourceEngagementTrackingSystem.Api.Tests\ResourceEngagementTrackingSystem.Api.Tests.csproj", "{D4E7F829-1A2B-3C4D-5E6F-7890123456AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +38,10 @@ Global
 		{536B9E8E-F073-4446-19EE-7630E70581BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{536B9E8E-F073-4446-19EE-7630E70581BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{536B9E8E-F073-4446-19EE-7630E70581BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4E7F829-1A2B-3C4D-5E6F-7890123456AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4E7F829-1A2B-3C4D-5E6F-7890123456AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4E7F829-1A2B-3C4D-5E6F-7890123456AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4E7F829-1A2B-3C4D-5E6F-7890123456AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,6 +53,7 @@ Global
 		{478F1F6D-5FE6-F947-C6F8-B0D3A74898AE} = {22BAF98C-8415-17C4-B26A-D537657BC863}
 		{9048EB7F-3875-A59E-E36B-5BD4C6F2A282} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{536B9E8E-F073-4446-19EE-7630E70581BE} = {9048EB7F-3875-A59E-E36B-5BD4C6F2A282}
+		{D4E7F829-1A2B-3C4D-5E6F-7890123456AB} = {85E0C528-F1A7-4B2A-B8E3-9F456789ABCD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {40C17F13-D285-4DED-B601-500F1CAD6919}

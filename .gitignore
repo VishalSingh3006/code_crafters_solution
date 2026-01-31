@@ -1,0 +1,81 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+*.swp
+
+# System archives
+__MACOSX/
+
+# Editors
+.vscode/
+.idea/
+*.iml
+.history/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Node/JS
+node_modules/
+dist/
+build/
+.next/
+out/
+.cache/
+.parcel-cache/
+.vite/
+coverage/
+*.tsbuildinfo
+.eslintcache
+.pnpm-store/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# .NET / Visual Studio
+[Bb]in/
+[Oo]bj/
+.vs/
+TestResults/
+artifacts/
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+*.svclog
+*.pdb
+*.mdb
+*.opendb
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Misc
+Thumbs.db
+*.trace
+*.out

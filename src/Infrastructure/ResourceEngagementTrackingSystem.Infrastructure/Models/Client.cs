@@ -7,7 +7,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
     public class Client : BaseEntity
     {
         [Key]
-        public int Id { get; set; }
+        public new int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

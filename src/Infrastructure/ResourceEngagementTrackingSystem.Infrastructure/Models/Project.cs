@@ -6,7 +6,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
     public class Project : BaseEntity
     {
         [Key]
-        public int Id { get; set; }
+        public new int Id { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }

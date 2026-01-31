@@ -5,7 +5,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
     public class Employee: BaseEntity
     {
         [Key]
-        public int Id { get; set; }
+        public new int Id { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]

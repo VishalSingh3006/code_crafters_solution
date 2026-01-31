@@ -2,6 +2,8 @@ using System;
 using System.Text;
 using ResourceEngagementTrackingSystem.Infrastructure.Models;
 using ResourceEngagementTrackingSystem.Infrastructure.Services;
+using ResourceEngagementTrackingSystem.Infrastructure.Services.ResourceTracking;
+using ResourceEngagementTrackingSystem.Infrastructure.Repositories.ResourceTracking;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using ResourceEngagementTrackingSystem.Application.Interfaces;
+using ResourceEngagementTrackingSystem.Application.Interfaces.ResourceTracking;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure;
@@ -31,6 +34,12 @@ public static class DependencyInjection
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IClientService, ClientService>();
         services.AddScoped<IEmployeeService, EmployeeService>();
+
+        // Register ResourceTracking repositories
+        services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+
+        // Register ResourceTracking services
+        services.AddScoped<IDeliveryService, DeliveryService>();
 
         // JWT Authentication Configuration
         var jwtSettings = config.GetSection("Jwt");

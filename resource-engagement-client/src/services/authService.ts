@@ -31,6 +31,32 @@ class AuthService {
     });
     return response;
   }
+
+  async forgotPassword(
+    email: string,
+  ): Promise<{ message: string; requiresTwoFactor?: boolean }> {
+    const response = await this.base.post<{
+      message: string;
+      requiresTwoFactor?: boolean;
+    }>("auth/forgot-password", {
+      email,
+    });
+    return response;
+  }
+
+  async changePassword(
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<{ message: string }> {
+    const response = await this.base.post<{ message: string }>(
+      "auth/change-password",
+      {
+        currentPassword,
+        newPassword,
+      },
+    );
+    return response;
+  }
 }
 
 // Export singleton instance

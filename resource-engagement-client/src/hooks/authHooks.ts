@@ -25,10 +25,25 @@ export function useAuthLogin() {
           return resp;
         }
         if (resp.token) {
-          dispatch(setCredentials({ user: resp.user, token: resp.token }));
-          
-          // If we have user data from response, no need to fetch profile
-          if (!resp.user) {
+          // Create user object from response fields
+          const user = resp.userId
+            ? {
+                userId: resp.userId,
+                email: resp.email || email,
+                firstName: resp.firstName || "",
+                lastName: resp.lastName || "",
+                title: "",
+                phoneNumber: "",
+                address: "",
+                zipCode: "",
+                twoFactorEnabled: false,
+              }
+            : null;
+
+          dispatch(setCredentials({ user, token: resp.token }));
+
+          // If we don't have complete user data from response, fetch profile
+          if (!user || !resp.firstName) {
             try {
               const profile = await baseServices.get("auth/profile");
               dispatch(setUser(profile));
@@ -113,4 +128,39 @@ export function useAuthLogout() {
   }, [dispatch]);
 
   return { logout, loading, error };
+}
+
+export function useAuthForgotPassword() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const forgotPassword = useCallback(async (email: string): Promise<void> => {
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const response = await authService.forgotPassword(email);
+      setSuccess(
+        response.message ||
+          "Password reset instructions have been sent to your email.",
+      );
+    } catch (e: any) {
+      const msg =
+        e?.response?.data?.message ||
+        e?.message ||
+        "Failed to send password reset email. Please try again.";
+      setError(msg);
+      throw e;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const resetState = useCallback(() => {
+    setError(null);
+    setSuccess(null);
+  }, []);
+
+  return { forgotPassword, loading, error, success, resetState };
 }

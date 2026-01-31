@@ -201,6 +201,8 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
         skills: employee.skills.map((s) => ({
           skillId: s.skillId,
           proficiencyLevel: s.proficiencyLevel,
+          yearsOfExperience: s.yearsOfExperience || undefined,
+          lastUsedDate: s.lastUsedDate || undefined,
         })),
       });
     } else if (mode === "create") {
@@ -432,14 +434,22 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
                 placeholder="e.g., 2.5"
                 inputProps={{ min: 0, max: 50, step: 0.5 }}
               />
-              <TextField
-                label="Last Used Date"
-                type="date"
-                {...register(`skills.${idx}.lastUsedDate` as const)}
-                error={!!errors.skills?.[idx]?.lastUsedDate}
-                helperText={errors.skills?.[idx]?.lastUsedDate?.message as string | undefined || "Optional"}
-                fullWidth
-                InputLabelProps={{ shrink: true }}
+              <Controller
+                name={`skills.${idx}.lastUsedDate` as const}
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Last Used Date"
+                    type="date"
+                    error={!!errors.skills?.[idx]?.lastUsedDate}
+                    helperText={errors.skills?.[idx]?.lastUsedDate?.message as string | undefined || "Optional"}
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                    value={field.value ? (field.value.includes('T') ? field.value.split('T')[0] : field.value) : ''}
+                    onChange={(e) => field.onChange(e.target.value)}
+                  />
+                )}
               />
               <Button 
                 color="error" 

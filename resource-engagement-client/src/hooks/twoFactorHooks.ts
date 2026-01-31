@@ -1,11 +1,13 @@
 import { useState, useCallback } from "react";
 import { twoFactorService } from "../services/twoFactorService";
-import { apiService } from "../services/baseService";
-import { useAuth } from "../context/AuthContext";
+import { baseServices } from "../services/baseService";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setCredentials, setUser } from "../store/authSlice";
 import type { TwoFactorSetup } from "../types";
 
 export function useTwoFactor() {
-  const { user, updateUser } = useAuth();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((s) => s.auth.user);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [setup, setSetup] = useState<TwoFactorSetup | null>(null);
@@ -29,16 +31,17 @@ export function useTwoFactor() {
       setError(null);
       try {
         const res = await twoFactorService.enable(code);
-        if (user) {
-          updateUser({ ...user, twoFactorEnabled: res.twoFactorEnabled });
-        }
+        if (user)
+          dispatch(
+            setUser({ ...user, twoFactorEnabled: res.twoFactorEnabled }),
+          );
       } catch (e: any) {
         setError(e?.message ?? "Failed to enable 2FA");
       } finally {
         setLoading(false);
       }
     },
-    [user, updateUser],
+    [user, dispatch],
   );
 
   const disable = useCallback(
@@ -47,16 +50,17 @@ export function useTwoFactor() {
       setError(null);
       try {
         const res = await twoFactorService.disable(code);
-        if (user) {
-          updateUser({ ...user, twoFactorEnabled: res.twoFactorEnabled });
-        }
+        if (user)
+          dispatch(
+            setUser({ ...user, twoFactorEnabled: res.twoFactorEnabled }),
+          );
       } catch (e: any) {
         setError(e?.message ?? "Failed to disable 2FA");
       } finally {
         setLoading(false);
       }
     },
-    [user, updateUser],
+    [user, dispatch],
   );
 
   const status = useCallback(async (): Promise<boolean> => {
@@ -72,7 +76,7 @@ export function useTwoFactor() {
 }
 
 export function useTwoFactorVerification() {
-  const { refreshProfile } = useAuth();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -83,8 +87,12 @@ export function useTwoFactorVerification() {
       try {
         const res = await twoFactorService.verify({ email, code });
         if (res.token && persistToken) {
-          apiService.setAuthToken(res.token);
-          await refreshProfile();
+          // Persist token in redux and fetch profile
+          dispatch(setCredentials({ user: null as any, token: res.token }));
+          try {
+            const profile = await baseServices.get("auth/profile");
+            dispatch(setUser(profile));
+          } catch {}
         }
         return res;
       } catch (e: any) {
@@ -96,7 +104,7 @@ export function useTwoFactorVerification() {
         setLoading(false);
       }
     },
-    [refreshProfile],
+    [dispatch],
   );
 
   return { verify, loading, error };

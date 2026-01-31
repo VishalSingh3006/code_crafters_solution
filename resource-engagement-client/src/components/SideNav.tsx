@@ -72,6 +72,13 @@ const SideNav: React.FC = () => {
             <ListItemText primary="Clients" />
           </ListItemButton>
           <ListItemButton
+            component={RouterLink}
+            to="/employees"
+            selected={location.pathname === "/employees"}
+          >
+            <ListItemText primary="Employees" />
+          </ListItemButton>
+          <ListItemButton
             onClick={() => setSettingsOpen((s) => !s)}
             aria-expanded={settingsOpen}
             aria-controls="settings-collapse"

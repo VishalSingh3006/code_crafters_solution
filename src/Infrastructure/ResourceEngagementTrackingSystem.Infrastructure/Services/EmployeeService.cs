@@ -33,14 +33,14 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                     LastName = e.LastName,
                     Email = e.Email,
                     Phone = e.Phone,
-                    Department = e.Department.Name,
-                    Designation = e.Designation.Name,
+                    Department = e.Department != null ? e.Department.Name : string.Empty,
+                    Designation = e.Designation != null ? e.Designation.Name : string.Empty,
                     EmploymentType = e.EmploymentType.ToString(),
                     ManagerId = e.ManagerId,
                     Skills = e.EmployeeSkills.Select(es => new EmployeeSkillDto
                     {
                         SkillId = es.SkillId,
-                        SkillName = es.Skill.Name,
+                        SkillName = es.Skill != null ? es.Skill.Name : string.Empty,
                         ProficiencyLevel = es.ProficiencyLevel.ToString(),
                         YearsOfExperience = es.YearsOfExperience,
                         LastUsedDate = es.LastUsedDate
@@ -66,14 +66,14 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 LastName = e.LastName,
                 Email = e.Email,
                 Phone = e.Phone,
-                Department = e.Department.Name,
-                Designation = e.Designation.Name,
+                Department = e.Department != null ? e.Department.Name : string.Empty,
+                Designation = e.Designation != null ? e.Designation.Name : string.Empty,
                 EmploymentType = e.EmploymentType.ToString(),
                 ManagerId = e.ManagerId,
                 Skills = e.EmployeeSkills.Select(es => new EmployeeSkillDto
                 {
                     SkillId = es.SkillId,
-                    SkillName = es.Skill.Name,
+                    SkillName = es.Skill != null ? es.Skill.Name : string.Empty,
                     ProficiencyLevel = es.ProficiencyLevel.ToString(),
                     YearsOfExperience = es.YearsOfExperience,
                     LastUsedDate = es.LastUsedDate

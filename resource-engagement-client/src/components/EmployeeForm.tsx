@@ -18,6 +18,7 @@ import {
   InputLabel,
   FormHelperText,
 } from "@mui/material";
+import { Delete, Add as AddIcon } from "@mui/icons-material";
 import { useEmployeeActions } from "../hooks/employeesHooks";
 import { useFieldArray, useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -79,13 +80,15 @@ const schema: yup.ObjectSchema<CreateEmployeeRequest> = yup
             .required("Proficiency is required"),
           yearsOfExperience: yup
             .number()
-            .transform((v, orig) => (orig === "" || orig === null || orig === undefined ? undefined : v))
+            .transform((v, orig) =>
+              orig === "" || orig === null || orig === undefined
+                ? undefined
+                : v,
+            )
             .min(0, "Years of experience must be positive")
             .max(50, "Years of experience must be less than 50")
             .optional(),
-          lastUsedDate: yup
-            .string()
-            .optional(),
+          lastUsedDate: yup.string().optional(),
         }),
       )
       .default([]),
@@ -182,12 +185,21 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   }, []);
 
   useEffect(() => {
-    if (mode === "edit" && employee && departments.length > 0 && designations.length > 0) {
+    if (
+      mode === "edit" &&
+      employee &&
+      departments.length > 0 &&
+      designations.length > 0
+    ) {
       // Find the department ID by matching the department name
-      const departmentId = departments.find(dept => dept.name === employee.department)?.id || 1;
+      const departmentId =
+        departments.find((dept) => dept.name === employee.department)?.id || 1;
       // Find the designation ID by matching the designation name
-      const designationId = designations.find(designation => designation.name === employee.designation)?.id || 1;
-      
+      const designationId =
+        designations.find(
+          (designation) => designation.name === employee.designation,
+        )?.id || 1;
+
       reset({
         employeeCode: employee.employeeCode,
         firstName: employee.firstName,
@@ -316,7 +328,12 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               </Select>
             )}
           />
-          <FormHelperText>{errors.departmentId?.message || (departmentsLoading ? "Loading departments..." : "Select a department")}</FormHelperText>
+          <FormHelperText>
+            {errors.departmentId?.message ||
+              (departmentsLoading
+                ? "Loading departments..."
+                : "Select a department")}
+          </FormHelperText>
         </FormControl>
 
         <FormControl fullWidth error={!!errors.designationId}>
@@ -344,7 +361,12 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               </Select>
             )}
           />
-          <FormHelperText>{errors.designationId?.message || (designationsLoading ? "Loading designations..." : "Select a designation")}</FormHelperText>
+          <FormHelperText>
+            {errors.designationId?.message ||
+              (designationsLoading
+                ? "Loading designations..."
+                : "Select a designation")}
+          </FormHelperText>
         </FormControl>
       </Stack>
       <TextField
@@ -354,7 +376,10 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           setValueAs: (v) => (v === "" || v === "0" ? null : Number(v)),
         })}
         error={!!errors.managerId}
-        helperText={errors.managerId?.message as string | undefined || "Leave empty if no manager"}
+        helperText={
+          (errors.managerId?.message as string | undefined) ||
+          "Leave empty if no manager"
+        }
         fullWidth
         placeholder="Enter manager's employee ID"
         inputProps={{ min: 0 }}
@@ -370,7 +395,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               direction={{ xs: "column", md: "row" }}
               spacing={1}
               key={s.id}
-              alignItems="center"
+              alignItems="flex-start"
             >
               <FormControl fullWidth error={!!errors.skills?.[idx]?.skillId}>
                 <InputLabel>Skill</InputLabel>
@@ -426,10 +451,15 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
                 label="Years of Experience"
                 type="number"
                 {...register(`skills.${idx}.yearsOfExperience` as const, {
-                  setValueAs: (v) => (v === "" || v === null ? undefined : Number(v)),
+                  setValueAs: (v) =>
+                    v === "" || v === null ? undefined : Number(v),
                 })}
                 error={!!errors.skills?.[idx]?.yearsOfExperience}
-                helperText={errors.skills?.[idx]?.yearsOfExperience?.message as string | undefined || "Optional"}
+                helperText={
+                  (errors.skills?.[idx]?.yearsOfExperience?.message as
+                    | string
+                    | undefined) || "Optional"
+                }
                 fullWidth
                 placeholder="e.g., 2.5"
                 inputProps={{ min: 0, max: 50, step: 0.5 }}
@@ -443,36 +473,54 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
                     label="Last Used Date"
                     type="date"
                     error={!!errors.skills?.[idx]?.lastUsedDate}
-                    helperText={errors.skills?.[idx]?.lastUsedDate?.message as string | undefined || "Optional"}
+                    helperText={
+                      (errors.skills?.[idx]?.lastUsedDate?.message as
+                        | string
+                        | undefined) || "Optional"
+                    }
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    value={field.value ? (field.value.includes('T') ? field.value.split('T')[0] : field.value) : ''}
+                    value={
+                      field.value
+                        ? field.value.includes("T")
+                          ? field.value.split("T")[0]
+                          : field.value
+                        : ""
+                    }
                     onChange={(e) => field.onChange(e.target.value)}
                   />
                 )}
               />
-              <Button 
-                color="error" 
+              <Button
+                color="error"
                 onClick={() => remove(idx)}
                 variant="outlined"
                 size="small"
+                sx={{ mt: 1, height: "56px" }}
               >
-                Remove
+                <Delete />
               </Button>
             </Stack>
           ))}
           <Button
             variant="outlined"
-            onClick={() => append({ 
-              skillId: skills.length > 0 ? skills[0].id : 1, 
-              proficiencyLevel: "Beginner",
-              yearsOfExperience: undefined,
-              lastUsedDate: undefined
-            })}
+            startIcon={<AddIcon />}
+            onClick={() =>
+              append({
+                skillId: skills.length > 0 ? skills[0].id : 1,
+                proficiencyLevel: "Beginner",
+                yearsOfExperience: undefined,
+                lastUsedDate: undefined,
+              })
+            }
             sx={{ alignSelf: "flex-start" }}
             disabled={skillsLoading || skills.length === 0}
           >
-            {skillsLoading ? "Loading..." : skills.length === 0 ? "No Skills Available" : "+ Add Skill"}
+            {skillsLoading
+              ? "Loading..."
+              : skills.length === 0
+                ? "No Skills Available"
+                : "+ Add Skill"}
           </Button>
         </Stack>
       </Box>
@@ -487,7 +535,12 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           {mode === "edit" ? "Update" : "Create"}
         </Button>
         {onCancel && (
-          <Button id="cancel-employee-form-btn" sx={{ ml: 2 }} variant="outlined" onClick={onCancel}>
+          <Button
+            id="cancel-employee-form-btn"
+            sx={{ ml: 2 }}
+            variant="outlined"
+            onClick={onCancel}
+          >
             Cancel
           </Button>
         )}

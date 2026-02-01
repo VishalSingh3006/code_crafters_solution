@@ -12,6 +12,7 @@ import {
   DialogActions,
   Alert,
 } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { RecruitmentRecord, RecruitmentStatus } from "../../types/Recruitment";
 import recruitmentService from "../../services/recruitmentService";
 import RecruitmentForm from "./RecruitmentForm";
@@ -96,6 +97,7 @@ const RecruitmentList: React.FC = () => {
           </Typography>
           <Button
             variant="contained"
+            startIcon={<Add />}
             onClick={() => {
               setShowForm(true);
               setSelectedRecord(undefined);
@@ -234,7 +236,7 @@ const RecruitmentList: React.FC = () => {
               onSubmit={handleFormSubmit}
               onCancel={handleFormCancel}
             />
-          </DialogContent>         
+          </DialogContent>
         </Dialog>
       </Container>
     </Box>

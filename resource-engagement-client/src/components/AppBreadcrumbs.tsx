@@ -10,7 +10,7 @@ const LABELS: Record<string, string> = {
   edit: "Edit",
   "2fa-setup": "Two-Factor Setup",
   roles: "Roles",
-  clients: "Clients",
+  clients: "Portfolio Companies",
   create: "Create",
   employees: "Employees",
   login: "Login",

@@ -18,6 +18,7 @@ import {
   TableBody,
 } from "@mui/material";
 import ProjectForm from "../../components/forms/ProjectForm";
+import { Add } from "@mui/icons-material";
 
 const ProjectsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const ProjectsPage: React.FC = () => {
           <Button
             id="create-project-btn"
             variant="contained"
+            startIcon={<Add />}
             onClick={() => navigate("/projects/create")}
           >
             Create Project

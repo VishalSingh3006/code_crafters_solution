@@ -21,6 +21,7 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
+import { Add } from "@mui/icons-material";
 
 const ClientsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ const ClientsPage: React.FC = () => {
             <Button
               id="create-client-btn"
               variant="contained"
+              startIcon={<Add />}
               onClick={() => navigate("/clients/create")}
             >
               Create Portfolio Company

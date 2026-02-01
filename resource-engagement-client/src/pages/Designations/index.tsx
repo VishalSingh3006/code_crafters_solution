@@ -16,7 +16,7 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, Add } from "@mui/icons-material";
 import { baseServices } from "../../services/baseService";
 import DesignationForm from "../../components/forms/DesignationForm";
 
@@ -55,13 +55,14 @@ const DesignationsPage: React.FC = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default", p: 3 }}>
       <Typography variant="h4" mb={2}>
         Designations
       </Typography>
       <Button
         variant="contained"
         color="primary"
+        startIcon={<Add />}
         onClick={() => {
           setEditing(null);
           setOpenForm(true);

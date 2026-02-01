@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDepartments, useDepartmentActions } from "../../hooks/departmentsHooks";
+import {
+  useDepartments,
+  useDepartmentActions,
+} from "../../hooks/departmentsHooks";
 import type { Department } from "../../types/departments";
 import {
   Container,
@@ -18,6 +21,7 @@ import {
   IconButton,
 } from "@mui/material";
 import DepartmentForm from "../../components/DepartmentForm";
+import { Add } from "@mui/icons-material";
 
 const DepartmentsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -49,6 +53,7 @@ const DepartmentsPage: React.FC = () => {
           <Button
             id="create-department-btn"
             variant="contained"
+            startIcon={<Add />}
             onClick={() => navigate("/departments/create")}
           >
             Create Department

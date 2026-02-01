@@ -116,7 +116,7 @@ export const ThemeModeProvider: React.FC<{ children: React.ReactNode }> = ({
         },
         button: {
           fontWeight: 700,
-          fontSize: "1.5rem",
+          fontSize: "1rem",
           textTransform: "none",
         },
       },
@@ -129,7 +129,7 @@ export const ThemeModeProvider: React.FC<{ children: React.ReactNode }> = ({
             root: {
               borderRadius: 0,
               fontWeight: 700,
-              fontSize: "1.5rem",
+              fontSize: "1rem",
               padding: "8px 16px",
               textTransform: "none",
             },

@@ -28,6 +28,8 @@ export interface ResourceAllocation {
   engagementId: number;
   employeeId: number;
   allocationPercentage: number;
+  allocationStart: string;
+  allocationEnd?: string;
   engagementName?: string;
   employeeName?: string;
 }
@@ -36,12 +38,16 @@ export interface CreateResourceAllocationRequest {
   engagementId: number;
   employeeId: number;
   allocationPercentage: number;
+  allocationStart: string;
+  allocationEnd?: string;
 }
 
 export interface UpdateResourceAllocationRequest {
   engagementId: number;
   employeeId: number;
   allocationPercentage: number;
+  allocationStart: string;
+  allocationEnd?: string;
 }
 
 // Proficiency levels for engagement positions

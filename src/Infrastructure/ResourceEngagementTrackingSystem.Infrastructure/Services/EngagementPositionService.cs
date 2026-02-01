@@ -99,7 +99,7 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 .AnyAsync(e => e.Id == dto.EngagementId);
             
             if (!engagementExists)
-                throw new ArgumentException("Engagement not found.");
+                throw new ArgumentException($"Engagement with ID {dto.EngagementId} not found.");
 
             var position = new EngagementPosition
             {
@@ -110,7 +110,15 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
             };
 
             _context.EngagementPositions.Add(position);
-            await _context.SaveChangesAsync();
+            
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new InvalidOperationException($"Failed to create engagement position. The engagement with ID {dto.EngagementId} may not exist or there may be a database constraint violation.", ex);
+            }
 
             return await GetByIdAsync(position.Id) ?? throw new InvalidOperationException("Failed to retrieve created position.");
         }

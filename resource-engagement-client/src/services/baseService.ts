@@ -63,6 +63,23 @@ class BaseServices {
         return Promise.reject(error);
       },
     );
+
+    // Add response interceptor to handle expired tokens
+    this.instance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401 && storeRef) {
+          // Clear the authentication state when token expires
+          storeRef.dispatch({ type: 'auth/clearCredentials' });
+          
+          // Redirect to login if not already on login page
+          if (window.location.pathname !== '/login') {
+            window.location.href = '/login';
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
   }
 
   // Made public to allow external error normalization

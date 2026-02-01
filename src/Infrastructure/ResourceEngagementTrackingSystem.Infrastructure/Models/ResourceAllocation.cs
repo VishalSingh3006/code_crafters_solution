@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,6 +15,11 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
         [Required]
         [Range(0, 100)]
         public decimal AllocationPercentage { get; set; }
+
+        [Required]
+        public DateTime AllocationStart { get; set; }
+        
+        public DateTime? AllocationEnd { get; set; }
 
         // Navigation properties
         [ForeignKey("EngagementId")]

@@ -11,7 +11,10 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ResourceAllocation, Employee } from "../../types";
@@ -25,11 +28,15 @@ const schema = yup.object().shape({
     .required("Allocation percentage is required")
     .min(0, "Allocation cannot be negative")
     .max(100, "Allocation cannot exceed 100%"),
+  allocationStart: yup.date().nullable().required("Start date is required"),
+  allocationEnd: yup.date().nullable(),
 });
 
-type FormData = {
+type AllocationFormData = {
   employeeId: number;
   allocationPercentage: number;
+  allocationStart: Date | null;
+  allocationEnd: Date | null;
 };
 
 interface ResourceAllocationFormProps {
@@ -58,12 +65,14 @@ export const ResourceAllocationForm: React.FC<ResourceAllocationFormProps> = ({
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm<FormData>({
-    resolver: yupResolver(schema),
+  } = useForm<AllocationFormData>({
+    resolver: yupResolver(schema) as any,
     mode: "onChange",
     defaultValues: {
       employeeId: allocation?.employeeId || 0,
       allocationPercentage: allocation?.allocationPercentage || 50,
+      allocationStart: allocation?.allocationStart ? new Date(allocation.allocationStart) : null,
+      allocationEnd: allocation?.allocationEnd ? new Date(allocation.allocationEnd) : null,
     },
   });
 
@@ -92,21 +101,34 @@ export const ResourceAllocationForm: React.FC<ResourceAllocationFormProps> = ({
       reset({
         employeeId: allocation?.employeeId || 0,
         allocationPercentage: allocation?.allocationPercentage || 50,
+        allocationStart: allocation?.allocationStart ? new Date(allocation.allocationStart) : null,
+        allocationEnd: allocation?.allocationEnd ? new Date(allocation.allocationEnd) : null,
       });
     }
   }, [open, allocation, reset]);
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit: SubmitHandler<AllocationFormData> = async (data) => {
     try {
+      if (!data.allocationStart) {
+        console.error("Start date is required");
+        return;
+      }
+
+      const formattedData = {
+        ...data,
+        allocationStart: data.allocationStart.toISOString(),
+        allocationEnd: data.allocationEnd?.toISOString() || undefined,
+      };
+
       if (isEditMode && allocation) {
         await update(allocation.id, {
           engagementId,
-          ...data,
+          ...formattedData,
         });
       } else {
         await create({
           engagementId,
-          ...data,
+          ...formattedData,
         });
       }
       onSuccess();
@@ -189,6 +211,46 @@ export const ResourceAllocationForm: React.FC<ResourceAllocationFormProps> = ({
                 />
               )}
             />
+
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Controller
+                name="allocationStart"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    {...field}
+                    label="Start Date"
+                    disabled={pending}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!errors.allocationStart,
+                        helperText: errors.allocationStart?.message,
+                      },
+                    }}
+                  />
+                )}
+              />
+
+              <Controller
+                name="allocationEnd"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    {...field}
+                    label="End Date (Optional)"
+                    disabled={pending}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!errors.allocationEnd,
+                        helperText: errors.allocationEnd?.message || "Leave empty for ongoing allocation",
+                      },
+                    }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
           </Box>
         </DialogContent>
 

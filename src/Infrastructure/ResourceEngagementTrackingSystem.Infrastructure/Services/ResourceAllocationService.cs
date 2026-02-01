@@ -59,6 +59,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                     EngagementId = ra.EngagementId,
                     EmployeeId = ra.EmployeeId,
                     AllocationPercentage = ra.AllocationPercentage,
+                    AllocationStart = ra.AllocationStart,
+                    AllocationEnd = ra.AllocationEnd,
                     EngagementName = ra.Engagement != null 
                         ? (ra.Engagement.Project != null 
                             ? $"Project: {ra.Engagement.Project.Name}"
@@ -86,6 +88,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                     EngagementId = ra.EngagementId,
                     EmployeeId = ra.EmployeeId,
                     AllocationPercentage = ra.AllocationPercentage,
+                    AllocationStart = ra.AllocationStart,
+                    AllocationEnd = ra.AllocationEnd,
                     EngagementName = ra.Engagement != null 
                         ? (ra.Engagement.Project != null 
                             ? $"Project: {ra.Engagement.Project.Name}"
@@ -117,6 +121,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                 EngagementId = ra.EngagementId,
                 EmployeeId = ra.EmployeeId,
                 AllocationPercentage = ra.AllocationPercentage,
+                AllocationStart = ra.AllocationStart,
+                AllocationEnd = ra.AllocationEnd,
                 EngagementName = ra.Engagement != null 
                     ? (ra.Engagement.Project != null 
                         ? $"Project: {ra.Engagement.Project.Name}"
@@ -130,31 +136,54 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
 
         public async Task<ResourceAllocationDto> CreateAsync(CreateResourceAllocationDto dto)
         {
-            // Validate engagement exists
-            var engagementExists = await _context.ProjectClientEngagements
-                .AnyAsync(e => e.Id == dto.EngagementId);
-            
-            if (!engagementExists)
-                throw new ArgumentException("Engagement not found.");
-
-            // Validate employee exists
-            var employeeExists = await _context.Employees
-                .AnyAsync(e => e.Id == dto.EmployeeId);
-            
-            if (!employeeExists)
-                throw new ArgumentException("Employee not found.");
-
-            var allocation = new ResourceAllocation
+            try
             {
-                EngagementId = dto.EngagementId,
-                EmployeeId = dto.EmployeeId,
-                AllocationPercentage = dto.AllocationPercentage
-            };
+                // Validate engagement exists
+                var engagementExists = await _context.ProjectClientEngagements
+                    .AnyAsync(e => e.Id == dto.EngagementId);
+                
+                if (!engagementExists)
+                    throw new ArgumentException("Engagement not found.");
 
-            _context.ResourceAllocations.Add(allocation);
-            await _context.SaveChangesAsync();
+                // Validate employee exists
+                var employeeExists = await _context.Employees
+                    .AnyAsync(e => e.Id == dto.EmployeeId);
+                
+                if (!employeeExists)
+                    throw new ArgumentException("Employee not found.");
 
-            return await GetByIdAsync(allocation.Id) ?? throw new InvalidOperationException("Failed to retrieve created allocation.");
+                var allocation = new ResourceAllocation
+                {
+                    EngagementId = dto.EngagementId,
+                    EmployeeId = dto.EmployeeId,
+                    AllocationPercentage = dto.AllocationPercentage,
+                    AllocationStart = dto.AllocationStart,
+                    AllocationEnd = dto.AllocationEnd
+                };
+
+                _context.ResourceAllocations.Add(allocation);
+                await _context.SaveChangesAsync();
+
+                return await GetByIdAsync(allocation.Id) ?? throw new InvalidOperationException("Failed to retrieve created allocation.");
+            }
+            catch (DbUpdateException ex)
+            {
+                // Handle foreign key constraint violations
+                if (ex.InnerException?.Message.Contains("foreign key constraint") == true)
+                {
+                    if (ex.InnerException.Message.Contains("EngagementId"))
+                    {
+                        throw new ArgumentException($"Invalid engagement ID {dto.EngagementId}. The engagement may not exist.");
+                    }
+                    if (ex.InnerException.Message.Contains("EmployeeId"))
+                    {
+                        throw new ArgumentException($"Invalid employee ID {dto.EmployeeId}. The employee may not exist.");
+                    }
+                }
+                
+                // Re-throw the original exception if we can't handle it
+                throw;
+            }
         }
 
         public async Task<ResourceAllocationDto?> UpdateAsync(int id, UpdateResourceAllocationDto dto)
@@ -180,6 +209,8 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
             allocation.EngagementId = dto.EngagementId;
             allocation.EmployeeId = dto.EmployeeId;
             allocation.AllocationPercentage = dto.AllocationPercentage;
+            allocation.AllocationStart = dto.AllocationStart;
+            allocation.AllocationEnd = dto.AllocationEnd;
 
             await _context.SaveChangesAsync();
             return await GetByIdAsync(allocation.Id);

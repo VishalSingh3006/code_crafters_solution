@@ -159,6 +159,44 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
                         await _context.SaveChangesAsync();
                     }
                 }
+
+                // Seed test project-client engagements
+                if (!await _context.ProjectClientEngagements.AnyAsync())
+                {
+                    var projects = await _context.Projects.ToListAsync();
+                    var clients = await _context.Clients.ToListAsync();
+
+                    var engagements = new[]
+                    {
+                        new ProjectClientEngagement
+                        {
+                            ProjectId = projects.Count > 0 ? projects[0].Id : null,
+                            ClientId = null,
+                            StartDate = DateTime.Now.AddDays(-30),
+                            EndDate = DateTime.Now.AddDays(30),
+                            OutcomeStatus = ProjectClientEngagementStatus.Success,
+                        },
+                        new ProjectClientEngagement
+                        {
+                            ProjectId = null,
+                            ClientId = clients.Count > 0 ? clients[0].Id : null,
+                            StartDate = DateTime.Now.AddDays(-60),
+                            EndDate = DateTime.Now.AddDays(60),
+                            OutcomeStatus = ProjectClientEngagementStatus.Success,
+                        },
+                        new ProjectClientEngagement
+                        {
+                            ProjectId = projects.Count > 1 ? projects[1].Id : null,
+                            ClientId = null,
+                            StartDate = DateTime.Now.AddDays(-15),
+                            EndDate = DateTime.Now.AddDays(45),
+                            OutcomeStatus = ProjectClientEngagementStatus.Success,
+                        }
+                    };
+
+                    _context.ProjectClientEngagements.AddRange(engagements);
+                    await _context.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {

@@ -152,6 +152,8 @@ export const ResourceAllocations: React.FC<ResourceAllocationsProps> = ({
                 <TableRow>
                   <TableCell>Employee</TableCell>
                   <TableCell align="center">Allocation %</TableCell>
+                  <TableCell align="center">Start Date</TableCell>
+                  <TableCell align="center">End Date</TableCell>
                   <TableCell align="center" width={120}>Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -170,6 +172,22 @@ export const ResourceAllocations: React.FC<ResourceAllocationsProps> = ({
                         variant="outlined"
                         size="small"
                       />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography variant="body2">
+                        {allocation.allocationStart 
+                          ? new Date(allocation.allocationStart).toLocaleDateString()
+                          : "Not set"
+                        }
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography variant="body2">
+                        {allocation.allocationEnd 
+                          ? new Date(allocation.allocationEnd).toLocaleDateString()
+                          : "Ongoing"
+                        }
+                      </Typography>
                     </TableCell>
                     <TableCell align="center">
                       <IconButton

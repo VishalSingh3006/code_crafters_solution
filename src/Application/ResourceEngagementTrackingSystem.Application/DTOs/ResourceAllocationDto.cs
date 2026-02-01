@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ResourceEngagementTrackingSystem.Application.DTOs
@@ -8,6 +9,8 @@ namespace ResourceEngagementTrackingSystem.Application.DTOs
         public int EngagementId { get; set; }
         public int EmployeeId { get; set; }
         public decimal AllocationPercentage { get; set; }
+        public DateTime AllocationStart { get; set; }
+        public DateTime? AllocationEnd { get; set; }
         
         // Optional navigation data
         public string? EngagementName { get; set; }
@@ -25,6 +28,11 @@ namespace ResourceEngagementTrackingSystem.Application.DTOs
         [Required]
         [Range(0, 100)]
         public decimal AllocationPercentage { get; set; }
+
+        [Required]
+        public DateTime AllocationStart { get; set; }
+        
+        public DateTime? AllocationEnd { get; set; }
     }
 
     public class UpdateResourceAllocationDto
@@ -38,5 +46,10 @@ namespace ResourceEngagementTrackingSystem.Application.DTOs
         [Required]
         [Range(0, 100)]
         public decimal AllocationPercentage { get; set; }
+
+        [Required]
+        public DateTime AllocationStart { get; set; }
+        
+        public DateTime? AllocationEnd { get; set; }
     }
 }

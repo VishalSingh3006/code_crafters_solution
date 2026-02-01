@@ -1,15 +1,25 @@
-using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ResourceEngagementTrackingSystem.Infrastructure.Models
 {
     public class ResourceAllocation : BaseEntity
     {
-        public int EngagementPositionId { get; set; }
-        public EngagementPosition EngagementPosition { get; set; }
+        [Required]
+        public int EngagementId { get; set; }
+        
+        [Required]
         public int EmployeeId { get; set; }
-        public Employee Employee { get; set; }
-        public DateTime AllocationStart { get; set; }
-        public DateTime? AllocationEnd { get; set; }
+        
+        [Required]
+        [Range(0, 100)]
         public decimal AllocationPercentage { get; set; }
+
+        // Navigation properties
+        [ForeignKey("EngagementId")]
+        public virtual ProjectClientEngagement? Engagement { get; set; }
+        
+        [ForeignKey("EmployeeId")]
+        public virtual Employee? Employee { get; set; }
     }
 }

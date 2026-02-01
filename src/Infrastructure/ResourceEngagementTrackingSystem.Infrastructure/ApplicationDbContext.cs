@@ -29,7 +29,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<BillingRecord> BillingRecords { get; set; }
 
     // Engagement/ResourceAllocation DbSets
-    public DbSet<Engagement> Engagements { get; set; }
     public DbSet<EngagementPosition> EngagementPositions { get; set; }
     public DbSet<ResourceAllocation> ResourceAllocations { get; set; }
     public DbSet<ProjectClientEngagement> ProjectClientEngagements { get; set; }

@@ -13,8 +13,9 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, Visibility } from "@mui/icons-material";
 import { format, parseISO } from "date-fns";
+import { useNavigate } from "react-router-dom";
 import type { ProjectClientEngagement } from "../../types";
 
 interface ProjectClientEngagementTableProps {
@@ -51,6 +52,8 @@ export const ProjectClientEngagementTable: React.FC<ProjectClientEngagementTable
   onDelete,
   loading = false,
 }) => {
+  const navigate = useNavigate();
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight={200}>
@@ -113,6 +116,15 @@ export const ProjectClientEngagementTable: React.FC<ProjectClientEngagementTable
                 />
               </TableCell>
               <TableCell align="center">
+                <Tooltip title="View details">
+                  <IconButton
+                    size="small"
+                    onClick={() => navigate(`/engagements/${engagement.id}`)}
+                    color="info"
+                  >
+                    <Visibility />
+                  </IconButton>
+                </Tooltip>
                 <Tooltip title="Edit engagement">
                   <IconButton
                     size="small"

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,9 +7,6 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
 {
     public class ProjectClientEngagement : BaseEntity
     {
-        [Key]
-        public new int Id { get; set; }
-
         [ForeignKey("Project")]
         public int? ProjectId { get; set; }
         public Project? Project { get; set; }
@@ -24,6 +22,10 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Models
 
         [Required]
         public ProjectClientEngagementStatus OutcomeStatus { get; set; }
+        
+        // Navigation properties for related entities
+        public ICollection<EngagementPosition>? Positions { get; set; }
+        public ICollection<ResourceAllocation>? ResourceAllocations { get; set; }
         
         // Ensure either ProjectId or ClientId is set, but not both
         public bool IsProjectEngagement => ProjectId.HasValue && !ClientId.HasValue;

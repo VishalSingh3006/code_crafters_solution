@@ -17,6 +17,8 @@ export * from "./billingRates";
 export * from "./portfolioCompanies";
 // Export engagements types
 export * from "./engagements";
+// Export engagement extensions types
+export * from "./engagementExtensions";
 
 export interface RegisterRequest {
   email: string;

@@ -39,6 +39,8 @@ public static class DependencyInjection
         services.AddScoped<IPortfolioCompanyService, PortfolioCompanyService>();
         services.AddScoped<IBillingRateService, BillingRateService>();
         services.AddScoped<IProjectClientEngagementService, ProjectClientEngagementService>();
+        services.AddScoped<IEngagementPositionService, EngagementPositionService>();
+        services.AddScoped<IResourceAllocationService, ResourceAllocationService>();
 
         // Register ResourceTracking repositories
         services.AddScoped<IDeliveryRepository, DeliveryRepository>();

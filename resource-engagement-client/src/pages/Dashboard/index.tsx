@@ -27,10 +27,10 @@ const Dashboard: React.FC = () => {
       onClick: () => navigate("/employees"),
     },
     {
-      title: "Clients",
+      title: "Portfolio Companies",
       count: clients?.length ?? 0,
       loading: clientsLoading,
-      actionLabel: "View Clients",
+      actionLabel: "View Portfolio Companies",
       onClick: () => navigate("/clients"),
     },
   ];
@@ -83,24 +83,24 @@ const Dashboard: React.FC = () => {
             <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
               <Button
                 id="new-project-btn"
-                variant="outlined"
+                variant="contained"
                 onClick={() => navigate("/projects/create")}
               >
                 New Project
               </Button>
               <Button
                 id="new-employee-btn"
-                variant="outlined"
+                variant="contained"
                 onClick={() => navigate("/employees/create")}
               >
                 New Employee
               </Button>
               <Button
                 id="new-client-btn"
-                variant="outlined"
+                variant="contained"
                 onClick={() => navigate("/clients/create")}
               >
-                New Client
+                New Portfolio Company
               </Button>
             </Stack>
           </Paper>

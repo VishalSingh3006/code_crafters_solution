@@ -96,6 +96,7 @@ const ProjectsPage: React.FC = () => {
                           id={`edit-project-${p.id}-btn`}
                           size="small"
                           variant="contained"
+                          sx={{ fontSize: "1rem" }}
                           onClick={(e) => {
                             e.stopPropagation();
                             setEditing(p);
@@ -108,6 +109,7 @@ const ProjectsPage: React.FC = () => {
                           size="small"
                           variant="contained"
                           color="error"
+                          sx={{ fontSize: "1rem" }}
                           onClick={(e) => {
                             e.stopPropagation();
                             remove(p.id);

@@ -22,7 +22,7 @@ export default function BillingPage() {
           id="nav-billing-rates-btn"
           variant="contained"
           startIcon={<SettingsIcon />}
-          onClick={() => navigate("/billing/rates")}
+          onClick={() => navigate("/resource-tracking/billing/rates")}
           sx={{
             textTransform: "none",
             fontWeight: 600,

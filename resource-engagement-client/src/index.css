@@ -2,4 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Brand theme CSS */
+@import './styles/brandTheme.css';
+
 /* You can add project-specific global styles below */
+
+/* Inter font import for consistent typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Global brand styling */
+html {
+  font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+}
+
+/* Ensure smooth theme transitions */
+* {
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+}

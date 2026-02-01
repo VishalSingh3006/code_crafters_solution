@@ -134,7 +134,7 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/billing/rates"
+        path="/resource-tracking/billing/rates"
         element={
           <ProtectedRoute>
             <BillingRates />

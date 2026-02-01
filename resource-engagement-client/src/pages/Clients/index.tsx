@@ -163,6 +163,7 @@ const ClientsPage: React.FC = () => {
                         <Button
                           id={`edit-client-${c.id}-btn`}
                           size="small"
+                          sx={{ fontSize: "1rem" }}
                           onClick={(e) => {
                             e.stopPropagation();
                             startEdit(c);
@@ -174,6 +175,7 @@ const ClientsPage: React.FC = () => {
                         <Button
                           id={`delete-client-${c.id}-btn`}
                           size="small"
+                          sx={{ fontSize: "1rem" }}
                           color="error"
                           onClick={(e) => {
                             e.stopPropagation();

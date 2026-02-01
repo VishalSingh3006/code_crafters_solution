@@ -1,0 +1,208 @@
+/**
+ * Brand Theme CSS
+ *
+ * This file contains CSS classes that use the CSS custom properties
+ * defined in brandColors.ts. These classes can be used alongside
+ * Tailwind utilities for brand-consistent styling.
+ */
+
+/* Background utilities using brand colors */
+.bg-brand-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-brand-secondary {
+  background-color: var(--color-secondary);
+}
+
+.bg-brand-success {
+  background-color: var(--color-success);
+}
+
+.bg-brand-paper {
+  background-color: var(--color-paper);
+}
+
+/* Text utilities using brand colors */
+.text-brand-primary {
+  color: var(--color-primary);
+}
+
+.text-brand-secondary {
+  color: var(--color-secondary);
+}
+
+.text-brand-success {
+  color: var(--color-success);
+}
+
+.text-brand-error {
+  color: var(--color-error);
+}
+
+.text-brand-warning {
+  color: var(--color-warning);
+}
+
+.text-brand-info {
+  color: var(--color-info);
+}
+
+/* Border utilities using brand colors */
+.border-brand-primary {
+  border-color: var(--color-primary);
+}
+
+.border-brand-secondary {
+  border-color: var(--color-secondary);
+}
+
+.border-brand-divider {
+  border-color: var(--color-divider);
+}
+
+/* Brand gradients */
+.bg-gradient-brand-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+}
+
+.bg-gradient-brand-hero {
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 50%, var(--color-success) 100%);
+}
+
+/* Brand shadows */
+.shadow-brand {
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1), 0 2px 4px -1px rgba(59, 130, 246, 0.06);
+}
+
+.shadow-brand-lg {
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1), 0 4px 6px -2px rgba(59, 130, 246, 0.05);
+}
+
+/* Interactive states */
+.hover-brand-primary:hover {
+  background-color: var(--color-primary-light);
+}
+
+.hover-brand-secondary:hover {
+  background-color: var(--color-secondary-light);
+}
+
+.focus-brand:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Status indicators */
+.status-enabled {
+  color: var(--color-success);
+}
+
+.status-disabled {
+  color: var(--color-error);
+}
+
+.status-warning {
+  color: var(--color-warning);
+}
+
+.status-info {
+  color: var(--color-info);
+}
+
+/* Brand specific components */
+.brand-button {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.brand-button:hover {
+  background: var(--color-primary-dark);
+  box-shadow: var(--shadow-brand);
+}
+
+.brand-button:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.brand-button:disabled {
+  background: var(--color-secondary);
+  cursor: not-allowed;
+}
+
+/* Card styling with brand colors */
+.brand-card {
+  background: var(--color-paper);
+  border: 1px solid var(--color-divider);
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.brand-card:hover {
+  box-shadow: var(--shadow-brand-lg);
+}
+
+/* Navigation styling */
+.brand-nav {
+  background: var(--color-paper);
+  border-right: 1px solid var(--color-divider);
+}
+
+.brand-nav-item {
+  color: var(--color-text-secondary);
+  transition: color 0.2s ease;
+}
+
+.brand-nav-item:hover {
+  color: var(--color-primary);
+}
+
+.brand-nav-item.active {
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+/* Form elements */
+.brand-input {
+  background: var(--color-background);
+  border: 1px solid var(--color-divider);
+  border-radius: 0;
+  color: var(--color-text-primary);
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.2s ease;
+}
+
+.brand-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* Responsive utilities for brand colors */
+@media (prefers-color-scheme: dark) {
+  .auto-brand-bg {
+    background-color: var(--color-paper);
+  }
+
+  .auto-brand-text {
+    color: var(--color-text-primary);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .auto-brand-bg {
+    background-color: var(--color-background);
+  }
+
+  .auto-brand-text {
+    color: var(--color-text-primary);
+  }
+}

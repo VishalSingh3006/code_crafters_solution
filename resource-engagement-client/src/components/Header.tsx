@@ -33,7 +33,12 @@ const Header: React.FC = () => {
           variant="h6"
           component="div"
           onClick={handleHomeClick}
-          sx={{ flexGrow: 1, cursor: "pointer" }}
+          sx={{
+            flexGrow: 1,
+            cursor: "pointer",
+            fontSize: "2rem",
+            fontWeight: "bold",
+          }}
         >
           Resource Engagement Tracking
         </Typography>

@@ -7,6 +7,10 @@ import React, {
 } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import {
+  createMuiColorPalette,
+  createCSSCustomProperties,
+} from "../styles/brandColors";
 
 export type ThemeMode = "light" | "dark";
 
@@ -85,15 +89,107 @@ export const ThemeModeProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   }, []);
 
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
+  const theme = useMemo(() => {
+    const colorPalette = createMuiColorPalette(mode);
+
+    return createTheme({
+      palette: colorPalette,
+      typography: {
+        fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+        h1: {
+          fontWeight: 700,
         },
-      }),
-    [mode],
-  );
+        h2: {
+          fontWeight: 600,
+        },
+        h3: {
+          fontWeight: 600,
+        },
+        h4: {
+          fontWeight: 600,
+        },
+        h5: {
+          fontWeight: 500,
+        },
+        h6: {
+          fontWeight: 500,
+        },
+        button: {
+          fontWeight: 700,
+          fontSize: "1.5rem",
+          textTransform: "none",
+        },
+      },
+      shape: {
+        borderRadius: 0,
+      },
+      components: {
+        MuiButton: {
+          styleOverrides: {
+            root: {
+              borderRadius: 0,
+              fontWeight: 700,
+              fontSize: "1.5rem",
+              padding: "8px 16px",
+              textTransform: "none",
+            },
+            contained: {
+              borderRadius: 8,
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              "&:hover": {
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
+              },
+            },
+          },
+        },
+        MuiCard: {
+          styleOverrides: {
+            root: {
+              borderRadius: 0,
+              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+            },
+          },
+        },
+        MuiPaper: {
+          styleOverrides: {
+            root: ({ theme }) => ({
+              borderRadius: 0,
+              backgroundColor:
+                theme.palette.mode === "dark"
+                  ? "#334155" // dark theme: darker background for contrast
+                  : "#fefde8", // light theme: warm tone from primary-100
+            }),
+          },
+        },
+        MuiTextField: {
+          styleOverrides: {
+            root: {
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 0,
+              },
+            },
+          },
+        },
+        MuiChip: {
+          styleOverrides: {
+            root: {
+              borderRadius: 0,
+            },
+          },
+        },
+      },
+    });
+  }, [mode]);
+
+  // Apply CSS custom properties to document root
+  useEffect(() => {
+    const cssProps = createCSSCustomProperties(mode);
+    const root = document.documentElement;
+
+    Object.entries(cssProps).forEach(([property, value]) => {
+      root.style.setProperty(property, value);
+    });
+  }, [mode]);
 
   const value = useMemo(() => ({ mode, toggleTheme }), [mode, toggleTheme]);
 

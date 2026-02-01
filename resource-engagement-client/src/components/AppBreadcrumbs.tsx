@@ -7,12 +7,26 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 const LABELS: Record<string, string> = {
   dashboard: "Dashboard",
   profile: "Profile",
+  edit: "Edit",
   "2fa-setup": "Two-Factor Setup",
   roles: "Roles",
   clients: "Clients",
+  create: "Create",
   employees: "Employees",
   login: "Login",
   register: "Register",
+  "resource-tracking": "Resource Tracking",
+  billing: "Billing",
+  rates: "Rates",
+  deliveries: "Deliveries",
+  staffing: "Staffing",
+  recruitment: "Recruitment",
+  projects: "Projects",
+  departments: "Departments",
+  designations: "Designations",
+  skills: "Skills",
+  "portfolio-companies": "Portfolio Companies",
+  engagements: "Engagements",
 };
 
 const titleCase = (s: string) =>
@@ -51,7 +65,7 @@ const AppBreadcrumbs: React.FC = () => {
       >
         {items.map((item, idx) =>
           idx === lastIndex ? (
-            <Typography key={item.to} color="text.primary">
+            <Typography key={item.to} color="primary" fontWeight="bold">
               {item.icon}
               {item.label}
             </Typography>
@@ -59,10 +73,14 @@ const AppBreadcrumbs: React.FC = () => {
             <Link
               key={item.to}
               component={RouterLink}
-              color="inherit"
+              color="primary"
               underline="hover"
               to={item.to}
-              sx={{ display: "inline-flex", alignItems: "center" }}
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                fontWeight: "bold",
+              }}
             >
               {item.icon}
               {item.label}

@@ -105,6 +105,7 @@ const EmployeesPage: React.FC = () => {
                         <Button
                           id={`edit-employee-${e.id}-btn`}
                           size="small"
+                          sx={{ fontSize: "1rem" }}
                           variant="contained"
                           onClick={(ev) => {
                             ev.stopPropagation();
@@ -116,6 +117,7 @@ const EmployeesPage: React.FC = () => {
                         <Button
                           id={`delete-employee-${e.id}-btn`}
                           size="small"
+                          sx={{ fontSize: "1rem" }}
                           color="error"
                           variant="contained"
                           onClick={(ev) => {

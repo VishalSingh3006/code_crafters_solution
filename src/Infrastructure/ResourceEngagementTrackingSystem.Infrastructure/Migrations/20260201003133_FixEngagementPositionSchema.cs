@@ -12,62 +12,147 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_EngagementPositions_Engagements_EngagementId",
-                table: "EngagementPositions");
+                        // Idempotent: Drop old FK from EngagementPositions to Engagements if present
+                        migrationBuilder.Sql(@"
+                                SET @sql = (
+                                    SELECT IF(
+                                        EXISTS (
+                                            SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+                                            WHERE CONSTRAINT_SCHEMA = DATABASE()
+                                                AND TABLE_NAME = 'EngagementPositions'
+                                                AND CONSTRAINT_NAME = 'FK_EngagementPositions_Engagements_EngagementId'
+                                        ),
+                                        'ALTER TABLE `EngagementPositions` DROP FOREIGN KEY `FK_EngagementPositions_Engagements_EngagementId`',
+                                        'SELECT 1'
+                                    )
+                                );
+                                PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+                        ");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_ResourceAllocations_Employees_EmployeeId",
-                table: "ResourceAllocations");
+                        // Idempotent: Drop old FK from ResourceAllocations to EngagementPositions if present
+                        migrationBuilder.Sql(@"
+                                SET @sql = (
+                                    SELECT IF(
+                                        EXISTS (
+                                            SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+                                            WHERE CONSTRAINT_SCHEMA = DATABASE()
+                                                AND TABLE_NAME = 'ResourceAllocations'
+                                                AND CONSTRAINT_NAME = 'FK_ResourceAllocations_EngagementPositions_EngagementPositionId'
+                                        ),
+                                        'ALTER TABLE `ResourceAllocations` DROP FOREIGN KEY `FK_ResourceAllocations_EngagementPositions_EngagementPositionId`',
+                                        'SELECT 1'
+                                    )
+                                );
+                                PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+                        ");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_ResourceAllocations_EngagementPositions_EngagementPositionId",
-                table: "ResourceAllocations");
+                        // Idempotent: Drop old FK from ResourceAllocations to Employees if present (to change delete behavior)
+                        migrationBuilder.Sql(@"
+                                SET @sql = (
+                                    SELECT IF(
+                                        EXISTS (
+                                            SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+                                            WHERE CONSTRAINT_SCHEMA = DATABASE()
+                                                AND TABLE_NAME = 'ResourceAllocations'
+                                                AND CONSTRAINT_NAME = 'FK_ResourceAllocations_Employees_EmployeeId'
+                                        ),
+                                        'ALTER TABLE `ResourceAllocations` DROP FOREIGN KEY `FK_ResourceAllocations_Employees_EmployeeId`',
+                                        'SELECT 1'
+                                    )
+                                );
+                                PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+                        ");
 
-            migrationBuilder.DropTable(
-                name: "Engagements");
+                        // Idempotent: Drop Engagements table if it exists
+                        migrationBuilder.Sql(@"
+                                SET @sql = (
+                                    SELECT IF(
+                                        EXISTS (
+                                            SELECT 1 FROM INFORMATION_SCHEMA.TABLES
+                                            WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'Engagements'
+                                        ),
+                                        'DROP TABLE `Engagements`',
+                                        'SELECT 1'
+                                    )
+                                );
+                                PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+                        ");
 
-            migrationBuilder.DropColumn(
-                name: "AllocationEnd",
-                table: "ResourceAllocations");
+                        // Note: Do NOT drop AllocationStart/AllocationEnd; current model uses these columns.
 
-            migrationBuilder.DropColumn(
-                name: "AllocationStart",
-                table: "ResourceAllocations");
+                        // Idempotent: Rename column EngagementPositionId -> EngagementId if the old column exists
+                        migrationBuilder.Sql(@"
+                                SET @hasOld = (
+                                    SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+                                    WHERE TABLE_SCHEMA = DATABASE()
+                                        AND TABLE_NAME = 'ResourceAllocations'
+                                        AND COLUMN_NAME = 'EngagementPositionId'
+                                );
+                                SET @hasNew = (
+                                    SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+                                    WHERE TABLE_SCHEMA = DATABASE()
+                                        AND TABLE_NAME = 'ResourceAllocations'
+                                        AND COLUMN_NAME = 'EngagementId'
+                                );
+                                SET @sql = (
+                                    SELECT IF(@hasOld > 0 AND @hasNew = 0,
+                                        'ALTER TABLE `ResourceAllocations` CHANGE COLUMN `EngagementPositionId` `EngagementId` INT NOT NULL',
+                                        'SELECT 1'
+                                    )
+                                );
+                                PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+                        ");
 
-            migrationBuilder.RenameColumn(
-                name: "EngagementPositionId",
-                table: "ResourceAllocations",
-                newName: "EngagementId");
+                        // Idempotent: Ensure FK from EngagementPositions to ProjectClientEngagements
+                        migrationBuilder.Sql(@"
+                                SET @sql = (
+                                    SELECT IF(
+                                        EXISTS (
+                                            SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+                                            WHERE CONSTRAINT_SCHEMA = DATABASE()
+                                                AND TABLE_NAME = 'EngagementPositions'
+                                                AND CONSTRAINT_NAME = 'FK_EngagementPositions_ProjectClientEngagements_EngagementId'
+                                        ),
+                                        'SELECT 1',
+                                        'ALTER TABLE `EngagementPositions` ADD CONSTRAINT `FK_EngagementPositions_ProjectClientEngagements_EngagementId` FOREIGN KEY (`EngagementId`) REFERENCES `ProjectClientEngagements`(`Id`) ON DELETE CASCADE'
+                                    )
+                                );
+                                PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+                        ");
 
-            migrationBuilder.RenameIndex(
-                name: "IX_ResourceAllocations_EngagementPositionId",
-                table: "ResourceAllocations",
-                newName: "IX_ResourceAllocations_EngagementId");
+                        // Idempotent: Ensure FK from ResourceAllocations to Employees
+                        migrationBuilder.Sql(@"
+                                SET @sql = (
+                                    SELECT IF(
+                                        EXISTS (
+                                            SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+                                            WHERE CONSTRAINT_SCHEMA = DATABASE()
+                                                AND TABLE_NAME = 'ResourceAllocations'
+                                                AND CONSTRAINT_NAME = 'FK_ResourceAllocations_Employees_EmployeeId'
+                                        ),
+                                        'SELECT 1',
+                                        'ALTER TABLE `ResourceAllocations` ADD CONSTRAINT `FK_ResourceAllocations_Employees_EmployeeId` FOREIGN KEY (`EmployeeId`) REFERENCES `Employees`(`Id`) ON DELETE RESTRICT'
+                                    )
+                                );
+                                PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+                        ");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_EngagementPositions_ProjectClientEngagements_EngagementId",
-                table: "EngagementPositions",
-                column: "EngagementId",
-                principalTable: "ProjectClientEngagements",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ResourceAllocations_Employees_EmployeeId",
-                table: "ResourceAllocations",
-                column: "EmployeeId",
-                principalTable: "Employees",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ResourceAllocations_ProjectClientEngagements_EngagementId",
-                table: "ResourceAllocations",
-                column: "EngagementId",
-                principalTable: "ProjectClientEngagements",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                        // Idempotent: Ensure FK from ResourceAllocations to ProjectClientEngagements
+                        migrationBuilder.Sql(@"
+                                SET @sql = (
+                                    SELECT IF(
+                                        EXISTS (
+                                            SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+                                            WHERE CONSTRAINT_SCHEMA = DATABASE()
+                                                AND TABLE_NAME = 'ResourceAllocations'
+                                                AND CONSTRAINT_NAME = 'FK_ResourceAllocations_ProjectClientEngagements_EngagementId'
+                                        ),
+                                        'SELECT 1',
+                                        'ALTER TABLE `ResourceAllocations` ADD CONSTRAINT `FK_ResourceAllocations_ProjectClientEngagements_EngagementId` FOREIGN KEY (`EngagementId`) REFERENCES `ProjectClientEngagements`(`Id`) ON DELETE CASCADE'
+                                    )
+                                );
+                                PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+                        ");
         }
 
         /// <inheritdoc />

@@ -134,6 +134,7 @@ const RolesPage: React.FC = () => {
               variant="contained"
               onClick={handleAssign}
               disabled={adminLoading}
+              sx={{ whiteSpace: "nowrap" }}
             >
               Assign Role
             </Button>
@@ -142,6 +143,7 @@ const RolesPage: React.FC = () => {
               color="warning"
               onClick={handleRemove}
               disabled={adminLoading}
+              sx={{ whiteSpace: "nowrap" }}
             >
               Remove Role
             </Button>

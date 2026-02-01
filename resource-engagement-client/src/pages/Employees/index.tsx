@@ -18,6 +18,7 @@ import {
   TableBody,
 } from "@mui/material";
 import EmployeeForm from "../../components/EmployeeForm";
+import { Add } from "@mui/icons-material";
 
 const EmployeesPage: React.FC = () => {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ const EmployeesPage: React.FC = () => {
           <Button
             id="create-employee-btn"
             variant="contained"
+            startIcon={<Add />}
             onClick={() => navigate("/employees/create")}
           >
             Create Employee

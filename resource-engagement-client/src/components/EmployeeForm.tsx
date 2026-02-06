@@ -243,6 +243,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           helperText={errors.employeeCode?.message}
           fullWidth
           placeholder="e.g., EMP001"
+          InputLabelProps={{ shrink: true }}
         />
         <FormControl fullWidth error={!!errors.employmentType}>
           <InputLabel>Employment Type</InputLabel>
@@ -274,6 +275,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           error={!!errors.firstName}
           helperText={errors.firstName?.message}
           fullWidth
+          InputLabelProps={{ shrink: true }}
         />
         <TextField
           label="Last Name"
@@ -281,6 +283,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           error={!!errors.lastName}
           helperText={errors.lastName?.message}
           fullWidth
+          InputLabelProps={{ shrink: true }}
         />
       </Stack>
       <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
@@ -292,6 +295,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           helperText={errors.email?.message}
           fullWidth
           placeholder="john.doe@company.com"
+          InputLabelProps={{ shrink: true }}
         />
         <TextField
           label="Phone"
@@ -300,6 +304,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           helperText={errors.phone?.message}
           fullWidth
           placeholder="+1-234-567-8900"
+          InputLabelProps={{ shrink: true }}
         />
       </Stack>
       <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
@@ -383,6 +388,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
         fullWidth
         placeholder="Enter manager's employee ID"
         inputProps={{ min: 0 }}
+        InputLabelProps={{ shrink: true }}
       />
 
       <Box>
@@ -463,6 +469,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
                 fullWidth
                 placeholder="e.g., 2.5"
                 inputProps={{ min: 0, max: 50, step: 0.5 }}
+                InputLabelProps={{ shrink: true }}
               />
               <Controller
                 name={`skills.${idx}.lastUsedDate` as const}

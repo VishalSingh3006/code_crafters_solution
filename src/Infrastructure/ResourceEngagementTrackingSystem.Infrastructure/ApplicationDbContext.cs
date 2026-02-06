@@ -63,6 +63,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
         // EmployeeSkill (many-to-many)
         modelBuilder.Entity<EmployeeSkill>().HasKey(es => new { es.EmployeeId, es.SkillId });
+        // Ensure EF does not expect a non-existent Id column on EmployeeSkills
+        modelBuilder.Entity<EmployeeSkill>().Ignore(es => es.Id);
         modelBuilder
             .Entity<EmployeeSkill>()
             .HasOne(es => es.Employee)

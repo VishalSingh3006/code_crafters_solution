@@ -126,9 +126,17 @@ namespace ResourceEngagementTrackingSystem.Infrastructure.Services
             e.DesignationId = dto.DesignationId;
             e.EmploymentType = ParseEmploymentType(dto.EmploymentType);
             e.ManagerId = dto.ManagerId;
-            // Update skills
-            e.EmployeeSkills.Clear();
-            if (dto.Skills != null)
+            // Update skills (null-safe)
+            if (e.EmployeeSkills != null && e.EmployeeSkills.Count > 0)
+            {
+                _context.EmployeeSkills.RemoveRange(e.EmployeeSkills);
+            }
+            // Ensure collection exists for assignment
+            if (e.EmployeeSkills == null)
+            {
+                e.EmployeeSkills = new List<EmployeeSkill>();
+            }
+            if (dto.Skills != null && dto.Skills.Count > 0)
             {
                 foreach (var s in dto.Skills)
                 {

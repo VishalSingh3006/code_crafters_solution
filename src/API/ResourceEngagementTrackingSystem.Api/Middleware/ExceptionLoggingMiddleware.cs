@@ -63,7 +63,14 @@ namespace ResourceEngagementTrackingSystem.Api.Middleware
 
                 if (_options.EnableExceptionLogging)
                 {
-                    await _exceptionLogService.LogExceptionAsync(exceptionLog);
+                    try
+                    {
+                        await _exceptionLogService.LogExceptionAsync(exceptionLog);
+                    }
+                    catch (Exception logEx)
+                    {
+                        _logger.LogWarning(logEx, "Failed to persist exception log; proceeding without DB logging. TraceId: {TraceId}", traceId);
+                    }
                 }
                 _logger.LogError(
                     ex,
